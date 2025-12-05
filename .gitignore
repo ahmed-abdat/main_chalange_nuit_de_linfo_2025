@@ -46,5 +46,5 @@ next-env.d.ts
 
 # MCP config (contains API keys)
 .mcp.json
-# .claude/*
+.claude/*
 CLAUDE.md
