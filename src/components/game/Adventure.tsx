@@ -235,7 +235,7 @@ function GameSection() {
       background="village"
     >
       <div className="max-w-4xl mx-auto">
-        <RefurbishGame onComplete={handleGameComplete} />
+        <RefurbishGame />
 
         {gameCompleted && (
           <motion.div
