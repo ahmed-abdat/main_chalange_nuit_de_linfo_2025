@@ -6,7 +6,7 @@ import { ReactLenis } from 'lenis/react';
 import {
   Users, Shield, Leaf, ExternalLink, ArrowRight, Gamepad2,
   Landmark, Swords, AlertTriangle, CreditCard, Monitor, Moon,
-  Star, Download, Check, HelpCircle
+  Star, Download, Check, HelpCircle, Tv, Radio, Play, Newspaper
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -17,7 +17,7 @@ import SplitText from '@/components/SplitText';
 import TrueFocus from '@/components/TrueFocus';
 import Particles from '@/components/Particles';
 import Shuffle from '@/components/Shuffle';
-import { TestimonialSlider } from '@/components/TestimonialSlider';
+// TestimonialSlider removed - now using MediaCoverageSection
 import { Button } from '@/components/ui/button';
 import { SmoothCursor } from '@/components/ui/SmoothCursor';
 import { cn } from '@/lib/utils';
@@ -61,9 +61,11 @@ import KnowledgePotionSection from '@/components/narrative/KnowledgePotionSectio
 import ThreatsSection from '@/components/narrative/ThreatsSection';
 import FinalTrialSection from '@/components/narrative/FinalTrialSection';
 
+// Scenario Sections
+import { ScenarioTeaserSection } from '@/components/scenarios';
+
 // Gamification
 import AchievementToast from '@/components/game/AchievementToast';
-import BadgesPanel from '@/components/game/BadgesPanel';
 
 /**
  * Village NIRD - La Nuit de l'Info 2025
@@ -106,66 +108,43 @@ function ParallaxSection({
 
 
 // =============================================================================
-// NAVIGATION - With subtle reveal on scroll
+// NAVIGATION - Commented out (not needed for now)
 // =============================================================================
-function Navigation() {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  return (
-    <motion.nav
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.3, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className={cn(
-        "fixed top-0 left-0 right-0 z-50 px-6 py-4 transition-all duration-500",
-        scrolled
-          ? "bg-[#1a1a1d]/95 backdrop-blur-lg border-b border-white/10 py-3"
-          : "bg-transparent"
-      )}
-    >
-      <div className="max-w-6xl mx-auto flex items-center justify-between">
-        <motion.div
-          className="flex items-center gap-3"
-        >
-          <Landmark className="w-6 h-6 text-[#00997d]" />
-          <span className="text-white font-bold text-lg">Village NIRD</span>
-        </motion.div>
-
-        <div className="flex items-center gap-4">
-          <Link href="/rpg">
-            <Button
-              variant="ghost"
-              className="hidden sm:flex items-center gap-2 text-sm text-[#00997d] hover:text-[#00b894] hover:bg-[#00997d]/10 transition-all duration-300"
-            >
-              <Swords className="w-4 h-4" />
-              RPG
-            </Button>
-          </Link>
-          <motion.div whileTap={{ scale: 0.98 }}>
-            <Button
-              asChild
-              className="bg-[#00997d] text-white text-sm font-medium rounded-full hover:bg-[#00b894] transition-colors"
-            >
-              <a
-                href="https://nird.forge.apps.education.fr/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Rejoindre NIRD
-              </a>
-            </Button>
-          </motion.div>
-        </div>
-      </div>
-    </motion.nav>
-  );
-}
+// function Navigation() {
+//   const [scrolled, setScrolled] = useState(false);
+//   useEffect(() => {
+//     const handleScroll = () => setScrolled(window.scrollY > 50);
+//     window.addEventListener('scroll', handleScroll);
+//     return () => window.removeEventListener('scroll', handleScroll);
+//   }, []);
+//   return (
+//     <motion.nav
+//       initial={{ y: -100, opacity: 0 }}
+//       animate={{ y: 0, opacity: 1 }}
+//       transition={{ delay: 0.3, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+//       className={cn(
+//         "fixed top-0 left-0 right-0 z-50 px-6 py-4 transition-all duration-500",
+//         scrolled ? "bg-[#1a1a1d]/95 backdrop-blur-lg border-b border-white/10 py-3" : "bg-transparent"
+//       )}
+//     >
+//       <div className="max-w-6xl mx-auto flex items-center justify-end">
+//         <div className="flex items-center gap-4">
+//           <Link href="/rpg">
+//             <Button variant="ghost" className="hidden sm:flex items-center gap-2 text-sm text-[#00997d] hover:text-[#00b894] hover:bg-[#00997d]/10 transition-all duration-300">
+//               <Swords className="w-4 h-4" />
+//               RPG
+//             </Button>
+//           </Link>
+//           <motion.div whileTap={{ scale: 0.98 }}>
+//             <Button asChild className="bg-[#00997d] text-white text-sm font-medium rounded-full hover:bg-[#00b894] transition-colors">
+//               <a href="https://nird.forge.apps.education.fr/" target="_blank" rel="noopener noreferrer">Rejoindre NIRD</a>
+//             </Button>
+//           </motion.div>
+//         </div>
+//       </div>
+//     </motion.nav>
+//   );
+// }
 
 // =============================================================================
 // HERO SECTION - With Background Variants
@@ -333,7 +312,7 @@ function StatsSection() {
   ];
 
   return (
-    <section id="stats" className="py-24 px-6 bg-[#1a1a1d] relative overflow-hidden">
+    <section id="stats" className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-[#1a1a1d] relative overflow-hidden">
       {/* Subtle grid pattern */}
       <div className="absolute inset-0 opacity-[0.03]">
         <div className="absolute inset-0" style={{
@@ -441,7 +420,7 @@ function ChoiceSection() {
   ];
 
   return (
-    <section id="choice" className="py-24 px-6 bg-[#1a1a1d] relative overflow-hidden">
+    <section id="choice" className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-[#1a1a1d] relative overflow-hidden">
       {/* Subtle gradient orbs */}
       <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-[#00997d]/8 rounded-full blur-[100px] -translate-y-1/2 -translate-x-1/2" />
       <div className="absolute bottom-0 right-0 w-[250px] h-[250px] bg-[#F9A825]/6 rounded-full blur-[80px] translate-y-1/2 translate-x-1/2" />
@@ -491,7 +470,8 @@ function ChoiceSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="mb-12 max-w-sm mx-auto"
+          className="mb-12 max-w-sm mx-auto cursor-auto"
+          data-cursor-default
         >
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm text-gray-400 font-medium">Nombre de PCs</span>
@@ -678,7 +658,7 @@ function GameSection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="game" className="relative py-24 px-6 bg-[#1a1a1d] overflow-hidden cursor-auto" data-cursor-default>
+    <section id="game" className="relative py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-[#1a1a1d] overflow-hidden cursor-auto" data-cursor-default>
       {/* Subtle ambient particles - matching SuccessStoriesSection */}
       <div className="absolute inset-0 z-0 opacity-20">
         <Particles
@@ -698,13 +678,13 @@ function GameSection() {
 
       <div ref={ref} className="relative z-10 max-w-5xl mx-auto">
         <ParallaxSection speed={0.1}>
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             {/* Badge */}
             <motion.span
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#F9A825]/20 text-[#F9A825] text-sm font-medium rounded-full mb-6"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#F9A825]/20 text-[#F9A825] text-sm font-medium rounded-full mb-4"
             >
               <Gamepad2 className="w-4 h-4" />
               Libérez vos Logiciels
@@ -712,23 +692,17 @@ function GameSection() {
 
             {/* Animated title */}
             <BlurText
-              text="Sauvez un PC"
-              className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-2"
+              text="Sauvez un PC de l'obsolescence"
+              className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4"
               delay={80}
-              animateBy="words"
-            />
-            <BlurText
-              text="de l'obsolescence"
-              className="text-4xl sm:text-5xl md:text-6xl font-black text-[#00997d]"
-              delay={120}
               animateBy="words"
             />
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              className="text-gray-400 text-lg md:text-xl mt-6 max-w-2xl mx-auto"
+              transition={{ delay: 0.3, duration: 0.6 }}
+              className="text-gray-400 text-base sm:text-lg max-w-xl mx-auto"
             >
               Glissez la clé USB Linux sur le PC pour lui donner une
               <span className="text-[#F9A825] font-semibold"> seconde vie</span>
@@ -780,7 +754,7 @@ function MemoryGameSection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="memory" className="relative py-24 px-6 bg-[#1a1a1d] overflow-hidden cursor-auto" data-cursor-default>
+    <section id="memory" className="relative py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-[#1a1a1d] overflow-hidden cursor-auto" data-cursor-default>
       {/* Background effects */}
       <div className="absolute inset-0 z-0 opacity-15">
         <Particles
@@ -804,32 +778,26 @@ function MemoryGameSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#00997d]/20 text-[#00d9a7] text-sm font-medium rounded-full mb-6"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#00997d]/20 text-[#00d9a7] text-sm font-medium rounded-full mb-4"
             >
               <Gamepad2 className="w-4 h-4" />
               Alternatives Libres
             </motion.span>
 
             <BlurText
-              text="Trouve les paires"
-              className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-2"
+              text="Trouve les paires Open Source"
+              className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4"
               delay={80}
-              animateBy="words"
-            />
-            <BlurText
-              text="Open Source"
-              className="text-3xl sm:text-4xl md:text-5xl font-black text-[#00997d]"
-              delay={120}
               animateBy="words"
             />
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              className="text-gray-400 text-lg mt-6 max-w-xl mx-auto"
+              transition={{ delay: 0.3, duration: 0.6 }}
+              className="text-gray-400 text-base sm:text-lg max-w-xl mx-auto"
             >
-              Chaque logiciel proprietaire a son alternative libre. Decouvre-les !
+              Chaque logiciel propriétaire a son alternative libre. Découvre-les !
             </motion.p>
           </div>
         </ParallaxSection>
@@ -847,20 +815,20 @@ function MemoryGameSection() {
 }
 
 // =============================================================================
-// TOWER DEFENSE SECTION
+// TOWER DEFENSE SECTION - Epic Battle Header
 // =============================================================================
 function TowerDefenseSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="defense" className="relative py-24 px-6 bg-[#1a1a1d] overflow-hidden cursor-auto" data-cursor-default>
-      {/* Background effects */}
+    <section id="defense" className="relative py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-[#1a1a1d] overflow-hidden cursor-auto" data-cursor-default>
+      {/* Background particles - battle colors */}
       <div className="absolute inset-0 z-0 opacity-15">
         <Particles
-          particleCount={20}
-          particleSpread={20}
-          speed={0.015}
+          particleCount={25}
+          particleSpread={25}
+          speed={0.02}
           particleColors={['#00997d', '#C62828']}
           alphaParticles={true}
           particleBaseSize={25}
@@ -868,50 +836,91 @@ function TowerDefenseSection() {
         />
       </div>
 
-      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#C62828]/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
-      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-[#00997d]/10 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2" />
+      {/* Dramatic gradient orbs */}
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#C62828]/15 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-[350px] h-[350px] bg-[#00997d]/12 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-[#C62828]/8 rounded-full blur-[150px]" />
 
       <div ref={ref} className="relative z-10 max-w-5xl mx-auto">
         <ParallaxSection speed={0.1}>
-          <div className="text-center mb-8">
+          <div className="text-center mb-10">
+            {/* Battle Badge */}
             <motion.span
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#00997d]/20 text-[#00d9a7] text-sm font-medium rounded-full mb-6"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#C62828]/20 text-[#ff6b6b] text-sm font-medium rounded-full mb-6"
             >
-              <Shield className="w-4 h-4" />
-              Defense du Village
+              <Swords className="w-4 h-4" />
+              Défense du Village
             </motion.span>
 
+            {/* VS Battle Icons */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="flex items-center justify-center gap-4 sm:gap-6 mb-6"
+            >
+              {/* Village Shield */}
+              <motion.div
+                animate={isInView ? { scale: [1, 1.08, 1] } : {}}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                className="p-3 rounded-xl bg-[#00997d]/20 border border-[#00997d]/40"
+              >
+                <Shield className="w-8 h-8 sm:w-10 sm:h-10 text-[#00997d]" />
+              </motion.div>
+
+              {/* VS Swords */}
+              <motion.div
+                animate={isInView ? { rotate: [0, 5, -5, 0] } : {}}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="text-2xl sm:text-3xl"
+              >
+                ⚔️
+              </motion.div>
+
+              {/* Big Tech Empire */}
+              <motion.div
+                animate={isInView ? { scale: [1, 1.08, 1] } : {}}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+                className="p-3 rounded-xl bg-[#C62828]/20 border border-[#C62828]/40"
+              >
+                <Landmark className="w-8 h-8 sm:w-10 sm:h-10 text-[#C62828]" />
+              </motion.div>
+            </motion.div>
+
+            {/* Main Titles with BlurText */}
             <BlurText
               text="Protégez le Village"
-              className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-2"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-2"
               delay={80}
               animateBy="words"
             />
             <BlurText
               text="contre Big Tech"
-              className="text-3xl sm:text-4xl md:text-5xl font-black text-[#C62828]"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#C62828]"
               delay={120}
               animateBy="words"
             />
 
+            {/* Description */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              className="text-gray-400 text-lg mt-6 max-w-xl mx-auto"
+              transition={{ delay: 0.5, duration: 0.6 }}
+              className="text-gray-400 text-base sm:text-lg mt-6 max-w-xl mx-auto"
             >
-              Placez vos defenses pour repousser les invasions de l'Empire !
+              Placez vos défenses stratégiquement pour repousser les invasions de l&apos;Empire numérique !
             </motion.p>
           </div>
         </ParallaxSection>
 
+        {/* Game Container */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.2, duration: 0.6 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
         >
           <TowerDefenseGame />
         </motion.div>
@@ -928,7 +937,7 @@ function TypingGameSection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="typing" className="relative py-24 px-6 bg-[#1a1a1d] overflow-hidden cursor-auto" data-cursor-default>
+    <section id="typing" className="relative py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-[#1a1a1d] overflow-hidden cursor-auto" data-cursor-default>
       {/* Background effects */}
       <div className="absolute inset-0 z-0 opacity-15">
         <Particles
@@ -952,30 +961,24 @@ function TypingGameSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#F9A825]/20 text-[#F9A825] text-sm font-medium rounded-full mb-6"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#F9A825]/20 text-[#F9A825] text-sm font-medium rounded-full mb-4"
             >
               <Gamepad2 className="w-4 h-4" />
               Terminal Magique
             </motion.span>
 
             <BlurText
-              text="Maîtrisez le Terminal"
-              className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-2"
+              text="Maîtrisez le Terminal Linux"
+              className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4"
               delay={80}
-              animateBy="words"
-            />
-            <BlurText
-              text="Linux"
-              className="text-3xl sm:text-4xl md:text-5xl font-black text-[#00997d]"
-              delay={120}
               animateBy="words"
             />
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              className="text-gray-400 text-lg mt-6 max-w-xl mx-auto"
+              transition={{ delay: 0.3, duration: 0.6 }}
+              className="text-gray-400 text-base sm:text-lg max-w-xl mx-auto"
             >
               Tapez les commandes Linux et battez Windows Update !
             </motion.p>
@@ -1045,14 +1048,14 @@ function PillarsSection() {
   ];
 
   return (
-    <section className="py-24 px-6 bg-[#1a1a1d] relative overflow-hidden">
+    <section className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-[#1a1a1d] relative overflow-hidden">
       {/* Subtle gradient orbs */}
       <div className="absolute top-1/4 right-0 w-[350px] h-[350px] bg-[#00997d]/8 rounded-full blur-[100px] translate-x-1/2" />
       <div className="absolute bottom-1/4 left-0 w-[300px] h-[300px] bg-[#F9A825]/6 rounded-full blur-[80px] -translate-x-1/2" />
 
       <div ref={ref} className="max-w-5xl mx-auto relative z-10">
         <ParallaxSection speed={0.15}>
-          <div className="text-center mb-12">
+          <div className="text-center mb-8 sm:mb-12">
             <motion.span
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -1065,7 +1068,7 @@ function PillarsSection() {
 
             <BlurText
               text="NIRD : Numérique"
-              className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-8"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 sm:mb-8"
               delay={50}
               animateBy="words"
             />
@@ -1084,7 +1087,7 @@ function PillarsSection() {
         </ParallaxSection>
 
         {/* Pillar Cards with 3D Tilt + Glare Effect */}
-        <div className="grid md:grid-cols-3 gap-8 mt-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mt-10 sm:mt-16">
           {pillarData.map((pillar, i) => {
             const Icon = pillar.icon;
             const isActive = i === activeIndex;
@@ -1166,7 +1169,7 @@ function QuizSection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="quiz" className="py-24 px-6 bg-[#1a1a1d] relative overflow-hidden">
+    <section id="quiz" className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-[#1a1a1d] relative overflow-hidden">
       {/* Ambient particles */}
       <div className="absolute inset-0 z-0 opacity-15">
         <Particles
@@ -1192,9 +1195,9 @@ function QuizSection() {
         }} />
       </div>
 
-      <div ref={ref} className="max-w-2xl mx-auto relative z-10">
+      <div ref={ref} className="max-w-4xl mx-auto relative z-10">
         <ParallaxSection speed={0.1}>
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <motion.span
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -1241,70 +1244,200 @@ function QuizSection() {
 }
 
 // =============================================================================
-// SUCCESS STORIES SECTION - With TestimonialSlider
+// MEDIA COVERAGE SECTION - La Résistance dans les Médias (Premium Glass Design)
 // =============================================================================
-function SuccessStoriesSection() {
+interface MediaCardData {
+  id: number;
+  title: string;
+  description: string;
+  duration: string;
+  mediaType: 'video' | 'audio';
+  source: string;
+  url: string;
+}
+
+function MediaCard({ item, index, isInView }: { item: MediaCardData; index: number; isInView: boolean }) {
+  const [isHovered, setIsHovered] = useState(false);
+  const MediaIcon = item.mediaType === 'video' ? Tv : Radio;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.5, delay: index * 0.15 }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      className="relative group"
+    >
+      <a href={item.url} target="_blank" rel="noopener noreferrer" className="block">
+        <motion.div
+          animate={{ scale: isHovered ? 1.02 : 1 }}
+          transition={{ duration: 0.3 }}
+          className="relative h-[380px] w-full rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl overflow-hidden"
+        >
+          {/* Gradient overlay on hover */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isHovered ? 1 : 0 }}
+            transition={{ duration: 0.3 }}
+            className="absolute inset-0 bg-gradient-to-br from-[#00997d]/20 via-transparent to-[#F9A825]/20 pointer-events-none"
+          />
+
+          {/* Content */}
+          <div className="relative h-full flex flex-col p-6">
+            {/* Header with icon and duration badge */}
+            <div className="flex items-start justify-between mb-5">
+              <motion.div
+                animate={{ scale: isHovered ? 1.1 : 1, rotate: isHovered ? 5 : 0 }}
+                transition={{ duration: 0.3 }}
+                className="p-3 rounded-xl bg-[#00997d]/20 backdrop-blur-sm border border-[#00997d]/30"
+              >
+                <MediaIcon className="w-7 h-7 text-[#00997d]" />
+              </motion.div>
+
+              <motion.div
+                animate={{ scale: isHovered ? 1.05 : 1 }}
+                transition={{ duration: 0.3 }}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20"
+              >
+                <Monitor className="w-3.5 h-3.5 text-white/80" />
+                <span className="text-xs font-medium text-white/90">{item.duration}</span>
+              </motion.div>
+            </div>
+
+            {/* Media source */}
+            <motion.div
+              animate={{ x: isHovered ? 5 : 0 }}
+              transition={{ duration: 0.3 }}
+              className="mb-2"
+            >
+              <span className="text-xs font-semibold text-[#F9A825] uppercase tracking-wider">
+                {item.source}
+              </span>
+            </motion.div>
+
+            {/* Title */}
+            <motion.h3
+              animate={{ x: isHovered ? 5 : 0 }}
+              transition={{ duration: 0.3, delay: 0.05 }}
+              className="text-xl font-bold text-white mb-3 leading-tight line-clamp-2"
+            >
+              {item.title}
+            </motion.h3>
+
+            {/* Description */}
+            <motion.p
+              animate={{ x: isHovered ? 5 : 0 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+              className="text-sm text-white/60 leading-relaxed flex-grow line-clamp-3"
+            >
+              {item.description}
+            </motion.p>
+
+            {/* Play button */}
+            <motion.div
+              animate={{ y: isHovered ? 0 : 10, opacity: isHovered ? 1 : 0.7 }}
+              transition={{ duration: 0.3 }}
+              className="mt-5 w-full flex items-center justify-center gap-3 px-5 py-3.5 rounded-xl bg-[#00997d]/20 hover:bg-[#00997d]/30 backdrop-blur-sm border border-[#00997d]/30 text-white font-semibold transition-all"
+            >
+              <motion.div animate={{ scale: isHovered ? 1.1 : 1 }} transition={{ duration: 0.3 }}>
+                <Play className="w-5 h-5 fill-[#00997d] text-[#00997d]" />
+              </motion.div>
+              <span className="text-[#00997d]">
+                {item.mediaType === 'audio' ? 'Écouter' : 'Regarder'}
+              </span>
+            </motion.div>
+          </div>
+
+          {/* Glow effect */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isHovered ? 0.4 : 0 }}
+            transition={{ duration: 0.3 }}
+            className="absolute inset-0 bg-gradient-to-t from-[#00997d]/40 via-transparent to-transparent pointer-events-none blur-xl"
+          />
+        </motion.div>
+
+        {/* Shadow effect */}
+        <motion.div
+          animate={{ scale: isHovered ? 1.02 : 1, opacity: isHovered ? 0.5 : 0.2 }}
+          transition={{ duration: 0.3 }}
+          className="absolute -inset-1 bg-gradient-to-br from-[#00997d]/30 to-[#F9A825]/30 rounded-2xl blur-2xl -z-10"
+        />
+      </a>
+    </motion.div>
+  );
+}
+
+function MediaCoverageSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  const reviews = [
+  const mediaItems: MediaCardData[] = [
     {
-      id: '1',
-      name: 'Collectif enseignant NIRD',
-      affiliation: 'Lycée Carnot, Bruay-la-Buissière',
-      quote: 'Nos élèves ont reconditionné 132 ordinateurs pour 11 écoles primaires. Ils apprennent en aidant les autres.',
-      imageSrc: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&h=600&fit=crop',
-      thumbnailSrc: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=100&h=100&fit=crop',
+      id: 1,
+      title: "Windows 11 : l'alternative des logiciels libres",
+      description: "Reportage sur la démarche NIRD et comment les établissements scolaires résistent à l'obsolescence programmée avec Linux.",
+      duration: "2 min",
+      mediaType: "video",
+      source: "France 3 Alpes",
+      url: "https://video.echirolles.fr/w/hVykGUtRZqRen6eiutqRvQ",
     },
     {
-      id: '2',
-      name: 'Élèves du lycée Carnot',
-      affiliation: 'La Forge Éducative',
-      quote: 'Linux, c\'est facile ! En 4 heures, un élève de seconde peut installer et configurer un système complet.',
-      imageSrc: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&h=600&fit=crop',
-      thumbnailSrc: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=100&h=100&fit=crop',
+      id: 2,
+      title: "Face à l'obsolescence, le logiciel libre comme solution",
+      description: "Grand reportage sur les alternatives aux mises à jour forcées de Windows et l'impact sur l'éducation nationale.",
+      duration: "4 min",
+      mediaType: "audio",
+      source: "France Inter",
+      url: "https://www.radiofrance.fr/franceinter/podcasts/le-grand-reportage-de-france-inter/le-grand-reportage-du-mardi-14-octobre-2025-4136495",
     },
     {
-      id: '3',
-      name: 'Collectif NIRD',
-      affiliation: 'Écoles partenaires, France',
-      quote: 'Comment promouvoir l\'éducation libre si chaque machine démarre sur Windows ?',
-      imageSrc: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&h=600&fit=crop',
-      thumbnailSrc: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=100&h=100&fit=crop',
+      id: 3,
+      title: "L'État obligé de jeter des milliers d'ordinateurs ?",
+      description: "Enquête sur l'impact environnemental de l'obsolescence logicielle dans le secteur public français.",
+      duration: "3 min",
+      mediaType: "video",
+      source: "France Info",
+      url: "https://www.youtube.com/watch?v=76T8oubek-c",
     },
   ];
 
   return (
-    <section className="py-24 px-6 bg-[#1a1a1d] relative overflow-hidden">
-      {/* Very subtle ambient particles */}
-      <div className="absolute inset-0 z-0 opacity-20">
+    <section className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-[#1a1a1d] relative overflow-hidden">
+      {/* Subtle ambient particles */}
+      <div className="absolute inset-0 z-0 opacity-15">
         <Particles
-          particleCount={20}
-          particleSpread={25}
-          speed={0.02}
+          particleCount={15}
+          particleSpread={30}
+          speed={0.015}
           particleColors={['#00997d', '#F9A825']}
           alphaParticles={true}
-          particleBaseSize={30}
+          particleBaseSize={25}
           disableRotation={true}
         />
       </div>
 
+      {/* Gradient orbs */}
+      <div className="absolute top-0 right-0 w-[350px] h-[350px] bg-[#00997d]/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-[#F9A825]/8 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2" />
+
       <div ref={ref} className="max-w-5xl mx-auto relative z-10">
+        {/* Header */}
         <ParallaxSection speed={0.1}>
-          <div className="text-center mb-12">
+          <div className="text-center mb-10">
             <motion.span
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6 }}
               className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#F9A825]/20 text-[#F9A825] text-sm font-medium rounded-full mb-6"
             >
-              <Star className="w-4 h-4" />
-              Ils l&apos;ont fait
+              <Newspaper className="w-4 h-4" />
+              Dans les médias
             </motion.span>
 
-            {/* Big animated title - using BlurText for white text on dark bg */}
             <BlurText
-              text="Témoignages du Village"
+              text="La Résistance fait parler d'elle"
               className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-6"
               delay={80}
               animateBy="words"
@@ -1316,45 +1449,34 @@ function SuccessStoriesSection() {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="text-gray-400 max-w-2xl mx-auto text-lg md:text-xl"
             >
-              Des établissements qui ont choisi la résistance numérique
+              Les grands médias français témoignent du mouvement NIRD
             </motion.p>
           </div>
         </ParallaxSection>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.2, duration: 0.6 }}
-        >
-          <TestimonialSlider reviews={reviews} className="text-white" />
-        </motion.div>
+        {/* Media Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {mediaItems.map((item, index) => (
+            <MediaCard key={item.id} item={item} index={index} isInView={isInView} />
+          ))}
+        </div>
 
-        {/* Media Links */}
+        {/* Additional Resources Link */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          className="mt-16 text-center"
+          transition={{ delay: 0.8, duration: 0.6 }}
+          className="mt-12 text-center"
         >
-          <p className="text-sm text-gray-500 mb-4">Ils en parlent dans les médias</p>
-          <div className="flex flex-wrap justify-center gap-4">
-            {[
-              { name: 'France 3 Alpes', url: 'https://video.echirolles.fr/w/hVykGUtRZqRen6eiutqRvQ' },
-              { name: 'France Inter', url: 'https://www.radiofrance.fr/franceinter/podcasts/le-grand-reportage-de-france-inter/le-grand-reportage-du-mardi-14-octobre-2025-4136495' },
-              { name: 'France Info', url: 'https://www.youtube.com/watch?v=76T8oubek-c' },
-            ].map((media) => (
-              <a
-                key={media.name}
-                href={media.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 px-4 py-2 text-sm text-gray-400 bg-white/5 rounded-full border border-white/10 hover:bg-white/10 hover:text-white transition-colors"
-              >
-                {media.name}
-                <ExternalLink className="w-3 h-3" />
-              </a>
-            ))}
-          </div>
+          <a
+            href="https://www.cafepedagogique.net/2025/04/27/bruay-labuissiere-voyage-au-centre-du-libre-educatif/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-[#00997d] transition-colors"
+          >
+            <span>En savoir plus sur le projet NIRD au lycée Carnot</span>
+            <ExternalLink className="w-4 h-4" />
+          </a>
         </motion.div>
       </div>
     </section>
@@ -1410,20 +1532,20 @@ function CTASection() {
       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-[#F9A825]/15 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
 
       {/* Content */}
-      <div ref={ref} className="relative z-10 max-w-5xl mx-auto px-6">
+      <div ref={ref} className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
         {/* Main Title - Extra large, tighter spacing */}
         <div className="text-center">
           <BlurText
             text="Rejoignez"
-            className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white tracking-tight leading-none"
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white tracking-tight leading-none"
             delay={60}
             animateBy="letters"
           />
         </div>
-        <div className="text-center mb-10">
+        <div className="text-center mb-6 sm:mb-10">
           <BlurText
             text="le Village"
-            className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-[#00997d] tracking-tight leading-none"
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-[#00997d] tracking-tight leading-none"
             delay={80}
             animateBy="letters"
           />
@@ -1523,23 +1645,16 @@ function CTASection() {
 // =============================================================================
 function Footer() {
   return (
-    <footer className="py-16 px-6 bg-[#1a1a1d] text-white">
+    <footer className="py-10 sm:py-12 md:py-16 px-4 sm:px-6 bg-[#1a1a1d] text-white">
       <div className="max-w-5xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex items-center gap-4">
-            <Monitor className="w-10 h-10 text-[#00997d]" />
-            <div>
-              <p className="font-bold text-lg">Village NIRD</p>
-              <p className="text-sm text-gray-400">La Nuit de l&apos;Info 2025</p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-8 text-sm">
+        <div className="flex flex-col md:flex-row justify-center items-center gap-6 sm:gap-8">
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 text-sm">
             {[
               { label: 'Site NIRD', href: 'https://nird.forge.apps.education.fr/' },
               { label: 'Linux NIRD', href: 'https://nird.forge.apps.education.fr/linux/' },
               { label: 'RPG', href: '/rpg', internal: true },
               { label: 'Variants', href: '/variants', internal: true },
+              { label: 'Tonton Roger 🤖', href: 'https://chatbot-kappa-mocha.vercel.app/' },
             ].map((link) => (
               <div key={link.label}>
                 {link.internal ? (
@@ -1585,8 +1700,8 @@ function useScrollSectionTracker() {
     const sections = [
       'hero', 'stats', 'choice', 'game',
       'knowledge-potion', 'memory', 'pillars',
-      'testimonials', 'threats', 'defense',
-      'quiz', 'final-trial', 'typing', 'cta'
+      'media-coverage', 'threats', 'defense',
+      'quiz', 'scenario-teasers', 'final-trial', 'typing', 'cta'
     ];
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
@@ -1626,10 +1741,10 @@ export default function Home() {
 
   return (
     <ReactLenis root options={{ lerp: 0.1, duration: 1.2, smoothWheel: true }}>
-      <main className="min-h-screen bg-white">
+      <main className="relative min-h-screen bg-white">
         {/* Custom animated cursor */}
         <SmoothCursor />
-        <Navigation />
+        {/* <Navigation /> */}
 
         {/* Scroll progress indicator */}
         <ScrollProgressBar color="#00997d" glowColor="#F9A825" height={3} />
@@ -1639,9 +1754,6 @@ export default function Home() {
 
         {/* Achievement Toast - Shows badge unlocks */}
         <AchievementToast />
-
-        {/* Badges Panel - Floating button to view badges */}
-        <BadgesPanel />
 
         {/* 1. HOOK - Dramatic hero (Dark) */}
         <div data-section="hero">
@@ -1678,9 +1790,9 @@ export default function Home() {
           <PillarsSection />
         </div>
 
-        {/* 8. SOCIAL PROOF - Testimonials (moved up for trust building) */}
-        <div data-section="testimonials">
-          <SuccessStoriesSection />
+        {/* 8. MEDIA COVERAGE - Real media coverage for credibility */}
+        <div data-section="media-coverage">
+          <MediaCoverageSection />
         </div>
 
         {/* 9. THREATS - Bridge to Tower Defense */}
@@ -1698,7 +1810,12 @@ export default function Home() {
           <QuizSection />
         </div>
 
-        {/* 12. FINAL TRIAL - Bridge to Typing */}
+        {/* 12. SCENARIO TEASERS - Practice your knowledge */}
+        <div data-section="scenario-teasers">
+          <ScenarioTeaserSection />
+        </div>
+
+        {/* 13. FINAL TRIAL - Bridge to Typing */}
         <div data-section="final-trial">
           <FinalTrialSection />
         </div>

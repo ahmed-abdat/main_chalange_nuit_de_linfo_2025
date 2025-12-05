@@ -102,7 +102,7 @@ function TowerPanel({
   onSelect: (type: TowerType | null) => void;
 }) {
   return (
-    <div className="flex gap-2 justify-center flex-wrap">
+    <div className="flex gap-1.5 sm:gap-2 justify-center flex-wrap">
       {(Object.keys(TOWERS) as TowerType[]).map(type => {
         const tower = TOWERS[type];
         const Icon = TOWER_ICONS[type];
@@ -116,7 +116,7 @@ function TowerPanel({
             onClick={() => onSelect(selectedTower === type ? null : type)}
             disabled={!canAfford}
             className={cn(
-              "flex flex-col items-center gap-1 p-2 rounded-lg border-2 transition-all min-w-[80px]",
+              "flex flex-col items-center gap-0.5 sm:gap-1 p-1.5 sm:p-2 rounded-lg border-2 transition-all min-w-[60px] sm:min-w-[80px]",
               selectedTower === type && "ring-2 ring-white",
               canAfford
                 ? "bg-gray-800 border-gray-600 hover:border-[#00997d] cursor-pointer"
@@ -124,14 +124,14 @@ function TowerPanel({
             )}
           >
             <div
-              className="w-8 h-8 rounded-full flex items-center justify-center"
+              className="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center"
               style={{ backgroundColor: `${tower.color}30` }}
             >
-              <Icon className="w-4 h-4" style={{ color: tower.color }} />
+              <Icon className="w-3 h-3 sm:w-4 sm:h-4" style={{ color: tower.color }} />
             </div>
-            <span className="text-[10px] text-white font-medium">{tower.name.split(' ')[0]}</span>
-            <span className="text-[10px] text-yellow-400 flex items-center gap-0.5">
-              <Coins className="w-3 h-3" />
+            <span className="text-[8px] sm:text-[10px] text-white font-medium">{tower.name.split(' ')[0]}</span>
+            <span className="text-[8px] sm:text-[10px] text-yellow-400 flex items-center gap-0.5">
+              <Coins className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
               {tower.cost}
             </span>
           </motion.button>
@@ -158,20 +158,20 @@ function GameHUD({
   phase: GamePhase;
 }) {
   return (
-    <div className="flex justify-between items-center mb-3">
-      <div className="flex gap-4">
-        <div className="flex items-center gap-1.5 bg-red-500/20 px-3 py-1.5 rounded-full border border-red-500/30">
-          <Heart className="w-4 h-4 text-red-400" />
-          <span className="text-red-400 font-bold text-sm">{lives}</span>
+    <div className="flex flex-wrap justify-between items-center gap-2 mb-3">
+      <div className="flex gap-2 sm:gap-4">
+        <div className="flex items-center gap-1 sm:gap-1.5 bg-red-500/20 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border border-red-500/30">
+          <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-red-400" />
+          <span className="text-red-400 font-bold text-xs sm:text-sm">{lives}</span>
         </div>
-        <div className="flex items-center gap-1.5 bg-yellow-500/20 px-3 py-1.5 rounded-full border border-yellow-500/30">
-          <Coins className="w-4 h-4 text-yellow-400" />
-          <span className="text-yellow-400 font-bold text-sm">{coins}</span>
+        <div className="flex items-center gap-1 sm:gap-1.5 bg-yellow-500/20 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border border-yellow-500/30">
+          <Coins className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400" />
+          <span className="text-yellow-400 font-bold text-xs sm:text-sm">{coins}</span>
         </div>
       </div>
-      <div className="flex items-center gap-1.5 bg-[#00997d]/20 px-3 py-1.5 rounded-full border border-[#00997d]/30">
-        <Zap className="w-4 h-4 text-[#00d9a7]" />
-        <span className="text-[#00d9a7] font-bold text-sm">
+      <div className="flex items-center gap-1 sm:gap-1.5 bg-[#00997d]/20 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border border-[#00997d]/30">
+        <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-[#00d9a7]" />
+        <span className="text-[#00d9a7] font-bold text-xs sm:text-sm">
           Vague {wave}/{totalWaves}
         </span>
       </div>
@@ -671,7 +671,7 @@ export default function TowerDefenseGame() {
   };
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto p-4">
+    <div className="relative w-full max-w-4xl mx-auto p-2 sm:p-4">
       {/* VFX Layers */}
       <EnhancedConfetti active={showConfetti} />
       <DamageFlash active={damageFlash} />
@@ -776,25 +776,26 @@ export default function TowerDefenseGame() {
             <TowerPanel coins={coins} selectedTower={selectedTower} onSelect={setSelectedTower} />
           </div>
 
-          {/* Controls */}
-          <div className="flex justify-center gap-3 mt-4">
+          {/* Controls - Responsive */}
+          <div className="flex justify-center gap-2 sm:gap-3 mt-3 sm:mt-4">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsPaused(!isPaused)}
-              className="px-4 py-2 bg-gray-700 text-white rounded-lg flex items-center gap-2 text-sm"
+              className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-700 text-white rounded-lg flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm"
             >
-              {isPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
-              {isPaused ? 'Reprendre' : 'Pause'}
+              {isPaused ? <Play className="w-3 h-3 sm:w-4 sm:h-4" /> : <Pause className="w-3 h-3 sm:w-4 sm:h-4" />}
+              <span className="hidden sm:inline">{isPaused ? 'Reprendre' : 'Pause'}</span>
+              <span className="sm:hidden">{isPaused ? '▶' : '⏸'}</span>
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={resetGame}
-              className="px-4 py-2 bg-red-500/20 text-red-400 rounded-lg flex items-center gap-2 text-sm border border-red-500/30"
+              className="px-3 sm:px-4 py-1.5 sm:py-2 bg-red-500/20 text-red-400 rounded-lg flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm border border-red-500/30"
             >
-              <RotateCcw className="w-4 h-4" />
-              Recommencer
+              <RotateCcw className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Recommencer</span>
             </motion.button>
           </div>
 

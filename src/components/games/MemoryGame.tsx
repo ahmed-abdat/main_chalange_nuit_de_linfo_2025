@@ -505,8 +505,8 @@ export default function MemoryGame() {
             </div>
           </div>
 
-          {/* Card Grid */}
-          <div className="grid grid-cols-4 gap-2 md:gap-3">
+          {/* Card Grid - Responsive: 2 cols mobile, 3 cols tablet, 4 cols desktop */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3">
             {cards.map((card, index) => (
               <Card
                 key={card.id}

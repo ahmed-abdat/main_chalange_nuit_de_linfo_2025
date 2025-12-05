@@ -1,50 +1,226 @@
 'use client';
 
-import { useRef, useMemo } from 'react';
-import { motion, useInView } from 'motion/react';
-import { Sparkles, FlaskConical, ArrowRight, Layers } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { motion, useInView, AnimatePresence } from 'motion/react';
+import { FlaskConical, ArrowRight, Gamepad2, X, Check } from 'lucide-react';
+import Image from 'next/image';
+import BlurText from '@/components/BlurText';
+import Particles from '@/components/Particles';
+import { CometCard } from '@/components/ui/CometCard';
+import { BorderBeam } from '@/components/ui/border-beam';
 import { cn } from '@/lib/utils';
 
-// Seeded random for deterministic values (rounded for hydration consistency)
-function seededRandom(seed: number): number {
-  const x = Math.sin(seed * 9999) * 10000;
-  const value = x - Math.floor(x);
-  // Round to 4 decimal places to avoid server/client floating-point mismatch
-  return Math.round(value * 10000) / 10000;
-}
+// Software alternatives data with actual logos
+const ALTERNATIVES = [
+  {
+    id: 1,
+    from: { name: 'Windows', logo: '/images/Windows_11_logo.svg', color: '#0078D4' },
+    to: { name: 'Linux', logo: null, color: '#00997d' }, // No Linux logo available
+    benefit: 'Gratuit & Léger',
+  },
+  {
+    id: 2,
+    from: { name: 'MS Office', logo: '/images/office.svg', color: '#D83B01' },
+    to: { name: 'LibreOffice', logo: '/images/LibreOffice_logo.svg', color: '#18A303' },
+    benefit: 'Open Source',
+  },
+  {
+    id: 3,
+    from: { name: 'Photoshop', logo: '/images/photoshop.svg', color: '#31A8FF' },
+    to: { name: 'GIMP', logo: '/images/The_GIMP_icon_-_gnome.svg', color: '#5C5543' },
+    benefit: '100% Gratuit',
+  },
+  {
+    id: 4,
+    from: { name: 'Chrome', logo: '/images/chrome.svg', color: '#4285F4' },
+    to: { name: 'Firefox', logo: '/images/firefox.svg', color: '#FF7139' },
+    benefit: 'Vie Privée',
+  },
+];
 
-// Floating code symbols for cauldron effect
-const CODE_SYMBOLS = ['<>', '{}', '()', '[]', '//', '/*', '=>', '&&', '||', '==='];
+function TransformationCard({
+  item,
+  index,
+  isInView,
+}: {
+  item: typeof ALTERNATIVES[0];
+  index: number;
+  isInView: boolean;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isTransformed, setIsTransformed] = useState(false);
 
-function FloatingSymbol({ symbol, delay, index }: { symbol: string; delay: number; index: number }) {
-  // Use deterministic values based on index
-  const xOffset1 = seededRandom(index * 7) * 40 - 20;
-  const xOffset2 = seededRandom(index * 11) * 60 - 30;
-  const repeatDelay = seededRandom(index * 13) * 2;
-  const leftPos = seededRandom(index * 17) * 80 + 10;
+  const currentLogo = isTransformed ? item.to.logo : item.from.logo;
 
   return (
-    <motion.span
-      initial={{ y: 50, opacity: 0 }}
-      animate={{
-        y: [-50, -100, -150],
-        opacity: [0, 1, 0],
-        x: [0, xOffset1, xOffset2]
-      }}
-      transition={{
-        duration: 3,
-        delay,
-        repeat: Infinity,
-        repeatDelay
-      }}
-      className="absolute text-[#00d9a7] font-mono text-sm opacity-60"
-      style={{
-        left: `${leftPos}%`,
-        bottom: '20%'
-      }}
+    <motion.div
+      initial={{ opacity: 0, y: 30, rotateX: -15 }}
+      animate={isInView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
+      transition={{ delay: 0.15 + index * 0.1, duration: 0.6, type: 'spring' }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      onClick={() => setIsTransformed(!isTransformed)}
+      className="cursor-pointer"
     >
-      {symbol}
-    </motion.span>
+      <CometCard rotateDepth={8} translateDepth={10} className="h-full">
+        <div className="relative h-full overflow-hidden rounded-2xl bg-[#242428]/90 backdrop-blur-sm border border-white/10">
+          {/* Animated border on hover */}
+          <AnimatePresence>
+            {isHovered && (
+              <BorderBeam
+                size={80}
+                duration={3}
+                colorFrom={isTransformed ? '#00997d' : '#C62828'}
+                colorTo={isTransformed ? '#F9A825' : '#ff6b6b'}
+                borderWidth={2}
+              />
+            )}
+          </AnimatePresence>
+
+          <div className="p-5 sm:p-6">
+            {/* Header with logo and state badge */}
+            <div className="flex items-center justify-between mb-4">
+              <motion.div
+                animate={{ rotate: isTransformed ? 360 : 0 }}
+                transition={{ duration: 0.5 }}
+                className={cn(
+                  'w-12 h-12 rounded-xl flex items-center justify-center p-2',
+                  isTransformed ? 'bg-[#00997d]/20' : 'bg-white/10'
+                )}
+              >
+                {currentLogo ? (
+                  <Image
+                    src={currentLogo}
+                    alt={isTransformed ? item.to.name : item.from.name}
+                    width={32}
+                    height={32}
+                    className="w-8 h-8 object-contain"
+                  />
+                ) : (
+                  <span
+                    className="text-lg font-bold"
+                    style={{ color: isTransformed ? item.to.color : item.from.color }}
+                  >
+                    {(isTransformed ? item.to.name : item.from.name).charAt(0)}
+                  </span>
+                )}
+              </motion.div>
+
+              <motion.div
+                initial={false}
+                animate={{
+                  backgroundColor: isTransformed ? 'rgba(0, 153, 125, 0.2)' : 'rgba(198, 40, 40, 0.2)',
+                  borderColor: isTransformed ? 'rgba(0, 153, 125, 0.4)' : 'rgba(198, 40, 40, 0.4)',
+                }}
+                className="px-2 py-1 rounded-full border text-xs font-medium flex items-center gap-1"
+              >
+                {isTransformed ? (
+                  <>
+                    <Check className="w-3 h-3 text-[#00997d]" />
+                    <span className="text-[#00d9a7]">Libre</span>
+                  </>
+                ) : (
+                  <>
+                    <X className="w-3 h-3 text-[#C62828]" />
+                    <span className="text-[#ff6b6b]">Proprio</span>
+                  </>
+                )}
+              </motion.div>
+            </div>
+
+            {/* Name transformation */}
+            <div className="relative h-12 mb-3 overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={isTransformed ? 'to' : 'from'}
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -20, opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute inset-0"
+                >
+                  <h3
+                    className={cn(
+                      'text-2xl font-bold',
+                      isTransformed ? 'line-through opacity-40' : ''
+                    )}
+                    style={{ color: isTransformed ? item.from.color : item.from.color }}
+                  >
+                    {isTransformed ? item.from.name : item.from.name}
+                  </h3>
+                  {isTransformed && (
+                    <motion.h3
+                      initial={{ x: -10, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      className="text-2xl font-bold"
+                      style={{ color: item.to.color }}
+                    >
+                      {item.to.name}
+                    </motion.h3>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Transformation arrow */}
+            <div className="flex items-center gap-3 mb-4">
+              <div
+                className={cn(
+                  'flex-1 h-1 rounded-full transition-all duration-500',
+                  isTransformed
+                    ? 'bg-gradient-to-r from-[#C62828]/30 to-[#00997d]'
+                    : 'bg-gradient-to-r from-[#C62828] to-[#C62828]/30'
+                )}
+              />
+              <motion.div
+                animate={{ x: isTransformed ? 5 : 0, scale: isTransformed ? 1.2 : 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <ArrowRight
+                  className={cn(
+                    'w-5 h-5 transition-colors duration-300',
+                    isTransformed ? 'text-[#00997d]' : 'text-[#C62828]'
+                  )}
+                />
+              </motion.div>
+              <div
+                className={cn(
+                  'flex-1 h-1 rounded-full transition-all duration-500',
+                  isTransformed
+                    ? 'bg-gradient-to-r from-[#00997d] to-[#F9A825]'
+                    : 'bg-gradient-to-r from-[#C62828]/30 to-[#C62828]/10'
+                )}
+              />
+            </div>
+
+            {/* Benefit badge */}
+            <motion.div
+              initial={false}
+              animate={{
+                opacity: isTransformed ? 1 : 0.5,
+                scale: isTransformed ? 1 : 0.95,
+              }}
+              className={cn(
+                'text-center py-2 px-3 rounded-lg border transition-colors duration-300',
+                isTransformed
+                  ? 'bg-[#00997d]/10 border-[#00997d]/30 text-[#00d9a7]'
+                  : 'bg-white/5 border-white/10 text-gray-500'
+              )}
+            >
+              <span className="text-sm font-medium">{item.benefit}</span>
+            </motion.div>
+
+            {/* Click hint */}
+            <motion.p
+              animate={{ opacity: isHovered ? 1 : 0 }}
+              className="text-xs text-center text-gray-500 mt-3"
+            >
+              Cliquez pour transformer
+            </motion.p>
+          </div>
+        </div>
+      </CometCard>
+    </motion.div>
   );
 }
 
@@ -55,165 +231,96 @@ export default function KnowledgePotionSection() {
   return (
     <section
       data-section="knowledge-potion"
-      className="relative py-24 px-6 overflow-hidden"
-      style={{
-        background: 'linear-gradient(to bottom, #1a1a1d 0%, #0a1f15 50%, #1a1a1d 100%)'
-      }}
+      className="relative py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-[#1a1a1d] overflow-hidden"
     >
       {/* Background particles */}
-      <div className="absolute inset-0 opacity-30">
-        {Array.from({ length: 20 }).map((_, i) => (
-          <motion.div
-            key={i}
-            animate={{
-              y: [0, -30, 0],
-              opacity: [0.2, 0.5, 0.2]
-            }}
-            transition={{
-              duration: 3 + i * 0.2,
-              repeat: Infinity,
-              delay: i * 0.1
-            }}
-            className="absolute w-1 h-1 bg-[#00997d] rounded-full"
-            style={{
-              left: `${seededRandom(i * 23) * 100}%`,
-              top: `${seededRandom(i * 29) * 100}%`
-            }}
-          />
-        ))}
+      <div className="absolute inset-0 z-0 opacity-20">
+        <Particles
+          particleCount={30}
+          particleSpread={30}
+          speed={0.02}
+          particleColors={['#00997d', '#F9A825', '#C62828']}
+          alphaParticles={true}
+          particleBaseSize={30}
+          moveParticlesOnHover={true}
+        />
       </div>
 
-      <div ref={ref} className="max-w-4xl mx-auto relative z-10">
-        {/* Section badge */}
+      {/* Gradient orbs */}
+      <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-[#C62828]/10 rounded-full blur-[120px] -translate-y-1/2" />
+      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[#00997d]/15 rounded-full blur-[120px] translate-y-1/2" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#F9A825]/8 rounded-full blur-[100px]" />
+
+      <div ref={ref} className="relative z-10 max-w-5xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          {/* Badge */}
+          <motion.span
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#F9A825]/20 text-[#F9A825] text-sm font-medium rounded-full mb-4"
+          >
+            <FlaskConical className="w-4 h-4" />
+            La Potion du Savoir
+          </motion.span>
+
+          {/* Title */}
+          <BlurText
+            text="La Magie de la Transformation"
+            className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4"
+            delay={80}
+            animateBy="words"
+          />
+
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            className="text-gray-400 text-base sm:text-lg max-w-2xl mx-auto mb-2"
+          >
+            Cliquez sur chaque carte pour découvrir la puissance des logiciels libres
+          </motion.p>
+
+          {/* Interactive hint */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.5, duration: 0.6 }}
+            className="flex items-center justify-center gap-2 text-[#F9A825]"
+          >
+            <span className="text-sm font-medium">[ Cliquez sur les cartes ]</span>
+          </motion.div>
+        </div>
+
+        {/* Transformation Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-10">
+          {ALTERNATIVES.map((alt, index) => (
+            <TransformationCard
+              key={alt.id}
+              item={alt}
+              index={index}
+              isInView={isInView}
+            />
+          ))}
+        </div>
+
+        {/* CTA to Memory Game */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          className="flex justify-center mb-8"
+          transition={{ delay: 0.7, duration: 0.6 }}
+          className="text-center"
         >
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#00997d]/20 text-[#00d9a7] rounded-full text-sm font-medium border border-[#00997d]/30">
-            <Sparkles className="w-4 h-4" />
-            La Potion du Savoir
-          </span>
-        </motion.div>
-
-        {/* Main content */}
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Cauldron visualization */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ delay: 0.2 }}
-            className="relative flex justify-center"
-          >
-            <div className="relative">
-              {/* Cauldron */}
-              <motion.div
-                animate={{ y: [0, -5, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="w-48 h-48 relative"
-              >
-                {/* Cauldron body */}
-                <div className="absolute bottom-0 w-full h-36 bg-gradient-to-b from-gray-700 to-gray-900 rounded-b-full border-4 border-gray-600" />
-
-                {/* Potion liquid */}
-                <motion.div
-                  animate={{ scale: [1, 1.05, 1] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                  className="absolute bottom-8 left-4 right-4 h-24 bg-gradient-to-t from-[#00997d] to-[#00d9a7] rounded-b-full opacity-80"
-                  style={{
-                    boxShadow: '0 0 30px rgba(0, 153, 125, 0.5), inset 0 -10px 20px rgba(0, 0, 0, 0.3)'
-                  }}
-                />
-
-                {/* Bubbles */}
-                {[...Array(5)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    animate={{
-                      y: [0, -40, -80],
-                      opacity: [0, 1, 0],
-                      scale: [0.5, 1, 0.5]
-                    }}
-                    transition={{
-                      duration: 2,
-                      delay: i * 0.4,
-                      repeat: Infinity
-                    }}
-                    className="absolute w-3 h-3 bg-[#00d9a7] rounded-full"
-                    style={{
-                      left: `${20 + i * 15}%`,
-                      bottom: '40%'
-                    }}
-                  />
-                ))}
-
-                {/* Floating code symbols */}
-                {CODE_SYMBOLS.map((symbol, i) => (
-                  <FloatingSymbol key={i} symbol={symbol} delay={i * 0.3} index={i} />
-                ))}
-              </motion.div>
-
-              {/* Flask icon */}
-              <motion.div
-                animate={{ rotate: [0, 5, -5, 0] }}
-                transition={{ duration: 3, repeat: Infinity }}
-                className="absolute -top-4 -right-4 w-16 h-16 bg-[#00997d]/20 rounded-full flex items-center justify-center border border-[#00997d]/30"
-              >
-                <FlaskConical className="w-8 h-8 text-[#00d9a7]" />
-              </motion.div>
-            </div>
-          </motion.div>
-
-          {/* Text content */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: 0.3 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              Pour chaque outil de l'Empire,{' '}
-              <span className="text-[#00d9a7]">une alternative libre</span> existe
-            </h2>
-
-            <p className="text-white/70 mb-6 text-lg">
-              La potion magique de Panoramix ? La connaissance des logiciels libres !
-              Chaque logiciel proprietaire a son equivalent open source, gratuit et respectueux.
+          <div className="inline-flex items-center gap-3 px-5 py-3 bg-[#00997d]/10 rounded-xl border border-[#00997d]/20">
+            <Gamepad2 className="w-5 h-5 text-[#F9A825]" />
+            <p className="text-white/80 text-sm">
+              <span className="text-[#00d9a7] font-medium">Prochain défi :</span>{' '}
+              Teste ta mémoire et découvre toutes les alternatives !
             </p>
-
-            <div className="space-y-3 mb-8">
-              {[
-                { from: 'Windows', to: 'Linux NIRD', color: '#00997d' },
-                { from: 'MS Office', to: 'LibreOffice', color: '#18A303' },
-                { from: 'Photoshop', to: 'GIMP', color: '#5C5543' }
-              ].map((item, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 0.4 + i * 0.1 }}
-                  className="flex items-center gap-3 text-sm"
-                >
-                  <span className="text-[#C62828] line-through opacity-60">{item.from}</span>
-                  <ArrowRight className="w-4 h-4 text-white/40" />
-                  <span className="font-medium" style={{ color: item.color }}>{item.to}</span>
-                </motion.div>
-              ))}
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.6 }}
-              className="flex items-center gap-3 p-4 bg-[#00997d]/10 rounded-xl border border-[#00997d]/20"
-            >
-              <Layers className="w-6 h-6 text-[#00d9a7] flex-shrink-0" />
-              <p className="text-white/80 text-sm">
-                <span className="text-[#00d9a7] font-medium">Prochain defi :</span>{' '}
-                Teste ta memoire et decouvre toutes les alternatives libres !
-              </p>
-            </motion.div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -292,6 +292,7 @@ function WindowsIcon({ className }: { className?: string }) {
       height={48}
       draggable={false}
       className={cn("object-contain pointer-events-none select-none", className)}
+      style={{ width: 'auto', height: 'auto' }}
     />
   );
 }
@@ -916,7 +917,7 @@ export default function ImmersiveRefurbishGame() {
 
   return (
     <div
-      className="relative w-full max-w-5xl mx-auto px-2 md:px-4 overflow-visible py-8"
+      className="relative w-full max-w-5xl mx-auto px-2 sm:px-3 md:px-4 overflow-visible py-4 sm:py-6 md:py-8"
       onMouseMove={handleMouseMove}
     >
       {/* Confetti */}
@@ -943,8 +944,8 @@ export default function ImmersiveRefurbishGame() {
         visible={totalPCsSaved > 0 && gameState !== 'intro'}
       />
 
-      {/* Main Game Area */}
-      <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3 md:gap-6 justify-items-center mt-8">
+      {/* Main Game Area - Responsive grid */}
+      <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-3 md:gap-6 justify-items-center mt-4 sm:mt-6 md:mt-8">
 
         {/* LEFT - Linux USB */}
         <div className="flex flex-col items-center justify-center">
@@ -979,8 +980,8 @@ export default function ImmersiveRefurbishGame() {
           </motion.div>
         </div>
 
-        {/* CENTER - PC Monitor */}
-        <div className="flex flex-col items-center w-full max-w-[450px]">
+        {/* CENTER - PC Monitor - Responsive max width */}
+        <div className="flex flex-col items-center w-full max-w-[280px] sm:max-w-[380px] md:max-w-[450px]">
           <motion.div
             ref={pcRef}
             animate={gameState === 'hovering' ? { scale: [1, 1.02, 1] } : {}}

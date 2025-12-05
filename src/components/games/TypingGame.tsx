@@ -60,8 +60,8 @@ function TerminalDisplay({
         <span className="text-gray-400 text-xs ml-2">terminal@nird-village ~ </span>
       </div>
 
-      {/* Terminal Content */}
-      <div className="p-4 min-h-[200px] max-h-[300px] overflow-y-auto">
+      {/* Terminal Content - Responsive heights */}
+      <div className="p-3 sm:p-4 min-h-[160px] sm:min-h-[200px] md:min-h-[220px] max-h-[250px] sm:max-h-[300px] md:max-h-[350px] overflow-y-auto">
         {/* Completed commands */}
         {completed.slice(-3).map((cmd, i) => (
           <div key={i} className="mb-2 opacity-60">
@@ -468,8 +468,8 @@ function TypingGameInner() {
             </div>
           </div>
 
-          {/* Race Display */}
-          <div className="grid md:grid-cols-2 gap-4 mb-4">
+          {/* Race Display - Responsive grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mb-4">
             {/* Linux Terminal */}
             <div>
               <div className="flex items-center gap-2 mb-2">
