@@ -79,7 +79,7 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
 
   return (
     <div
-      className="relative flex gap-4 justify-center items-center flex-wrap"
+      className="relative flex gap-6 md:gap-8 justify-center items-center flex-wrap w-full mx-auto"
       ref={containerRef}
       style={{ outline: 'none', userSelect: 'none' }}
     >
@@ -91,17 +91,14 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
             ref={el => {
               wordRefs.current[index] = el;
             }}
-            className="relative text-[3rem] font-black cursor-pointer"
+            className="relative text-[2.5rem] md:text-[3rem] font-black cursor-pointer"
             style={
               {
-                filter: manualMode
-                  ? isActive
-                    ? `blur(0px)`
-                    : `blur(${blurAmount}px)`
-                  : isActive
-                    ? `blur(0px)`
-                    : `blur(${blurAmount}px)`,
-                transition: `filter ${animationDuration}s ease`,
+                filter: isActive ? `blur(0px)` : `blur(${blurAmount}px)`,
+                opacity: isActive ? 1 : 0.4,
+                color: isActive ? '#F9A825' : '#9CA3AF',
+                textShadow: isActive ? '0 0 20px rgba(249, 168, 37, 0.5)' : 'none',
+                transition: `filter ${animationDuration}s ease, opacity ${animationDuration}s ease, color ${animationDuration}s ease`,
                 outline: 'none',
                 userSelect: 'none'
               } as React.CSSProperties

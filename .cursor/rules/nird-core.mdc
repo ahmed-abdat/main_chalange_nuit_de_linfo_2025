@@ -1,0 +1,86 @@
+---
+description: Village NIRD core project conventions and challenge context
+alwaysApply: true
+---
+
+# Village NIRD - Core Project Rules
+
+## Challenge Context
+
+**La Nuit de l'Info 2025** - "The Resistant Digital Village"
+
+Using the Asterix vs Roman Empire metaphor to promote NIRD (Numérique Inclusif, Responsable, Durable).
+
+> "We are in 2025. All French schools are occupied by Big Tech... All of them? No! One village of irreducible teachers and students still resists the invader."
+
+## Tech Stack
+
+| Technology | Version | Notes |
+|------------|---------|-------|
+| Next.js | 16.0.7 | App Router, Turbopack |
+| React | 19.2.0 | React Compiler enabled |
+| TypeScript | 5 | Strict mode |
+| Tailwind CSS | 4 | Theme in CSS @theme |
+| Framer Motion | 12 | Primary animation library |
+| Zustand | 5 | State management |
+| Three.js | - | 3D graphics |
+
+## File Structure
+
+```
+src/
+├── app/           # Next.js App Router pages
+├── components/    # React components
+│   ├── sections/  # Page sections (Hero, Crisis, etc.)
+│   ├── ui/        # shadcn/ui components
+│   └── Village/   # Village-themed components
+├── store/         # Zustand state
+├── hooks/         # Custom hooks
+├── data/          # Static data
+├── types/         # TypeScript types
+└── lib/           # Utilities
+```
+
+## Core Conventions
+
+### TypeScript
+- Never use `any` - use `unknown` or proper types
+- Enable strict mode
+- Use absolute imports: `@/components/...`, `@/lib/...`
+
+### React/Next.js
+- Server Components by default
+- Add `'use client'` only when using hooks, state, or browser APIs
+- Use `next/image` for all images with width/height
+- Params in Next.js 16 are Promises - must await them
+
+### Imports
+```typescript
+// Use absolute imports with @ alias
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+```
+
+### Styling
+```typescript
+// Use cn() for conditional Tailwind classes
+import { cn } from '@/lib/utils';
+
+<div className={cn(
+  'base-styles',
+  isActive && 'active-styles'
+)} />
+```
+
+## Git Commits
+- Write clean, professional commit messages
+- Never include auto-generated signatures
+- Follow conventional commits when applicable
+
+## Commands
+
+```bash
+pnpm dev      # Start dev server (port 3000)
+pnpm build    # Production build
+pnpm lint     # Run ESLint
+```

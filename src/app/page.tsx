@@ -1,140 +1,212 @@
 'use client';
 
-import { Suspense } from 'react';
+import { useState } from 'react';
 import { motion } from 'motion/react';
+import { Users, Shield, Leaf } from 'lucide-react';
+import Link from 'next/link';
+
+// Components
+import CountUp from '@/components/CountUp';
+import { cn } from '@/lib/utils';
+
+// Data
+import { type ChoiceId } from '@/data/choices';
+
+// Store
+import { useChoiceStore } from '@/store/choiceStore';
+
+// Games
+import { RefurbishGame } from '@/components/games';
 
 /**
- * Village NIRD - La Nuit de l'Info 2025
- *
- * Theme: "The Resistant Digital Village"
- * - Asterix vs Big Tech metaphor
- * - Scrollytelling with interactive choice
- * - NIRD 3 pillars: Inclusive, Responsible, Sustainable
+ * Village NIRD - Modern Simplified Landing Page
+ * La Nuit de l'Info 2025
  */
 
-// Placeholder Hero Section
+// =============================================================================
+// NAVIGATION
+// =============================================================================
+function Navigation() {
+  return (
+    <motion.nav
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.5 }}
+      className="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-white/80 backdrop-blur-md border-b border-gray-100"
+    >
+      <div className="max-w-6xl mx-auto flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <span className="text-2xl">🏛️</span>
+          <span className="text-gray-900 font-bold text-lg">Village NIRD</span>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <Link
+            href="/rpg"
+            className="hidden sm:flex items-center gap-2 px-4 py-2 text-sm text-[#00997d] hover:text-[#007d66] transition-colors"
+          >
+            <span>⚔️</span>
+            RPG
+          </Link>
+          <a
+            href="https://nird.forge.apps.education.fr/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-5 py-2 bg-[#00997d] text-white text-sm font-medium rounded-full hover:bg-[#007d66] transition-colors"
+          >
+            Rejoindre NIRD
+          </a>
+        </div>
+      </div>
+    </motion.nav>
+  );
+}
+
+// =============================================================================
+// HERO SECTION - Light Theme
+// =============================================================================
 function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-[var(--nird-parchment)] to-[var(--nird-parchment-dark)]">
-      {/* Background pattern */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-30" />
+    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-white via-gray-50 to-white overflow-hidden pt-20">
+      {/* Subtle pattern background */}
+      <div className="absolute inset-0 z-0 opacity-[0.03]">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(circle at 1px 1px, #00997d 1px, transparent 0)`,
+          backgroundSize: '40px 40px'
+        }} />
+      </div>
 
-      <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
+      {/* Subtle gradient accents */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#00997d]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#F9A825]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+
+      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+        {/* Alert Badge */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ delay: 0.2 }}
+          className="mb-8"
         >
-          {/* Epic intro text */}
-          <p className="text-lg md:text-xl text-[var(--nird-dark-blue)] mb-4 font-medium">
-            Nous sommes en 2025...
-          </p>
-
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-            <span className="text-gradient-empire">Toutes les écoles françaises</span>
-            <br />
-            <span className="text-[var(--nird-dark-blue)]">sont occupées par</span>
-            <br />
-            <span className="text-[var(--nird-roman-red)]">Big Tech...</span>
-          </h1>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-            className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--nird-forest-green)] mt-8"
-          >
-            Toutes ? Non !
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1, duration: 0.8 }}
-            className="text-xl md:text-2xl text-[var(--nird-dark-blue)] mt-4 max-w-3xl mx-auto"
-          >
-            Un village d&apos;irréductibles enseignants et élèves résiste encore à l&apos;envahisseur...
-          </motion.p>
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#C62828]/10 text-[#C62828] text-sm font-medium rounded-full border border-[#C62828]/20">
+            <span className="w-1.5 h-1.5 bg-[#C62828] rounded-full animate-pulse" />
+            Octobre 2025 — Fin de Windows 10
+          </span>
         </motion.div>
 
-        {/* CTA Button */}
+        {/* Main Title */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-4 tracking-tight"
+        >
+          Le Village qui{' '}
+          <span className="text-[#00997d]">Résiste</span>
+        </motion.h1>
+
+        {/* Subtitle */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+          className="text-lg sm:text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed"
+        >
+          <span className="text-[#C62828] font-semibold">240 millions</span> de PCs menacés d&apos;obsolescence.
+          Une solution libre et gratuite existe : <span className="text-[#00997d] font-semibold">Linux</span>.
+        </motion.p>
+
+        {/* Quick Stats */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.5, duration: 0.6 }}
-          className="mt-12"
+          transition={{ delay: 0.5 }}
+          className="flex flex-wrap justify-center gap-8 mb-12"
         >
-          <button className="px-8 py-4 bg-[var(--nird-forest-green)] hover:bg-[var(--nird-forest-light)] text-white font-bold text-lg rounded-lg transition-all transform hover:scale-105 shadow-lg">
-            Découvrir le Village NIRD
-          </button>
+          {[
+            { value: '€0', label: 'Coût', color: '#00997d' },
+            { value: '+5 ans', label: 'Durée de vie', color: '#d97706' },
+            { value: '100%', label: 'Libre', color: '#00997d' },
+          ].map((stat) => (
+            <div key={stat.label} className="text-center">
+              <p className="text-2xl font-bold" style={{ color: stat.color }}>{stat.value}</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">{stat.label}</p>
+            </div>
+          ))}
         </motion.div>
 
-        {/* Scroll indicator */}
+        {/* CTA Buttons */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2, duration: 0.6 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="flex flex-col sm:flex-row gap-4 justify-center"
         >
-          <div className="animate-bounce">
-            <svg className="w-8 h-8 text-[var(--nird-dark-blue)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-          </div>
+          <button
+            onClick={() => document.getElementById('choice')?.scrollIntoView({ behavior: 'smooth' })}
+            className="px-8 py-4 bg-[#00997d] text-white font-semibold rounded-xl hover:bg-[#007d66] transition-all shadow-lg shadow-[#00997d]/20"
+          >
+            Faire le choix
+          </button>
+          <button
+            onClick={() => document.getElementById('game')?.scrollIntoView({ behavior: 'smooth' })}
+            className="px-8 py-4 bg-gray-900 text-white font-medium rounded-xl hover:bg-gray-800 transition-all"
+          >
+            Mini-jeu
+          </button>
         </motion.div>
       </div>
     </section>
   );
 }
 
-// Crisis Section - Windows 10 Problem
-function CrisisSection() {
+// =============================================================================
+// STATS SECTION - Light Theme
+// =============================================================================
+function StatsSection() {
   const stats = [
-    { value: '240M', label: 'PCs à jeter dans le monde', color: 'var(--nird-roman-red)' },
-    { value: '68%', label: 'PCs Windows 10 en France (admin)', color: 'var(--nird-roman-red)' },
-    { value: '€300-800', label: 'Coût par nouveau PC', color: 'var(--nird-roman-red)' },
-    { value: '€0', label: 'Coût de Linux', color: 'var(--nird-forest-green)' },
+    { value: 240, suffix: 'M', label: 'PCs menacés', color: '#C62828' },
+    { value: 68, suffix: '%', label: 'Admin sous Win10', color: '#d97706' },
+    { value: 800, prefix: '€', label: 'Coût nouveau PC', color: '#C62828' },
+    { value: 0, prefix: '€', label: 'Coût Linux', color: '#00997d' },
   ];
 
   return (
-    <section className="py-24 px-6 bg-white">
-      <div className="max-w-6xl mx-auto">
+    <section id="stats" className="py-20 px-6 bg-gray-50">
+      <div className="max-w-5xl mx-auto">
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
-          <span className="inline-block px-4 py-2 bg-[var(--nird-roman-red)] text-white text-sm font-bold rounded-full mb-4">
-            ALERTE : 14 OCTOBRE 2025
+          <span className="inline-block px-3 py-1 bg-[#C62828]/10 text-[#C62828] text-xs font-medium rounded-full mb-4">
+            14 Octobre 2025
           </span>
-          <h2 className="text-3xl md:text-5xl font-bold text-[var(--nird-dark-blue)] mb-6">
-            La Crise
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+            La crise est réelle
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Microsoft met fin au support GRATUIT de Windows 10.
-            Plus de mises à jour de sécurité gratuites.
-            Les ordinateurs non protégés deviennent vulnérables aux cyberattaques.
+          <p className="text-gray-600 max-w-lg mx-auto">
+            Fin du support Windows 10. Des millions de PCs deviennent vulnérables.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {stats.map((stat, index) => (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="text-center p-6 rounded-xl bg-gray-50"
+              transition={{ delay: i * 0.1 }}
+              className="text-center p-6 bg-white rounded-xl border border-gray-100 shadow-sm"
             >
-              <div
-                className="text-3xl md:text-4xl font-bold mb-2"
-                style={{ color: stat.color }}
-              >
-                {stat.value}
+              <div className="flex items-baseline justify-center gap-0.5 mb-1">
+                {stat.prefix && <span className="text-lg" style={{ color: stat.color }}>{stat.prefix}</span>}
+                <CountUp to={stat.value} duration={2} className="text-3xl font-bold" style={{ color: stat.color }} />
+                {stat.suffix && <span className="text-lg" style={{ color: stat.color }}>{stat.suffix}</span>}
               </div>
-              <div className="text-sm text-gray-600">{stat.label}</div>
+              <p className="text-xs text-gray-500">{stat.label}</p>
             </motion.div>
           ))}
         </div>
@@ -143,99 +215,242 @@ function CrisisSection() {
   );
 }
 
-// Pillars Section - NIRD 3 Pillars
-function PillarsSection() {
-  const pillars = [
-    {
-      title: 'Inclusif',
-      subtitle: 'La tech pour tous',
-      description: 'Les élèves plus âgés reconditionnent des PCs pour les plus jeunes. 132 ordinateurs livrés à 11 écoles.',
-      color: 'var(--nird-forest-green)',
-      icon: '🤝',
-    },
-    {
-      title: 'Responsable',
-      subtitle: 'Contrôlez vos données',
-      description: 'Utilisez des alternatives open-source. Gardez les données en France/UE. Souveraineté numérique.',
-      color: 'var(--nird-gold)',
-      icon: '🛡️',
-    },
-    {
-      title: 'Durable',
-      subtitle: 'Matériel qui dure 10+ ans',
-      description: 'Linux fonctionne sur les vieux ordinateurs. Un SSD à 30€ transforme un vieux PC en machine rapide.',
-      color: 'var(--nird-dark-blue)',
-      icon: '🌱',
-    },
+// =============================================================================
+// CHOICE SECTION - Light Theme
+// =============================================================================
+function ChoiceSection() {
+  const { userChoice, setUserChoice, calculatorInputs, setCalculatorInputs } = useChoiceStore();
+  const [schoolSize, setSchoolSize] = useState(calculatorInputs.schoolSize);
+
+  const handleSchoolSizeChange = (value: number) => {
+    setSchoolSize(value);
+    setCalculatorInputs({ schoolSize: value });
+  };
+
+  const choices = [
+    { id: 'A' as ChoiceId, title: "Payer", desc: 'Nouveaux PCs Windows', icon: '💸', color: '#C62828', cost: schoolSize * 800 },
+    { id: 'B' as ChoiceId, title: 'Résister', desc: 'Linux gratuit', icon: '🐧', color: '#00997d', cost: schoolSize * 50, recommended: true },
+    { id: 'C' as ChoiceId, title: 'Ignorer', desc: 'Risque sécurité', icon: '😴', color: '#64748b', cost: schoolSize * 1200 },
   ];
 
   return (
-    <section className="py-24 px-6 bg-gradient-village">
-      <div className="max-w-6xl mx-auto">
+    <section id="choice" className="py-20 px-6 bg-white">
+      <div className="max-w-4xl mx-auto">
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-5xl font-bold text-[var(--nird-dark-blue)] mb-4">
-            Le Mouvement NIRD
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+            Que ferait votre école ?
           </h2>
-          <p className="text-xl text-gray-600">
-            Numérique Inclusif, Responsable, Durable
+          <p className="text-gray-600">Calculez vos économies potentielles</p>
+        </motion.div>
+
+        {/* Slider */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-10 max-w-sm mx-auto"
+        >
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm text-gray-600">Nombre de PCs</span>
+            <span className="text-lg font-bold text-gray-900">{schoolSize}</span>
+          </div>
+          <input
+            type="range"
+            min="10"
+            max="500"
+            value={schoolSize}
+            onChange={(e) => handleSchoolSizeChange(Number(e.target.value))}
+            className="w-full h-1.5 rounded-full appearance-none bg-gray-200 cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#00997d] [&::-webkit-slider-thumb]:cursor-pointer"
+          />
+        </motion.div>
+
+        {/* Choice Cards */}
+        <div className="grid md:grid-cols-3 gap-4">
+          {choices.map((choice, i) => (
+            <motion.button
+              key={choice.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              onClick={() => setUserChoice(choice.id)}
+              className={cn(
+                'relative p-6 rounded-xl text-left transition-all',
+                'bg-white border shadow-sm',
+                userChoice === choice.id
+                  ? 'border-2 shadow-md'
+                  : 'border-gray-200 hover:border-gray-300',
+                choice.recommended && !userChoice && 'ring-2 ring-[#00997d]/20'
+              )}
+              style={{ borderColor: userChoice === choice.id ? choice.color : undefined }}
+            >
+              {choice.recommended && (
+                <span className="absolute -top-2.5 left-4 px-2 py-0.5 bg-[#00997d] text-white text-[10px] font-medium rounded-full">
+                  Recommandé
+                </span>
+              )}
+
+              <span className="text-3xl block mb-3">{choice.icon}</span>
+              <h3 className="text-lg font-semibold text-gray-900 mb-1">{choice.title}</h3>
+              <p className="text-xs text-gray-500 mb-4">{choice.desc}</p>
+
+              <div className="pt-3 border-t border-gray-100">
+                <p className="text-[10px] text-gray-500 uppercase tracking-wide mb-1">Coût 5 ans</p>
+                <p className="text-2xl font-bold" style={{ color: choice.color }}>
+                  €{choice.cost.toLocaleString()}
+                </p>
+              </div>
+
+              {userChoice === choice.id && (
+                <div
+                  className="absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center text-white text-xs"
+                  style={{ backgroundColor: choice.color }}
+                >
+                  ✓
+                </div>
+              )}
+            </motion.button>
+          ))}
+        </div>
+
+        {/* Savings display */}
+        {userChoice === 'B' && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-8 text-center p-4 bg-[#00997d]/10 rounded-xl border border-[#00997d]/20"
+          >
+            <p className="text-[#00997d] font-semibold">
+              Économie de €{((schoolSize * 800) - (schoolSize * 50)).toLocaleString()} sur 5 ans
+            </p>
+          </motion.div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+// =============================================================================
+// GAME SECTION - Light Theme
+// =============================================================================
+function GameSection() {
+  return (
+    <section id="game" className="py-20 px-6 bg-gray-50">
+      <div className="max-w-4xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-10"
+        >
+          <span className="inline-block px-3 py-1 bg-[#00997d]/10 text-[#00997d] text-xs font-medium rounded-full mb-4">
+            Interactif
+          </span>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+            Sauvez un PC
+          </h2>
+          <p className="text-gray-600 text-sm">
+            Glissez Linux sur le PC pour le sauver
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {pillars.map((pillar, index) => (
-            <motion.div
-              key={pillar.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.2 }}
-              className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow"
-            >
-              <div className="text-5xl mb-4">{pillar.icon}</div>
-              <h3
-                className="text-2xl font-bold mb-2"
-                style={{ color: pillar.color }}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <RefurbishGame />
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// =============================================================================
+// PILLARS SECTION - Light Theme
+// =============================================================================
+function PillarsSection() {
+  const pillarData = [
+    { id: 'inclusive', title: 'Inclusif', icon: Users, color: '#00997d', desc: 'Tech pour tous, PC reconditionnés' },
+    { id: 'responsible', title: 'Responsable', icon: Shield, color: '#3B82F6', desc: 'Données souveraines, RGPD' },
+    { id: 'sustainable', title: 'Durable', icon: Leaf, color: '#22C55E', desc: 'PCs 10+ ans, moins de déchets' },
+  ];
+
+  return (
+    <section className="py-20 px-6 bg-white">
+      <div className="max-w-4xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+            Les 3 piliers NIRD
+          </h2>
+          <p className="text-gray-600">Numérique Inclusif, Responsable, Durable</p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-3 gap-4">
+          {pillarData.map((pillar, i) => {
+            const Icon = pillar.icon;
+            return (
+              <motion.div
+                key={pillar.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="p-6 bg-gray-50 rounded-xl border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all"
               >
-                {pillar.title}
-              </h3>
-              <p className="text-gray-500 text-sm mb-3">{pillar.subtitle}</p>
-              <p className="text-gray-600">{pillar.description}</p>
-            </motion.div>
-          ))}
+                <div
+                  className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
+                  style={{ backgroundColor: `${pillar.color}15` }}
+                >
+                  <Icon className="w-5 h-5" style={{ color: pillar.color }} />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">{pillar.title}</h3>
+                <p className="text-sm text-gray-600">{pillar.desc}</p>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
   );
 }
 
-// CTA Section - Join the Village
-function JoinSection() {
+// =============================================================================
+// CTA SECTION - Light Theme with accent
+// =============================================================================
+function CTASection() {
   return (
-    <section className="py-24 px-6 bg-[var(--nird-forest-green)]">
-      <div className="max-w-4xl mx-auto text-center">
+    <section className="py-20 px-6 bg-[#00997d]">
+      <div className="max-w-2xl mx-auto text-center">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
+          <span className="text-5xl block mb-6">🐧</span>
+          <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">
             Rejoignez le Village
           </h2>
-          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Vous n&apos;êtes pas seul. Le village vous accueille.
-            Ensemble, résistons à l&apos;Empire numérique.
+          <p className="text-white/90 mb-8">
+            Des centaines d&apos;écoles ont déjà fait le choix de la liberté numérique.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a
               href="https://nird.forge.apps.education.fr/"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-4 bg-white text-[var(--nird-forest-green)] font-bold text-lg rounded-lg transition-all transform hover:scale-105 shadow-lg"
+              className="px-8 py-3 bg-white text-[#00997d] font-semibold rounded-xl hover:bg-gray-100 transition-all"
             >
               Découvrir NIRD
             </a>
@@ -243,9 +458,9 @@ function JoinSection() {
               href="https://nird.forge.apps.education.fr/linux/"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-4 bg-[var(--nird-gold)] text-[var(--nird-dark-blue)] font-bold text-lg rounded-lg transition-all transform hover:scale-105 shadow-lg"
+              className="px-8 py-3 bg-white/20 text-white font-medium rounded-xl border border-white/30 hover:bg-white/30 transition-all"
             >
-              Installer Linux
+              Télécharger Linux
             </a>
           </div>
         </motion.div>
@@ -254,41 +469,60 @@ function JoinSection() {
   );
 }
 
-// Footer
+// =============================================================================
+// FOOTER - Light Theme
+// =============================================================================
 function Footer() {
   return (
-    <footer className="py-8 px-6 bg-[var(--nird-dark-blue)] text-white/80">
-      <div className="max-w-6xl mx-auto text-center">
-        <p className="text-sm">
-          La Nuit de l&apos;Info 2025 - Team Mauritania
-        </p>
-        <p className="text-xs mt-2 text-white/60">
-          Inspiré par le mouvement NIRD - Numérique Inclusif, Responsable, Durable
-        </p>
+    <footer className="py-8 px-6 bg-gray-50 border-t border-gray-200">
+      <div className="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="flex items-center gap-2">
+          <span className="text-xl">🐧</span>
+          <span className="text-sm text-gray-600">Village NIRD — La Nuit de l&apos;Info 2025</span>
+        </div>
+        <div className="flex items-center gap-4">
+          <a href="https://nird.forge.apps.education.fr/" target="_blank" rel="noopener noreferrer" className="text-xs text-gray-500 hover:text-gray-900">
+            NIRD
+          </a>
+          <Link href="/rpg" className="text-xs text-gray-500 hover:text-gray-900">
+            RPG
+          </Link>
+          <Link href="/variants" className="text-xs text-gray-500 hover:text-gray-900">
+            Variants
+          </Link>
+        </div>
       </div>
     </footer>
   );
 }
 
+// =============================================================================
+// MAIN PAGE - Logical Storytelling Flow
+// =============================================================================
+// Flow: Hook → Problem → Solution → Action
+// 1. Hero: Asterix narrative hook (emotional connection)
+// 2. Stats/Crisis: The Windows 10 problem (urgency)
+// 3. Choice: Interactive decision (user engagement)
+// 4. Pillars: NIRD values - what makes Linux better (education)
+// 5. Game: Save a PC experience (fun/memorable)
+// 6. CTA: Join the resistance (conversion)
+// =============================================================================
 export default function Home() {
   return (
-    <main className="min-h-screen">
-      <Suspense fallback={<div className="min-h-screen bg-[var(--nird-parchment)]" />}>
-        <HeroSection />
-      </Suspense>
-
-      <Suspense fallback={null}>
-        <CrisisSection />
-      </Suspense>
-
-      <Suspense fallback={null}>
-        <PillarsSection />
-      </Suspense>
-
-      <Suspense fallback={null}>
-        <JoinSection />
-      </Suspense>
-
+    <main className="min-h-screen bg-white">
+      <Navigation />
+      {/* 1. HOOK - Asterix narrative, emotional connection */}
+      <HeroSection />
+      {/* 2. PROBLEM - The crisis is real, urgency */}
+      <StatsSection />
+      {/* 3. DECISION - Interactive choice engagement */}
+      <ChoiceSection />
+      {/* 4. EDUCATION - The 3 NIRD pillars */}
+      <PillarsSection />
+      {/* 5. EXPERIENCE - Interactive game (memorable WOW) */}
+      <GameSection />
+      {/* 6. CONVERSION - Final CTA */}
+      <CTASection />
       <Footer />
     </main>
   );
