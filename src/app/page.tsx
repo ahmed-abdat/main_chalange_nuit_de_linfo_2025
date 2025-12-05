@@ -42,6 +42,13 @@ function Navigation() {
 
         <div className="flex items-center gap-4">
           <Link
+            href="/student-scenarios"
+            className="hidden sm:flex items-center gap-2 px-4 py-2 text-sm text-[#00997d] hover:text-[#007d66] transition-colors"
+          >
+            <span>🎯</span>
+            Scénarios
+          </Link>
+          <Link
             href="/rpg"
             className="hidden sm:flex items-center gap-2 px-4 py-2 text-sm text-[#00997d] hover:text-[#007d66] transition-colors"
           >
@@ -484,6 +491,9 @@ function Footer() {
           <a href="https://nird.forge.apps.education.fr/" target="_blank" rel="noopener noreferrer" className="text-xs text-gray-500 hover:text-gray-900">
             NIRD
           </a>
+          <Link href="/student-scenarios" className="text-xs text-gray-500 hover:text-gray-900">
+            Scénarios
+          </Link>
           <Link href="/rpg" className="text-xs text-gray-500 hover:text-gray-900">
             RPG
           </Link>
