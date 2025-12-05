@@ -1660,6 +1660,7 @@ function Footer() {
               { label: 'Linux NIRD', href: 'https://nird.forge.apps.education.fr/linux/' },
               { label: 'Variants', href: '/variants', internal: true },
               { label: 'Tonton Roger 🤖', href: 'https://chatbot-kappa-mocha.vercel.app/' },
+              { label: 'Audio visuelisation 🎧', href: 'https://interctive-audio.vercel.app/' },
             ].map((link) => (
               <div key={link.label}>
                 {link.internal ? (
