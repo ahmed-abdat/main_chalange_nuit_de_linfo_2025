@@ -90,6 +90,7 @@ export function SmoothCursor({
   },
 }: SmoothCursorProps) {
   const [isMoving, setIsMoving] = useState(false)
+  const [isHidden, setIsHidden] = useState(false)
   const lastMousePos = useRef<Position>({ x: 0, y: 0 })
   const velocity = useRef<Position>({ x: 0, y: 0 })
   const lastUpdateTime = useRef(Date.now())
@@ -128,6 +129,11 @@ export function SmoothCursor({
     const smoothMouseMove = (e: MouseEvent) => {
       const currentPos = { x: e.clientX, y: e.clientY }
       updateVelocity(currentPos)
+
+      // Check if hovering over an element with data-cursor-default
+      const target = e.target as HTMLElement
+      const shouldHide = target.closest('[data-cursor-default]') !== null
+      setIsHidden(shouldHide)
 
       const speed = Math.sqrt(
         Math.pow(velocity.current.x, 2) + Math.pow(velocity.current.y, 2)
@@ -193,6 +199,7 @@ export function SmoothCursor({
         zIndex: 100,
         pointerEvents: "none",
         willChange: "transform",
+        opacity: isHidden ? 0 : 1,
       }}
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}

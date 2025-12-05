@@ -1,15 +1,12 @@
-import {
-  Gamepad2, Box, Bot, Search, Chrome, Music2, Headphones,
-  Skull, Palette, MessageSquareWarning, MessageCircleHeart,
-  Wrench, CloudUpload, FileLock2, MapPinOff, Map, Film,
-  Clapperboard, KeyRound, Languages, Globe, Trash2, Usb,
-  Eye, EyeOff, MailWarning, MailCheck, Clock, Users,
-  FileX, FileCheck, Copyright, Image, Zap, PenTool,
-  ShieldCheck, Lock, Unlock, Sprout, DollarSign, ServerCrash,
-  Smartphone, Laptop, Wifi, HelpCircle, Info, GitBranch
-} from 'lucide-react';
-
-export type ScenarioId = number;
+/**
+ * Student Scenarios - Village NIRD
+ *
+ * Credits:
+ * - Original scenarios by: Hashimi (hashimi branch)
+ * - Adapted for dark theme by: Main team
+ *
+ * La Nuit de l'Info 2025
+ */
 
 export interface ScenarioPoints {
   money: number;
@@ -17,220 +14,227 @@ export interface ScenarioPoints {
   environment: number;
 }
 
-export type ChoiceType = 'A' | 'B';
-
 export interface ScenarioChoice {
+  id: 'A' | 'B';
   title: string;
   description: string;
-  icon: string; // Lucide icon name OR Simple Icon name (prefixed with Si)
-  points?: ScenarioPoints; // Only for choice B (NIRD)
-  realityCheck?: string; // Persuasive text for wrong choice (Choice A)
+  icon: string;
+  color: string;
+  points?: ScenarioPoints;
+  feedback: string;
 }
 
 export interface EducationalInfo {
   title: string;
   explanation: string;
   benefits: string[];
-  tools?: {
-    name: string;
-    description: string;
-    link?: string;
-  }[];
-  nirdPillar?: 'inclusive' | 'responsible' | 'sustainable';
+  nirdPillar: 'inclusive' | 'responsible' | 'sustainable';
   fact: string;
 }
 
 export interface StudentScenario {
-  id: ScenarioId;
-  context: string; // Problem/context description
-  choiceA: ScenarioChoice; // Big Tech / Easy / Costly
-  choiceB: ScenarioChoice; // NIRD / Resistance / Sustainable
+  id: string;
+  title: string;
+  context: string;
+  character: 'asterix' | 'panoramix' | 'obelix' | 'idefix';
+  choiceA: ScenarioChoice;
+  choiceB: ScenarioChoice;
   educationalInfo: EducationalInfo;
+  isTeaser?: boolean;
 }
 
 export const studentScenarios: StudentScenario[] = [
+  // SCENARIO 1 - Windows 10 Crisis (TEASER)
   {
-    id: 1,
-    context: "🚨 Windows 10 va mourir ! Ton école doit changer 50 ordinateurs car ils ne sont pas compatibles Windows 11.",
+    id: 'student-1',
+    title: 'Nouveau PC ou Linux ?',
+    context: "Windows 10 va mourir ! Ton ecole doit changer 50 ordinateurs car ils ne sont pas compatibles Windows 11. Que proposes-tu ?",
+    character: 'asterix',
+    isTeaser: true,
     choiceA: {
-      title: "Tout Racheter",
-      description: "Jeter les 50 PC (qui marchent encore !) et payer 25 000€ pour des neufs.",
-      icon: "SiWindows",
-      realityCheck: "Aïe ! Tu viens de jeter 50 ordinateurs fonctionnels à la poubelle. C'est 12 tonnes de CO2 et 25 000€ de budget gaspillé. L'école ne pourra pas acheter de livres cette année..."
+      id: 'A',
+      title: 'Tout Racheter',
+      description: 'Jeter les 50 PC et payer 25 000EUR pour des neufs.',
+      icon: 'laptop',
+      color: '#C62828',
+      feedback: "Aie ! Tu viens de jeter 50 ordinateurs fonctionnels. C'est 12 tonnes de CO2 et 25 000EUR de budget gaspille."
     },
     choiceB: {
-      title: "Passer à Linux",
-      description: "Installer Linux Mint gratuitement. Les vieux PC deviennent ultra-rapides !",
-      icon: "SiLinux",
-      points: { money: 100, protection: 100, environment: 100 }
+      id: 'B',
+      title: 'Passer a Linux',
+      description: 'Installer Linux gratuitement. Les vieux PC deviennent ultra-rapides !',
+      icon: 'terminal',
+      color: '#00997d',
+      points: { money: 100, protection: 100, environment: 100 },
+      feedback: "Excellent ! Tu as sauve 50 PC de la poubelle, economise 25 000EUR et reduit l'empreinte carbone de l'ecole !"
     },
     educationalInfo: {
-      title: "C'est quoi l'Obsolescence Programmée ?",
-      explanation: "C'est quand on te force à jeter un appareil qui marche encore, juste parce que le logiciel change. C'est mauvais pour la planète et le porte-monnaie.",
+      title: "C'est quoi l'Obsolescence Programmee ?",
+      explanation: "C'est quand on te force a jeter un appareil qui marche encore, juste parce que le logiciel change.",
       benefits: [
-        "0€ dépensé en matériel inutile",
-        "Moins de déchets toxiques dans la nature",
+        "0EUR depense en materiel inutile",
+        "Moins de dechets toxiques",
         "Des PC plus rapides qu'avant"
       ],
-      tools: [
-        { name: "Linux Mint", description: "Le système libre le plus facile pour débuter.", link: "https://linuxmint.com/" }
-      ],
-      nirdPillar: "sustainable",
+      nirdPillar: 'sustainable',
       fact: "Fabriquer un ordinateur consomme 1500 litres d'eau et 240 kg de combustibles fossiles."
     }
   },
+
+  // SCENARIO 2 - Office vs LibreOffice
   {
-    id: 2,
-    context: "💸 L'abonnement Office coûte trop cher ! L'école n'a plus d'argent pour le voyage de fin d'année.",
+    id: 'student-2',
+    title: 'Logiciels Payants ou Libres ?',
+    context: "L'abonnement Office coute trop cher ! L'ecole n'a plus d'argent pour le voyage de fin d'annee.",
+    character: 'panoramix',
     choiceA: {
-      title: "Payer Microsoft",
-      description: "Payer l'abonnement mensuel et annuler le voyage scolaire.",
-      icon: "SiMicrosoftoffice",
-      realityCheck: "Dommage... L'argent de l'école part en Californie au lieu de financer votre voyage. En plus, quand tu arrêtes de payer, tu perds l'accès à tes propres documents !"
+      id: 'A',
+      title: 'Payer Microsoft',
+      description: "Payer l'abonnement et annuler le voyage scolaire.",
+      icon: 'credit-card',
+      color: '#C62828',
+      feedback: "L'argent de l'ecole part en Californie. En plus, sans payer, tu perds l'acces a tes documents !"
     },
     choiceB: {
-      title: "LibreOffice",
-      description: "Utiliser LibreOffice. C'est gratuit, ça fait pareil, et on part en voyage !",
-      icon: "SiLibreoffice",
-      points: { money: 80, protection: 20, environment: 0 }
+      id: 'B',
+      title: 'LibreOffice',
+      description: 'Utiliser LibreOffice. Gratuit, ca fait pareil, et on part en voyage !',
+      icon: 'file-text',
+      color: '#00997d',
+      points: { money: 80, protection: 20, environment: 0 },
+      feedback: "Genial ! LibreOffice fait tout pareil que Office, en gratuit. L'argent economise finance le voyage !"
     },
     educationalInfo: {
-      title: "Pourquoi payer pour écrire ?",
-      explanation: "Les logiciels libres comme LibreOffice appartiennent à tout le monde. Personne ne peut te demander de payer pour y accéder.",
+      title: "Logiciels Libres vs Proprietaires",
+      explanation: "Les logiciels libres comme LibreOffice appartiennent a tout le monde. Personne ne peut te demander de payer.",
       benefits: [
         "Gratuit pour toujours",
-        "Ouvre tous les fichiers (Word, Excel...)",
-        "L'argent économisé sert à des projets cool"
+        "Ouvre tous les fichiers Office",
+        "L'argent sert a des projets utiles"
       ],
-      tools: [
-        { name: "LibreOffice", description: "L'alternative complète à Office.", link: "https://www.libreoffice.org/" }
-      ],
-      nirdPillar: "responsible",
-      fact: "La Gendarmerie Nationale utilise des logiciels libres et économise des millions d'euros d'impôts."
+      nirdPillar: 'inclusive',
+      fact: "La Gendarmerie Nationale utilise des logiciels libres et economise des millions d'euros."
     }
   },
+
+  // SCENARIO 3 - Slow PCs
   {
-    id: 3,
-    context: "🐌 Les PC du CDI sont trop lents ! On met 10 minutes à les allumer.",
+    id: 'student-3',
+    title: 'PC Lents au CDI',
+    context: "Les PC du CDI sont trop lents ! On met 10 minutes a les allumer.",
+    character: 'obelix',
     choiceA: {
-      title: "À la poubelle !",
-      description: "Ils sont vieux, ils ne servent à rien. On les jette.",
-      icon: "Trash2",
-      realityCheck: "Stop ! Ces ordinateurs sont juste un peu encrassés. Les jeter, c'est créer des déchets très polluants (métaux lourds) qui finissent souvent dans des décharges illégales en Afrique."
+      id: 'A',
+      title: 'A la poubelle !',
+      description: 'Ils sont vieux, ils ne servent a rien. On les jette.',
+      icon: 'trash-2',
+      color: '#C62828',
+      feedback: "Stop ! Ces ordinateurs sont juste encrasses. Les jeter cree des dechets polluants qui finissent en Afrique."
     },
     choiceB: {
-      title: "Opération Boost",
-      description: "On change juste une petite pièce (le disque dur) pour 30€. Ils repartent comme neufs !",
-      icon: "Wrench",
-      points: { money: 60, protection: 0, environment: 90 }
+      id: 'B',
+      title: 'Operation Boost',
+      description: 'On change le disque dur pour 30EUR. Ils repartent comme neufs !',
+      icon: 'wrench',
+      color: '#00997d',
+      points: { money: 60, protection: 0, environment: 90 },
+      feedback: "Bravo ! Reparer coute 30EUR au lieu de 800EUR, et evite les dechets electroniques !"
     },
     educationalInfo: {
-      title: "Réparer c'est Gagner",
-      explanation: "Souvent, un seul composant ralentit tout l'ordinateur. Le changer est facile, pas cher et super écolo.",
+      title: "Reparer c'est Gagner",
+      explanation: "Souvent, un seul composant ralentit l'ordinateur. Le changer est facile, pas cher et ecolo.",
       benefits: [
         "Apprends comment marche un ordi",
-        "Évite de créer des déchets électroniques",
-        "Fais de grosses économies"
+        "Evite les dechets electroniques",
+        "Fais de grosses economies"
       ],
-      tools: [
-        { name: "iFixit", description: "Le site qui t'apprend à tout réparer.", link: "https://www.ifixit.com/" }
-      ],
-      nirdPillar: "sustainable",
+      nirdPillar: 'sustainable',
       fact: "80% de la pollution d'un ordinateur vient de sa fabrication, pas de son utilisation."
     }
   },
+
+  // SCENARIO 4 - Privacy
   {
-    id: 4,
-    context: "🕵️ Google sait tout de toi ! Tes recherches sont enregistrées pour te cibler avec des pubs.",
+    id: 'student-4',
+    title: 'Vie Privee en Ligne',
+    context: "Google sait tout de toi ! Tes recherches sont enregistrees pour te cibler avec des pubs.",
+    character: 'idefix',
     choiceA: {
-      title: "Tant pis",
-      description: "Je n'ai rien à cacher, laissez-moi voir mes pubs.",
-      icon: "SiGoogle",
-      realityCheck: "Tu n'as rien à cacher ? Imagine que quelqu'un note tout ce que tu dis, où tu vas, et ce que tu aimes, pour le vendre à des inconnus. C'est exactement ce que fait Google. Ta vie privée est un droit !"
+      id: 'A',
+      title: 'Tant pis',
+      description: "Je n'ai rien a cacher, laissez-moi voir mes pubs.",
+      icon: 'eye',
+      color: '#C62828',
+      feedback: "Tu n'as rien a cacher ? Imagine quelqu'un qui note tout ce que tu fais pour le vendre. C'est ce que fait Google."
     },
     choiceB: {
-      title: "Mode Secret",
-      description: "Utiliser Qwant ou DuckDuckGo. Ils ne t'espionnent pas et respectent ta vie privée.",
-      icon: "SiDuckduckgo",
-      points: { money: 0, protection: 90, environment: 0 }
+      id: 'B',
+      title: 'Mode Secret',
+      description: 'Utiliser Qwant ou DuckDuckGo. Ils ne t\'espionnent pas.',
+      icon: 'eye-off',
+      color: '#00997d',
+      points: { money: 0, protection: 90, environment: 0 },
+      feedback: "Ta vie privee est protegee ! Ces moteurs ne vendent pas tes donnees aux publicitaires."
     },
     educationalInfo: {
-      title: "Ta vie privée n'est pas à vendre",
-      explanation: "Quand c'est gratuit, c'est toi le produit ! Les moteurs éthiques ne vendent pas tes données aux publicitaires.",
+      title: "Ta vie privee n'est pas a vendre",
+      explanation: "Quand c'est gratuit, c'est toi le produit ! Les moteurs ethiques ne vendent pas tes donnees.",
       benefits: [
         "Personne ne sait ce que tu cherches",
-        "Pas de bulles de filtres (tu vois le vrai web)",
-        "Protège ton identité numérique"
+        "Pas de bulles de filtres",
+        "Protege ton identite numerique"
       ],
-      tools: [
-        { name: "Qwant", description: "Le moteur de recherche français qui respecte ta vie privée.", link: "https://www.qwant.com/" }
-      ],
-      nirdPillar: "responsible",
-      fact: "Les géants du web créent un 'profil' de toi pour prédire ce que tu vas acheter ou penser."
+      nirdPillar: 'responsible',
+      fact: "Les geants du web creent un 'profil' de toi pour predire ce que tu vas acheter ou penser."
     }
   },
+
+  // SCENARIO 5 - Gaming
   {
-    id: 5,
-    context: "🎮 Fortnite lague trop ! Ton PC n'est pas assez puissant pour les gros jeux modernes.",
+    id: 'student-5',
+    title: 'Jeux Video Responsables',
+    context: "Fortnite lague trop ! Ton PC n'est pas assez puissant pour les gros jeux modernes.",
+    character: 'asterix',
     choiceA: {
-      title: "PC Gamer à 2000€",
-      description: "Harceler tes parents pour acheter une bête de course qui consomme plein d'électricité.",
-      icon: "SiFortnite",
-      realityCheck: "2000€ pour jouer ? C'est le prix d'une voiture d'occasion ! En plus, ces PC consomment autant qu'un four électrique. Il y a d'autres façons de s'amuser sans se ruiner."
+      id: 'A',
+      title: 'PC Gamer a 2000EUR',
+      description: 'Demander un PC qui consomme autant qu\'un four electrique.',
+      icon: 'zap',
+      color: '#C62828',
+      feedback: "2000EUR pour jouer ? C'est le prix d'une voiture ! Ces PC consomment enormement d'electricite."
     },
     choiceB: {
-      title: "Minetest & Rétro",
-      description: "Jouer à Minetest (comme Minecraft mais libre) ou à des jeux rétro. C'est fun et léger !",
-      icon: "Box",
-      points: { money: 80, protection: 0, environment: 50 }
+      id: 'B',
+      title: 'Jeux Retro & Libres',
+      description: 'Jouer a Minetest ou des jeux retro. Fun et leger !',
+      icon: 'gamepad',
+      color: '#00997d',
+      points: { money: 80, protection: 0, environment: 50 },
+      feedback: "Les jeux libres sont crees par des passionnes, pour le fun, pas pour l'argent. Et ca tourne partout !"
     },
     educationalInfo: {
-      title: "Le Jeu Libre et Créatif",
-      explanation: "On n'a pas besoin de graphismes 4K pour s'amuser. Les jeux libres sont souvent créés par des passionnés, pour le fun, pas pour l'argent.",
+      title: "Le Jeu Libre et Creatif",
+      explanation: "On n'a pas besoin de graphismes 4K pour s'amuser. Les jeux libres sont souvent meilleurs !",
       benefits: [
         "Tourne sur n'importe quel ordi",
-        "Tu peux modifier le jeu toi-même (mods)",
-        "Développe ta créativité"
+        "Tu peux modifier le jeu (mods)",
+        "Developpe ta creativite"
       ],
-      tools: [
-        { name: "Minetest", description: "Un monde infini de blocs à construire et programmer.", link: "https://www.minetest.net/" }
-      ],
-      nirdPillar: "inclusive",
-      fact: "Le jeu Minecraft original a été inspiré par des jeux libres développés par la communauté."
-    }
-  },
-  {
-    id: 6,
-    context: "🧟 Zombie TikTok ! Tu passes 4h par jour à scroller sans t'en rendre compte.",
-    choiceA: {
-      title: "Encore 5 minutes...",
-      description: "Continuer à scroller jusqu'à ce que ton cerveau fonde.",
-      icon: "SiTiktok",
-      realityCheck: "4 heures par jour, c'est 2 mois par an perdus à regarder des vidéos de 15 secondes ! C'est du temps que tu ne passeras jamais avec tes amis, à faire du sport ou à créer quelque chose."
-    },
-    choiceB: {
-      title: "Reprendre le Contrôle",
-      description: "Installer une appli qui bloque les réseaux sociaux après 30 min. Liberté !",
-      icon: "Smartphone",
-      points: { money: 0, protection: 70, environment: 20 }
-    },
-    educationalInfo: {
-      title: "L'Économie de l'Attention",
-      explanation: "Les applis sont conçues par des psychologues pour te rendre accro. Reprendre le contrôle, c'est un acte de résistance !",
-      benefits: [
-        "Meilleur sommeil et concentration",
-        "Plus de temps pour les vrais amis",
-        "Tu décides, pas l'algorithme"
-      ],
-      tools: [
-        { name: "Forest", description: "Une appli jeu pour t'aider à déconnecter.", link: "https://www.forestapp.cc/" }
-      ],
-      nirdPillar: "responsible",
-      fact: "Les patrons de la Silicon Valley interdisent souvent les écrans à leurs propres enfants car ils savent que c'est addictif."
+      nirdPillar: 'inclusive',
+      fact: "Minecraft original a ete inspire par des jeux libres developpes par la communaute."
     }
   }
 ];
 
-export const getScenario = (id: ScenarioId): StudentScenario | undefined => {
+// Helper functions
+export function getStudentScenarioById(id: string): StudentScenario | undefined {
   return studentScenarios.find(s => s.id === id);
-};
+}
+
+export function getStudentTeaserScenario(): StudentScenario | undefined {
+  return studentScenarios.find(s => s.isTeaser);
+}
+
+export function getFullStudentScenarios(): StudentScenario[] {
+  return studentScenarios;
+}

@@ -89,7 +89,7 @@ export const TestimonialSlider = ({
   return (
     <div
       className={cn(
-        "relative w-full min-h-[500px] md:min-h-[550px] overflow-hidden bg-transparent text-white p-4 sm:p-6 md:p-10",
+        "relative w-full min-h-[420px] sm:min-h-[480px] md:min-h-[550px] overflow-hidden bg-transparent text-white p-4 sm:p-6 md:p-10",
         className
       )}
     >
@@ -133,8 +133,8 @@ export const TestimonialSlider = ({
           </div>
         </div>
 
-        {/* === Center Column: Main Image === */}
-        <div className="md:col-span-4 relative h-64 sm:h-72 md:h-auto md:min-h-[400px] order-1 md:order-2">
+        {/* === Center Column: Main Image - Consistent aspect ratio === */}
+        <div className="md:col-span-4 relative aspect-[4/3] md:aspect-auto md:min-h-[400px] order-1 md:order-2">
           <AnimatePresence initial={false} custom={direction}>
             <motion.img
               key={currentIndex}

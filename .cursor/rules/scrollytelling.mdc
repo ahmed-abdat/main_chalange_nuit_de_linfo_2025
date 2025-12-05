@@ -1,0 +1,317 @@
+---
+description: Scrollytelling patterns, animations, and interactive storytelling
+globs: ["src/components/sections/**", "src/hooks/useScroll*", "src/app/page.tsx"]
+alwaysApply: false
+---
+
+# Scrollytelling Patterns
+
+## Site Structure - The Story Flow
+
+| Section | Purpose | Scroll Position |
+|---------|---------|-----------------|
+| 1. Hero | "Empire vs Village" dramatic intro | 0-100vh |
+| 2. Crisis | Windows 10 problem explained | 100-200vh |
+| 3. Choice | Interactive A/B/C decision | 200-300vh |
+| 4. Consequences | Results of user's choice | 300-400vh |
+| 5. Pillars | 3 NIRD pillars (huts) | 400-600vh |
+| 6. Success | Real school testimonials | 600-700vh |
+| 7. Join | CTA to official NIRD | 700-800vh |
+
+## Scroll-Based Animation Patterns
+
+### Basic Scroll Reveal
+```tsx
+'use client';
+
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
+
+export function ScrollReveal({
+  children,
+  delay = 0
+}: {
+  children: React.ReactNode;
+  delay?: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 60 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, delay, ease: 'easeOut' }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+```
+
+### Parallax Effect
+```tsx
+'use client';
+
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
+
+export function ParallaxSection({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+
+  return (
+    <div ref={ref} className="relative overflow-hidden">
+      <motion.div style={{ y }}>
+        {children}
+      </motion.div>
+    </div>
+  );
+}
+```
+
+### Progress-Based Animation
+```tsx
+'use client';
+
+import { motion, useScroll, useTransform } from 'framer-motion';
+
+export function ProgressSection() {
+  const { scrollYProgress } = useScroll();
+
+  // Map scroll to width for progress bar
+  const width = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+
+  // Map scroll to opacity for fade effects
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [1, 1, 0.5, 0]);
+
+  return (
+    <>
+      {/* Progress bar */}
+      <motion.div
+        className="fixed top-0 left-0 h-1 bg-emerald-500 z-50"
+        style={{ width }}
+      />
+
+      {/* Fading content */}
+      <motion.div style={{ opacity }}>
+        Content that fades as you scroll
+      </motion.div>
+    </>
+  );
+}
+```
+
+## Section Transition Patterns
+
+### Fade Between Sections
+```tsx
+const sectionVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.8, ease: 'easeOut' }
+  },
+  exit: {
+    opacity: 0,
+    transition: { duration: 0.5 }
+  }
+};
+```
+
+### Slide In From Side
+```tsx
+const slideVariants = {
+  hiddenLeft: { x: -100, opacity: 0 },
+  hiddenRight: { x: 100, opacity: 0 },
+  visible: {
+    x: 0,
+    opacity: 1,
+    transition: { duration: 0.6, ease: 'easeOut' }
+  }
+};
+```
+
+### Scale and Fade
+```tsx
+const scaleVariants = {
+  hidden: { scale: 0.8, opacity: 0 },
+  visible: {
+    scale: 1,
+    opacity: 1,
+    transition: { duration: 0.5 }
+  }
+};
+```
+
+## Interactive Elements
+
+### Sticky Section Pattern
+```tsx
+export function StickyScrollSection() {
+  return (
+    <section className="relative min-h-[300vh]">
+      {/* Sticky container */}
+      <div className="sticky top-0 h-screen flex items-center justify-center">
+        <div className="max-w-4xl">
+          {/* Content changes based on scroll */}
+        </div>
+      </div>
+    </section>
+  );
+}
+```
+
+### Intersection Observer Hook
+```tsx
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+
+export function useOnScreen(threshold = 0.5) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { threshold }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, [threshold]);
+
+  return { ref, isVisible };
+}
+```
+
+## Hero Section Specifics
+
+### Dramatic Entrance
+```tsx
+export function HeroSection() {
+  return (
+    <section className="relative h-screen overflow-hidden">
+      {/* Background with parallax */}
+      <motion.div
+        initial={{ scale: 1.2 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 1.5, ease: 'easeOut' }}
+        className="absolute inset-0"
+      >
+        {/* Village vs Empire background */}
+      </motion.div>
+
+      {/* Title with staggered reveal */}
+      <motion.h1
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.8 }}
+        className="text-6xl font-bold"
+      >
+        Le Village Résiste
+      </motion.h1>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5 }}
+        className="absolute bottom-8"
+      >
+        <ScrollIndicator />
+      </motion.div>
+    </section>
+  );
+}
+```
+
+## Statistics Animation
+
+### Animated Counter
+```tsx
+'use client';
+
+import { useInView, useSpring, animated } from '@react-spring/web';
+
+export function AnimatedNumber({ value }: { value: number }) {
+  const [ref, inView] = useInView({ once: true });
+
+  const { number } = useSpring({
+    from: { number: 0 },
+    number: inView ? value : 0,
+    delay: 200,
+    config: { mass: 1, tension: 20, friction: 10 },
+  });
+
+  return (
+    <animated.span ref={ref}>
+      {number.to((n) => n.toFixed(0))}
+    </animated.span>
+  );
+}
+```
+
+## Performance Considerations
+
+### Reduce Motion Support
+```tsx
+'use client';
+
+import { useReducedMotion } from 'framer-motion';
+
+export function AccessibleAnimation({ children }) {
+  const shouldReduceMotion = useReducedMotion();
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: shouldReduceMotion ? 0 : 0.6 }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+```
+
+### Lazy Load Sections
+```tsx
+import dynamic from 'next/dynamic';
+
+// Heavy sections loaded on demand
+const PillarsSection = dynamic(
+  () => import('@/components/sections/PillarsSection'),
+  { loading: () => <SectionSkeleton /> }
+);
+```
+
+## Storytelling Tips
+
+1. **Build tension** - Start with the problem (Big Tech dominance)
+2. **Offer hope** - Show the solution exists (Linux/NIRD)
+3. **Make it personal** - Interactive choice engages users
+4. **Show proof** - Real statistics, real school success
+5. **Call to action** - Clear next step (join NIRD)
+
+## Key Messages Through Scroll
+
+Each scroll section should reinforce one message:
+
+1. **Hero**: "A battle is being fought"
+2. **Crisis**: "The deadline is October 2025"
+3. **Choice**: "You can decide the outcome"
+4. **Consequences**: "See the impact of your choice"
+5. **Pillars**: "NIRD = Inclusive + Responsible + Durable"
+6. **Success**: "Other schools did it successfully"
+7. **Join**: "Become part of the resistance"

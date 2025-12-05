@@ -346,6 +346,72 @@
 }
 
 /* ================================
+   POTION VARIANT THEME
+   ================================ */
+.variant-potion {
+  /* Primary - NIRD Emerald */
+  --potion-primary: var(--nird-emerald);
+  --potion-primary-light: var(--nird-emerald-light);
+  --potion-primary-dark: var(--nird-emerald-dark);
+
+  /* Accent - Gold/Amber */
+  --potion-accent: var(--nird-gold);
+  --potion-accent-light: var(--nird-gold-light);
+  --potion-accent-dark: var(--nird-amber);
+
+  /* Danger - Roman Red */
+  --potion-danger: var(--nird-roman-red);
+  --potion-danger-dark: var(--nird-roman-dark);
+
+  /* Forest - Secondary Green */
+  --potion-forest: var(--nird-forest-green);
+  --potion-forest-light: var(--nird-forest-light);
+
+  /* Neutral - Dark Blue */
+  --potion-neutral: var(--nird-dark-blue);
+  --potion-neutral-light: var(--nird-dark-blue-light);
+
+  /* Backgrounds */
+  --potion-bg-dark: oklch(0.15 0 0);
+  --potion-bg-darker: oklch(0.08 0 0);
+  --potion-bg-card: oklch(0.12 0.01 150);
+}
+
+/* Potion variant utility classes */
+.text-potion-primary { color: var(--potion-primary); }
+.text-potion-accent { color: var(--potion-accent); }
+.text-potion-danger { color: var(--potion-danger); }
+.text-potion-forest { color: var(--potion-forest); }
+
+.bg-potion-primary { background-color: var(--potion-primary); }
+.bg-potion-accent { background-color: var(--potion-accent); }
+.bg-potion-danger { background-color: var(--potion-danger); }
+.bg-potion-dark { background-color: var(--potion-bg-dark); }
+
+.border-potion-primary { border-color: var(--potion-primary); }
+.border-potion-accent { border-color: var(--potion-accent); }
+.border-potion-danger { border-color: var(--potion-danger); }
+
+.shadow-potion-primary { box-shadow: 0 0 30px color-mix(in oklch, var(--potion-primary) 40%, transparent); }
+.shadow-potion-accent { box-shadow: 0 0 30px color-mix(in oklch, var(--potion-accent) 40%, transparent); }
+.shadow-potion-danger { box-shadow: 0 0 30px color-mix(in oklch, var(--potion-danger) 40%, transparent); }
+
+.text-gradient-potion {
+  background: linear-gradient(135deg, var(--potion-primary) 0%, var(--potion-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-gradient-potion-dark {
+  background: linear-gradient(to bottom, var(--potion-bg-darker) 0%, var(--potion-bg-dark) 50%, oklch(0.1 0.02 150) 100%);
+}
+
+.bg-gradient-potion-danger {
+  background: linear-gradient(to bottom, oklch(0.15 0 0) 0%, oklch(0.12 0.05 25) 50%, oklch(0.1 0 0) 100%);
+}
+
+/* ================================
    ARCADE ANIMATIONS
    ================================ */
 @keyframes neon-pulse {
