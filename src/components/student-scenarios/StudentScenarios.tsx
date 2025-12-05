@@ -11,9 +11,9 @@ import { EducationalInfo } from './EducationalInfo';
 import { cn } from '@/lib/utils';
 import CountUp from '@/components/CountUp';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, ArrowLeft, List, X, Check } from 'lucide-react';
+import { ArrowRight, ArrowLeft, List, X, Check, Bot, ShieldCheck, Sprout, Users, AlertTriangle, Info } from 'lucide-react';
 
-const TOTAL_SCENARIOS = 20;
+const TOTAL_SCENARIOS = studentScenarios.length;
 
 export function StudentScenarios() {
   const currentScenarioId = useStudentScenarioStore((state) => state.currentScenarioId);
@@ -239,25 +239,51 @@ export function StudentScenarios() {
         {currentScenario && (
           <div className="space-y-8">
             <ScenarioCard
+              key={currentScenario.id}
               scenario={currentScenario}
               onChoiceSelect={handleChoiceSelect}
             />
 
-            {/* Educational Info - Show after NIRD choice */}
-            <AnimatePresence>
-              {isScenarioCompleted(currentScenario.id) &&
-                getScenarioChoice(currentScenario.id) === 'B' && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                  >
+            {/* Educational Info OR Reality Check */}
+            <AnimatePresence mode="wait">
+              {isScenarioCompleted(currentScenario.id) && (
+                <motion.div
+                  key={currentScenario.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                >
+                  {getScenarioChoice(currentScenario.id) === 'B' ? (
                     <EducationalInfo
                       info={currentScenario.educationalInfo}
                       scenarioNumber={currentScenario.id}
                     />
-                  </motion.div>
-                )}
+                  ) : (
+                    <div className="bg-red-50 border border-red-100 rounded-2xl p-6 md:p-8">
+                      <div className="flex items-start gap-4">
+                        <div className="p-3 bg-red-100 rounded-xl shrink-0">
+                          <AlertTriangle className="w-8 h-8 text-red-600" />
+                        </div>
+                        <div className="space-y-4">
+                          <div>
+                            <h3 className="text-xl font-bold text-red-900 mb-2">
+                              Réalité du choix Big Tech
+                            </h3>
+                            <p className="text-red-800 leading-relaxed text-lg">
+                              {currentScenario.choiceA.realityCheck}
+                            </p>
+                          </div>
+
+                          <div className="flex items-center gap-2 text-sm text-red-700 bg-red-100/50 p-3 rounded-lg">
+                            <Info className="w-4 h-4" />
+                            <span>Ce choix ne vous rapporte aucun point NIRD. Essayez de trouver une alternative plus éthique !</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              )}
             </AnimatePresence>
 
             {/* Navigation */}
@@ -304,8 +330,66 @@ export function StudentScenarios() {
             </div>
           </div>
         )}
+        {/* Summary Section */}
+        <ScenarioSummary completedCount={completed} totalCount={total} />
       </div>
     </div>
   );
 }
 
+
+function ScenarioSummary({ completedCount, totalCount }: { completedCount: number; totalCount: number }) {
+  if (completedCount === 0) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="mt-12 p-6 bg-gradient-to-br from-[#00997d]/5 to-[#007d66]/5 rounded-2xl border border-[#00997d]/20"
+    >
+      <div className="flex items-start gap-4">
+        <div className="p-3 bg-[#00997d]/10 rounded-xl">
+          <Bot className="w-8 h-8 text-[#00997d]" />
+        </div>
+        <div>
+          <h3 className="text-lg font-bold text-gray-900 mb-2">
+            Résumé de votre Résistance
+          </h3>
+          <p className="text-gray-600 mb-4 leading-relaxed">
+            Vous avez complété {completedCount} scénarios sur {totalCount}. Chaque choix NIRD que vous faites aide à construire un village numérique plus libre, éthique et durable.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+              <div className="flex items-center gap-2 mb-2 text-[#00997d]">
+                <ShieldCheck className="w-5 h-5" />
+                <span className="font-bold">Indépendance</span>
+              </div>
+              <p className="text-xs text-gray-500">
+                Vous apprenez à ne plus dépendre des géants de la tech pour vos outils quotidiens.
+              </p>
+            </div>
+            <div className="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+              <div className="flex items-center gap-2 mb-2 text-[#00997d]">
+                <Sprout className="w-5 h-5" />
+                <span className="font-bold">Durabilité</span>
+              </div>
+              <p className="text-xs text-gray-500">
+                Vos choix prolongent la vie du matériel et réduisent les déchets électroniques.
+              </p>
+            </div>
+            <div className="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+              <div className="flex items-center gap-2 mb-2 text-[#00997d]">
+                <Users className="w-5 h-5" />
+                <span className="font-bold">Communauté</span>
+              </div>
+              <p className="text-xs text-gray-500">
+                Vous rejoignez un mouvement mondial de partage et d'entraide (Open Source).
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}

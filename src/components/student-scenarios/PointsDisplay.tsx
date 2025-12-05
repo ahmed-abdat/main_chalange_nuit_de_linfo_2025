@@ -54,15 +54,15 @@ export function PointsDisplay({ className, sticky = false }: PointsDisplayProps)
       )}
     >
       <div className="max-w-7xl mx-auto px-6 py-4">
-        <div className="flex flex-wrap items-center gap-4">
+        <div className="flex items-center justify-between gap-4 overflow-x-auto no-scrollbar">
           {/* Title */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <span className="text-xl">🎯</span>
-            <h3 className="text-lg font-bold text-gray-900">Vos Points</h3>
+            <h3 className="text-lg font-bold text-gray-900 whitespace-nowrap">Vos Points</h3>
           </div>
 
           {/* Points Badges */}
-          <div className="flex flex-wrap gap-3 flex-1">
+          <div className="flex items-center gap-3">
             <PointsBadge
               emoji="💰"
               label="Économies"
@@ -87,12 +87,14 @@ export function PointsDisplay({ className, sticky = false }: PointsDisplayProps)
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="px-6 py-3 bg-gradient-to-r from-[#00997d] to-[#007d66] rounded-xl text-white"
+            className="px-6 py-3 bg-gradient-to-r from-[#00997d] to-[#007d66] rounded-xl text-white shrink-0"
           >
-            <p className="text-xs uppercase tracking-wide mb-1 opacity-90">Total</p>
-            <p className="text-2xl font-bold">
-              <CountUp to={total} duration={0.8} />
-            </p>
+            <div className="flex items-center gap-3">
+              <p className="text-xs uppercase tracking-wide opacity-90">Total</p>
+              <p className="text-2xl font-bold leading-none">
+                <CountUp to={total} duration={0.8} />
+              </p>
+            </div>
           </motion.div>
         </div>
       </div>

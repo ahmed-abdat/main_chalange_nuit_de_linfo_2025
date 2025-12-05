@@ -1,20 +1,20 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { ScenarioId, ChoiceType, ScenarioPoints } from '@/data/studentScenarios';
+import { studentScenarios, type ScenarioId, type ChoiceType, type ScenarioPoints } from '@/data/studentScenarios';
 
 interface StudentScenarioStore {
   // Completed scenarios: Record<string, ChoiceType> for serialization
   completedScenarios: Record<string, ChoiceType>;
-  
+
   // Total points across all categories
   totalPoints: ScenarioPoints;
-  
+
   // Current scenario being viewed
   currentScenarioId: ScenarioId | null;
-  
+
   // Whether to show all scenarios or one at a time
   viewMode: 'single' | 'grid';
-  
+
   // Actions
   completeScenario: (scenarioId: ScenarioId, choice: ChoiceType, points: ScenarioPoints) => void;
   setCurrentScenario: (scenarioId: ScenarioId | null) => void;
@@ -22,14 +22,14 @@ interface StudentScenarioStore {
   resetProgress: () => void;
   isScenarioCompleted: (scenarioId: ScenarioId) => boolean;
   getScenarioChoice: (scenarioId: ScenarioId) => ChoiceType | null;
-  
+
   // Computed
   getCompletedCount: () => number;
   getProgressPercentage: () => number;
   getNextUnlockedScenario: () => ScenarioId | null;
 }
 
-const TOTAL_SCENARIOS = 20;
+const TOTAL_SCENARIOS = studentScenarios.length;
 
 const initialPoints: ScenarioPoints = {
   money: 0,
@@ -48,7 +48,7 @@ export const useStudentScenarioStore = create<StudentScenarioStore>()(
       completeScenario: (scenarioId, choice, points) => {
         set((state) => {
           const scenarioKey = String(scenarioId);
-          
+
           // Only allow completing each scenario once
           if (state.completedScenarios[scenarioKey]) {
             return state;
@@ -58,7 +58,7 @@ export const useStudentScenarioStore = create<StudentScenarioStore>()(
             ...state.completedScenarios,
             [scenarioKey]: choice,
           };
-          
+
           // Calculate new total points (only add if choice is B)
           let newTotalPoints = { ...state.totalPoints };
           if (choice === 'B') {
@@ -111,7 +111,7 @@ export const useStudentScenarioStore = create<StudentScenarioStore>()(
 
       getNextUnlockedScenario: () => {
         const { completedScenarios } = get();
-        
+
         // Find first scenario that's not completed
         for (let i = 1; i <= TOTAL_SCENARIOS; i++) {
           const scenarioId = i as ScenarioId;
@@ -119,7 +119,7 @@ export const useStudentScenarioStore = create<StudentScenarioStore>()(
             return scenarioId;
           }
         }
-        
+
         // All scenarios completed
         return null;
       },
@@ -153,10 +153,10 @@ export const useCurrentScenario = () =>
   useStudentScenarioStore((state) => state.currentScenarioId);
 
 export const useProgress = () => {
-  const completedCount = useStudentScenarioStore((state) => 
+  const completedCount = useStudentScenarioStore((state) =>
     Object.keys(state.completedScenarios).length
   );
-  
+
   return {
     completed: completedCount,
     total: TOTAL_SCENARIOS,

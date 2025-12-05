@@ -17,17 +17,43 @@ import {
   FileX, FileCheck, Copyright, Image, Zap, PenTool, GitBranch
 } from 'lucide-react';
 
-// Map string icon names to Lucide components
+// Import Simple Icons from react-icons
+import {
+  SiLinux, SiLibreoffice,
+  SiGoogle, SiDuckduckgo, SiTiktok
+} from 'react-icons/si';
+
+// Map string icon names to Components
 const IconMap: Record<string, any> = {
+  // Lucide Icons
   Gamepad2, Box, Bot, Search, Chrome, ShieldCheck, Music2, Headphones,
   Skull, Palette, MessageSquareWarning, MessageCircleHeart, Smartphone, Wrench,
   CloudUpload, FileLock2, MapPinOff, Map, Film, Clapperboard, Unlock, KeyRound,
   Languages, Globe, Trash2, Usb, Eye, EyeOff, MailWarning, MailCheck, Clock, Users,
-  FileX, FileCheck, Copyright, Image, Zap, PenTool, Lock, GitBranch
+  FileX, FileCheck, Copyright, Image, Zap, PenTool, Lock, GitBranch,
+  ServerCrash, DollarSign, Sprout,
+
+  // Simple Icons (Real Logos)
+  SiLinux, SiLibreoffice,
+  SiGoogle, SiDuckduckgo, SiTiktok,
+
+  // Mappings for missing/renamed icons
+  SiFortnite: Gamepad2, // Fallback for missing SiFortnite
+  SiWindows: Box, // Fallback for missing SiWindows
+  SiMicrosoft: Box, // Fallback for missing SiMicrosoft
+  SiMicrosoftoffice: FileCheck, // Fallback for missing SiMicrosoftoffice
 };
 
 const DynamicIcon = ({ name, className }: { name: string, className?: string }) => {
-  const IconComponent = IconMap[name] || HelpCircle;
+  // Handle SiMicrosoftoffice mapping if needed, or fallback
+  let IconComponent = IconMap[name];
+
+  // Fallbacks for missing icons or name mismatches
+  if (!IconComponent) {
+    if (name === 'SiMicrosoftoffice') IconComponent = FileCheck;
+    else IconComponent = HelpCircle;
+  }
+
   return <IconComponent className={className} />;
 };
 
@@ -108,14 +134,18 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
   }, [gameState, checkOverlap]);
 
   const handleDragEnd = useCallback((itemType: 'A' | 'B') => {
-    if (gameState === 'hovering' && hoveredChoice === itemType) {
+    // Check overlap one last time to ensure reliability
+    const ref = itemType === 'A' ? choiceARef : choiceBRef;
+    const isOver = checkOverlap(ref);
+
+    if (isOver) {
       handleDrop(itemType);
     } else {
       setGameState('idle');
       setDraggingItem(null);
       setHoveredChoice(null);
     }
-  }, [gameState, hoveredChoice]);
+  }, [checkOverlap]);
 
   const handleDrop = (choiceId: 'A' | 'B') => {
     setGameState('processing');
@@ -137,6 +167,13 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
     ? (selectedChoice === 'B' ? 'success' : 'warning')
     : (gameState === 'processing' ? 'processing' : 'idle');
 
+  // Helper to get image path for scenario visuals
+  const getVisualPath = (choice: 'A' | 'B') => {
+    // Use the background-removed images as requested
+    const path = `/scenarios/s${scenario.id}_${choice.toLowerCase()}-removebg-preview.png`;
+    return path;
+  };
+
   return (
     <div className="w-full max-w-5xl mx-auto relative">
       {/* Confetti Effect */}
@@ -156,7 +193,7 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
       >
         <span className="inline-flex items-center gap-2 px-3 py-1 bg-[#00997d]/10 text-[#00997d] text-xs font-medium rounded-full mb-4">
           <Laptop className="w-3 h-3" />
-          Scénario {scenario.id}/20
+          Scénario {scenario.id}/6
         </span>
         <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 leading-relaxed max-w-3xl mx-auto flex items-center justify-center gap-3" dir="rtl">
           {scenario.context}
@@ -209,15 +246,29 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
                   exit={{ opacity: 0, scale: 0.8 }}
                   className="flex flex-col items-center"
                 >
-                  <div className={cn(
-                    "w-20 h-20 rounded-full flex items-center justify-center mb-4",
-                    hoveredChoice === 'B' ? "bg-[#00997d]/10" : "bg-[#C62828]/10"
-                  )}>
-                    <DynamicIcon
-                      name={hoveredChoice === 'B' ? scenario.choiceB.icon : scenario.choiceA.icon}
-                      className={cn("w-10 h-10", hoveredChoice === 'B' ? "text-[#00997d]" : "text-[#C62828]")}
+                  {/* Show the Visual Object of the hovered choice */}
+                  <div className="w-32 h-32 mb-4 relative">
+                    <img
+                      src={getVisualPath(hoveredChoice as 'A' | 'B')}
+                      alt="Visual"
+                      className="w-full h-full object-contain drop-shadow-xl"
+                      onError={(e) => {
+                        // Fallback if image not found
+                        e.currentTarget.style.display = 'none';
+                      }}
                     />
+                    {/* Fallback Icon if image fails or loading */}
+                    <div className={cn(
+                      "absolute inset-0 flex items-center justify-center -z-10",
+                      hoveredChoice === 'B' ? "text-[#00997d]/20" : "text-[#C62828]/20"
+                    )}>
+                      <DynamicIcon
+                        name={hoveredChoice === 'B' ? scenario.choiceB.icon : scenario.choiceA.icon}
+                        className="w-16 h-16"
+                      />
+                    </div>
                   </div>
+
                   <p className={cn(
                     "font-bold text-lg",
                     hoveredChoice === 'B' ? "text-[#00997d]" : "text-[#C62828]"
@@ -264,21 +315,41 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
                   animate={{ opacity: 1, scale: 1 }}
                   className="flex flex-col items-center"
                 >
-                  <div className={cn(
-                    "w-20 h-20 rounded-full flex items-center justify-center mb-4 shadow-sm",
-                    selectedChoice === 'B' ? "bg-[#00997d] text-white" : "bg-[#C62828] text-white"
-                  )}>
-                    {selectedChoice === 'B' ? <Check className="w-10 h-10" /> : <X className="w-10 h-10" />}
+                  <div className="w-32 h-32 mb-4 relative">
+                    <img
+                      src={getVisualPath(selectedChoice as 'A' | 'B')}
+                      alt="Result Visual"
+                      className="w-full h-full object-contain drop-shadow-xl"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                    {/* Fallback Icon if image fails or loading */}
+                    <div className={cn(
+                      "absolute inset-0 flex items-center justify-center -z-10",
+                      selectedChoice === 'B' ? "text-[#00997d]/20" : "text-[#C62828]/20"
+                    )}>
+                      <DynamicIcon
+                        name={selectedChoice === 'B' ? scenario.choiceB.icon : scenario.choiceA.icon}
+                        className="w-16 h-16"
+                      />
+                    </div>
                   </div>
-                  <p className={cn(
-                    "font-bold text-lg mb-1",
+
+                  <div className={cn(
+                    "flex items-center gap-2 mb-2",
                     selectedChoice === 'B' ? "text-[#00997d]" : "text-[#C62828]"
                   )}>
-                    {selectedChoice === 'B' ? "Excellent Choix !" : "Choix Coûteux"}
-                  </p>
+                    {selectedChoice === 'B' ? <Check className="w-6 h-6" /> : <X className="w-6 h-6" />}
+                    <p className="font-bold text-lg">
+                      {selectedChoice === 'B' ? "Excellent Choix !" : "Choix Coûteux"}
+                    </p>
+                  </div>
                   <p className="text-sm text-gray-600">
                     {selectedChoice === 'B' ? "+ Points NIRD" : "Aucun point gagné"}
                   </p>
+
+
                 </motion.div>
               )}
             </AnimatePresence>
@@ -304,23 +375,35 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
             onDrag={() => handleDrag('A')}
             onDragEnd={() => handleDragEnd('A')}
             className={cn(
-              "relative p-5 rounded-xl border-2 transition-all cursor-grab active:cursor-grabbing bg-white",
+              "relative p-5 rounded-xl border-2 transition-all cursor-grab active:cursor-grabbing bg-white group",
               isCompleted && selectedChoice !== 'A' && "opacity-50 grayscale pointer-events-none",
               isCompleted && selectedChoice === 'A' && "border-[#C62828] bg-[#C62828]/5 pointer-events-none",
               !isCompleted && "hover:border-[#C62828] hover:shadow-md border-gray-200"
             )}
           >
-            <div className="flex items-start justify-between mb-2">
-              <div className="p-2 bg-[#C62828]/10 rounded-lg">
-                <DynamicIcon name={scenario.choiceA.icon} className="w-6 h-6 text-[#C62828]" />
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <div className="flex items-center gap-3 flex-1">
+                <div className="p-2 bg-[#C62828]/10 rounded-lg shrink-0">
+                  <DynamicIcon name={scenario.choiceA.icon} className="w-5 h-5 text-[#C62828]" />
+                </div>
+                <h4 className="font-bold text-gray-900 text-sm leading-tight">{scenario.choiceA.title}</h4>
               </div>
-              <span className="px-2 py-1 bg-[#C62828]/10 text-[#C62828] text-xs font-bold rounded uppercase flex items-center gap-1">
+              <span className="px-2 py-1 bg-[#C62828]/10 text-[#C62828] text-[10px] font-bold rounded uppercase flex items-center gap-1 shrink-0">
                 <Lock className="w-3 h-3" />
                 Big Tech
               </span>
             </div>
-            <h4 className="font-bold text-gray-900 mb-1">{scenario.choiceA.title}</h4>
-            <p className="text-sm text-gray-600">{scenario.choiceA.description}</p>
+            <p className="text-xs text-gray-600 leading-relaxed">{scenario.choiceA.description}</p>
+
+            {/* Visual Preview (Small) */}
+            <div className="absolute right-4 bottom-4 w-12 h-12 opacity-20 group-hover:opacity-100 transition-opacity">
+              <img
+                src={getVisualPath('A')}
+                alt=""
+                className="w-full h-full object-contain"
+                onError={(e) => e.currentTarget.style.display = 'none'}
+              />
+            </div>
 
             {!isCompleted && (
               <div className="absolute -right-2 -top-2 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center border border-gray-200 shadow-sm">
@@ -341,23 +424,35 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
             onDrag={() => handleDrag('B')}
             onDragEnd={() => handleDragEnd('B')}
             className={cn(
-              "relative p-5 rounded-xl border-2 transition-all cursor-grab active:cursor-grabbing bg-white",
+              "relative p-5 rounded-xl border-2 transition-all cursor-grab active:cursor-grabbing bg-white group",
               isCompleted && selectedChoice !== 'B' && "opacity-50 grayscale pointer-events-none",
               isCompleted && selectedChoice === 'B' && "border-[#00997d] bg-[#00997d]/5 pointer-events-none",
               !isCompleted && "hover:border-[#00997d] hover:shadow-md border-gray-200"
             )}
           >
-            <div className="flex items-start justify-between mb-2">
-              <div className="p-2 bg-[#00997d]/10 rounded-lg">
-                <DynamicIcon name={scenario.choiceB.icon} className="w-6 h-6 text-[#00997d]" />
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <div className="flex items-center gap-3 flex-1">
+                <div className="p-2 bg-[#00997d]/10 rounded-lg shrink-0">
+                  <DynamicIcon name={scenario.choiceB.icon} className="w-5 h-5 text-[#00997d]" />
+                </div>
+                <h4 className="font-bold text-gray-900 text-sm leading-tight">{scenario.choiceB.title}</h4>
               </div>
-              <span className="px-2 py-1 bg-[#00997d]/10 text-[#00997d] text-xs font-bold rounded uppercase flex items-center gap-1">
+              <span className="px-2 py-1 bg-[#00997d]/10 text-[#00997d] text-[10px] font-bold rounded uppercase flex items-center gap-1 shrink-0">
                 <Unlock className="w-3 h-3" />
                 NIRD
               </span>
             </div>
-            <h4 className="font-bold text-gray-900 mb-1">{scenario.choiceB.title}</h4>
-            <p className="text-sm text-gray-600">{scenario.choiceB.description}</p>
+            <p className="text-xs text-gray-600 leading-relaxed">{scenario.choiceB.description}</p>
+
+            {/* Visual Preview (Small) */}
+            <div className="absolute right-4 bottom-16 w-12 h-12 opacity-20 group-hover:opacity-100 transition-opacity">
+              <img
+                src={getVisualPath('B')}
+                alt=""
+                className="w-full h-full object-contain"
+                onError={(e) => e.currentTarget.style.display = 'none'}
+              />
+            </div>
 
             {/* Points Preview */}
             {scenario.choiceB.points && !isCompleted && (
