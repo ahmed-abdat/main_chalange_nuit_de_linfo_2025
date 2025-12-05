@@ -10,6 +10,9 @@ export type BadgeId =
   | 'alternatives_master'
   | 'village_defender'
   | 'terminal_ninja'
+  | 'scenario_explorer'
+  | 'student_champion'
+  | 'family_advisor'
   | 'village_hero'
 
 export interface Badge {
@@ -77,6 +80,27 @@ export const BADGES: Record<BadgeId, Omit<Badge, 'unlockedAt'>> = {
     description: 'Atteindre 50 WPM au Terminal',
     xp: 175,
     icon: 'terminal-square'
+  },
+  scenario_explorer: {
+    id: 'scenario_explorer',
+    title: 'Explorateur de Scenarios',
+    description: 'Completer un scenario teaser',
+    xp: 100,
+    icon: 'compass'
+  },
+  student_champion: {
+    id: 'student_champion',
+    title: 'Champion Etudiant',
+    description: 'Tous les scenarios etudiants avec choix NIRD',
+    xp: 250,
+    icon: 'graduation-cap'
+  },
+  family_advisor: {
+    id: 'family_advisor',
+    title: 'Conseiller Familial',
+    description: 'Completer tous les scenarios parents',
+    xp: 250,
+    icon: 'users'
   },
   village_hero: {
     id: 'village_hero',
