@@ -15,7 +15,7 @@ const ALTERNATIVES = [
   {
     id: 1,
     from: { name: 'Windows', logo: '/images/Windows_11_logo.svg', color: '#0078D4' },
-    to: { name: 'Linux', logo: null, color: '#00997d' }, // No Linux logo available
+    to: { name: 'Linux', logo: '/lunix.svg', color: '#00997d' },
     benefit: 'Gratuit & Léger',
   },
   {
