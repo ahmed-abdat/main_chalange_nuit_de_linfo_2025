@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Trophy, Footprints, BookOpen, Laptop, Terminal, Crown,
@@ -22,8 +22,14 @@ const ICON_MAP: Record<string, React.ReactNode> = {
 };
 
 export default function AchievementToast() {
+  const [mounted, setMounted] = useState(false);
   const recentBadge = useAchievementStore((state) => state.recentBadge);
   const clearRecentBadge = useAchievementStore((state) => state.clearRecentBadge);
+
+  // Fix hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (recentBadge) {
@@ -34,7 +40,8 @@ export default function AchievementToast() {
     }
   }, [recentBadge, clearRecentBadge]);
 
-  if (!recentBadge) return null;
+  // Don't render until mounted to avoid hydration mismatch
+  if (!mounted || !recentBadge) return null;
 
   const badge = BADGES[recentBadge];
   const reaction = achievementReactions[recentBadge];

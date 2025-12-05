@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Trophy, Footprints, BookOpen, Laptop, Terminal, Crown, X, Award,
@@ -27,11 +27,21 @@ interface BadgesPanelProps {
 
 export default function BadgesPanel({ className }: BadgesPanelProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const unlockedBadges = useAchievementStore((state) => state.unlockedBadges);
   const totalXP = useAchievementStore((state) => state.totalXP);
 
+  // Fix hydration mismatch - wait for client mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Show loading state until hydrated
+  const displayUnlocked = mounted ? unlockedBadges : [];
+  const displayXP = mounted ? totalXP : 0;
+
   const allBadges = Object.values(BADGES);
-  const unlockedCount = unlockedBadges.length;
+  const unlockedCount = displayUnlocked.length;
   const totalCount = allBadges.length;
 
   return (
@@ -50,7 +60,7 @@ export default function BadgesPanel({ className }: BadgesPanelProps) {
       >
         <Award className="w-5 h-5 text-[#F9A825]" />
         <span className="font-bold text-sm">{unlockedCount}/{totalCount}</span>
-        <span className="text-[#00997d] font-bold text-sm">{totalXP} XP</span>
+        <span className="text-[#00997d] font-bold text-sm">{displayXP} XP</span>
       </motion.button>
 
       {/* Modal overlay */}
@@ -96,12 +106,12 @@ export default function BadgesPanel({ className }: BadgesPanelProps) {
                   <div className="mt-4 p-3 bg-white/5 rounded-xl">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm text-gray-400">Experience totale</span>
-                      <span className="text-[#F9A825] font-bold">{totalXP} XP</span>
+                      <span className="text-[#F9A825] font-bold">{displayXP} XP</span>
                     </div>
                     <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
-                        animate={{ width: `${Math.min(100, (totalXP / 1150) * 100)}%` }}
+                        animate={{ width: `${Math.min(100, (displayXP / 1150) * 100)}%` }}
                         transition={{ delay: 0.3, duration: 0.8, ease: 'easeOut' }}
                         className="h-full bg-gradient-to-r from-[#00997d] to-[#F9A825] rounded-full"
                       />
@@ -113,7 +123,7 @@ export default function BadgesPanel({ className }: BadgesPanelProps) {
                 <div className="flex-1 overflow-y-auto p-6">
                   <div className="grid grid-cols-2 gap-4">
                     {allBadges.map((badge, i) => {
-                      const isUnlocked = unlockedBadges.includes(badge.id);
+                      const isUnlocked = displayUnlocked.includes(badge.id);
                       const IconComponent = ICON_MAP[badge.icon] || Trophy;
 
                       return (
