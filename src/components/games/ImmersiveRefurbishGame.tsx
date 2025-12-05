@@ -292,6 +292,7 @@ function WindowsIcon({ className }: { className?: string }) {
       height={48}
       draggable={false}
       className={cn("object-contain pointer-events-none select-none", className)}
+      style={{ width: 'auto', height: 'auto' }}
     />
   );
 }

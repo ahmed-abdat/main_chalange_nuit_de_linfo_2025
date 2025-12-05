@@ -180,7 +180,7 @@ function GameHUD({
 }
 
 // =============================================================================
-// GAME CANVAS
+// GAME CANVAS - Enhanced with 3D-like visuals
 // =============================================================================
 function GameCanvas({
   enemies,
@@ -221,41 +221,118 @@ function GameCanvas({
       ref={canvasRef}
       onClick={handleClick}
       className={cn(
-        "relative w-full rounded-lg overflow-hidden border-2",
-        selectedTower ? "cursor-crosshair border-[#00997d]" : "border-gray-700"
+        "relative w-full rounded-2xl overflow-hidden border-2 shadow-2xl",
+        selectedTower ? "cursor-crosshair border-[#00997d] shadow-[#00997d]/20" : "border-gray-700/50"
       )}
       style={{
         height: laneCount * laneHeight,
-        background: 'linear-gradient(to right, #1a472a 0%, #0f2818 50%, #1a1a1a 100%)'
+        background: 'linear-gradient(135deg, #1a472a 0%, #0f2818 30%, #1A237E 70%, #0d1421 100%)',
+        perspective: '1000px',
       }}
     >
-      {/* Village (left side) */}
-      <div className="absolute left-2 top-1/2 -translate-y-1/2 flex flex-col items-center gap-1">
-        <div className="w-12 h-16 bg-[#FFF8E1] rounded-t-lg relative">
-          <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-b-8 border-transparent border-b-[#8B4513]" />
-          <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-3 h-5 bg-[#8B4513] rounded-t-sm" />
+      {/* Animated background grid */}
+      <div
+        className="absolute inset-0 opacity-20"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(0,153,125,0.3) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,153,125,0.3) 1px, transparent 1px)
+          `,
+          backgroundSize: '40px 40px',
+          animation: 'gridMove 20s linear infinite',
+        }}
+      />
+
+      {/* Village side glow */}
+      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#00997d]/30 to-transparent pointer-events-none" />
+
+      {/* Empire side glow */}
+      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#C62828]/30 to-transparent pointer-events-none" />
+
+      {/* Village (left side) - Enhanced 3D huts */}
+      <div className="absolute left-3 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2">
+        {/* Main hut */}
+        <div className="relative">
+          {/* Hut shadow */}
+          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-14 h-3 bg-black/30 rounded-full blur-sm" />
+          {/* Hut body */}
+          <div className="w-14 h-12 bg-gradient-to-b from-[#FFF8E1] to-[#E8D5B5] rounded-lg relative shadow-lg border border-[#D4A574]/30">
+            {/* Roof */}
+            <div className="absolute -top-5 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[32px] border-r-[32px] border-b-[20px] border-transparent border-b-[#8B4513]"
+                 style={{ filter: 'drop-shadow(0 -2px 2px rgba(0,0,0,0.3))' }} />
+            {/* Door */}
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-6 bg-gradient-to-b from-[#6D4C41] to-[#5D4037] rounded-t-lg" />
+            {/* Window */}
+            <div className="absolute top-2 left-2 w-3 h-3 bg-[#F9A825]/60 rounded-sm shadow-inner" />
+          </div>
         </div>
-        <span className="text-[8px] text-[#00d9a7] font-bold">VILLAGE</span>
+        {/* Cauldron with glow */}
+        <div className="relative">
+          <div className="w-6 h-4 bg-gradient-to-b from-gray-700 to-gray-900 rounded-b-full border border-gray-600" />
+          <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-4 h-2 bg-[#00997d] rounded-full animate-pulse shadow-[0_0_10px_#00997d]" />
+        </div>
+        <span className="text-[10px] text-[#00d9a7] font-bold tracking-wider drop-shadow-lg">VILLAGE</span>
       </div>
 
-      {/* Spawn (right side) */}
-      <div className="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col items-center gap-1">
-        <div className="w-10 h-10 bg-[#C62828] rounded flex items-center justify-center">
-          <AlertTriangle className="w-5 h-5 text-white" />
+      {/* Empire (right side) - Corporate tower */}
+      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2">
+        {/* Tower shadow */}
+        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-12 h-3 bg-black/40 rounded-full blur-sm" />
+        {/* Corporate tower */}
+        <div className="relative">
+          <div className="w-12 h-20 bg-gradient-to-b from-[#1A237E] to-[#0D1421] rounded-t-sm shadow-lg border border-[#3949AB]/30">
+            {/* Windows grid */}
+            <div className="absolute inset-1 grid grid-cols-2 gap-1">
+              {[...Array(8)].map((_, i) => (
+                <div
+                  key={i}
+                  className="w-full h-2 bg-[#C62828] rounded-sm animate-pulse"
+                  style={{ animationDelay: `${i * 0.2}s`, opacity: 0.6 + Math.random() * 0.4 }}
+                />
+              ))}
+            </div>
+            {/* Antenna */}
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-0.5 h-3 bg-gray-500" />
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#C62828] rounded-full animate-pulse shadow-[0_0_8px_#C62828]" />
+          </div>
         </div>
-        <span className="text-[8px] text-red-400 font-bold">EMPIRE</span>
+        <span className="text-[10px] text-[#ff6b6b] font-bold tracking-wider drop-shadow-lg">EMPIRE</span>
       </div>
 
-      {/* Lane dividers */}
+      {/* Lane dividers - Enhanced with gradient */}
       {Array.from({ length: laneCount - 1 }).map((_, i) => (
         <div
           key={i}
-          className="absolute left-0 right-0 h-px bg-white/10"
-          style={{ top: (i + 1) * laneHeight }}
+          className="absolute left-16 right-16 h-px"
+          style={{
+            top: (i + 1) * laneHeight,
+            background: 'linear-gradient(90deg, #00997d30 0%, #ffffff20 50%, #C6282830 100%)'
+          }}
         />
       ))}
 
-      {/* Towers */}
+      {/* Path indicators */}
+      {Array.from({ length: laneCount }).map((_, i) => (
+        <div
+          key={`path-${i}`}
+          className="absolute left-20 right-20 flex justify-center items-center pointer-events-none opacity-30"
+          style={{
+            top: i * laneHeight + laneHeight / 2 - 1,
+            height: 2,
+          }}
+        >
+          {[...Array(15)].map((_, j) => (
+            <motion.div
+              key={j}
+              className="w-6 h-0.5 bg-white/50 mx-2 rounded-full"
+              animate={{ opacity: [0.2, 0.5, 0.2] }}
+              transition={{ duration: 2, delay: j * 0.1, repeat: Infinity }}
+            />
+          ))}
+        </div>
+      ))}
+
+      {/* Towers - Enhanced with 3D effect */}
       {towers.map(tower => {
         const config = TOWERS[tower.type];
         const Icon = TOWER_ICONS[tower.type];
@@ -263,40 +340,59 @@ function GameCanvas({
         return (
           <motion.div
             key={tower.id}
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
+            initial={{ scale: 0, y: -20 }}
+            animate={{ scale: 1, y: 0 }}
+            transition={{ type: 'spring', damping: 10 }}
             className="absolute flex items-center justify-center"
             style={{
-              left: tower.x - 20,
-              top: tower.lane * laneHeight + laneHeight / 2 - 20,
-              width: 40,
-              height: 40
+              left: tower.x - 22,
+              top: tower.lane * laneHeight + laneHeight / 2 - 22,
+              width: 44,
+              height: 44,
             }}
           >
+            {/* Tower shadow */}
             <div
-              className="w-10 h-10 rounded-full flex items-center justify-center border-2"
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-2 rounded-full blur-sm"
+              style={{ backgroundColor: `${config.color}40` }}
+            />
+            {/* Tower base */}
+            <div
+              className="w-11 h-11 rounded-xl flex items-center justify-center border-2 shadow-lg relative overflow-hidden"
               style={{
-                backgroundColor: `${config.color}30`,
-                borderColor: config.color
+                background: `linear-gradient(135deg, ${config.color}50 0%, ${config.color}20 100%)`,
+                borderColor: config.color,
+                boxShadow: `0 0 20px ${config.color}40, inset 0 1px 0 rgba(255,255,255,0.2)`
               }}
             >
-              <Icon className="w-5 h-5" style={{ color: config.color }} />
+              {/* Inner glow */}
+              <div
+                className="absolute inset-0 animate-pulse"
+                style={{
+                  background: `radial-gradient(circle at center, ${config.color}30 0%, transparent 70%)`
+                }}
+              />
+              <Icon className="w-5 h-5 relative z-10 drop-shadow-lg" style={{ color: config.color }} />
             </div>
             {/* Range indicator */}
-            <div
-              className="absolute rounded-full border border-white/10 pointer-events-none"
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 0.15, scale: 1 }}
+              className="absolute rounded-full border pointer-events-none"
               style={{
                 width: config.range * 2,
                 height: config.range * 2,
-                left: 20 - config.range,
-                top: 20 - config.range
+                left: 22 - config.range,
+                top: 22 - config.range,
+                borderColor: config.color,
+                background: `radial-gradient(circle at center, ${config.color}10 0%, transparent 70%)`
               }}
             />
           </motion.div>
         );
       })}
 
-      {/* Enemies */}
+      {/* Enemies - Enhanced with 3D effect */}
       {enemies.map(enemy => {
         const config = ENEMIES[enemy.type];
         const Icon = ENEMY_ICONS[enemy.type];
@@ -306,49 +402,100 @@ function GameCanvas({
           <motion.div
             key={enemy.id}
             className="absolute"
+            animate={{ x: [0, -2, 0, 2, 0] }}
+            transition={{ duration: 0.5, repeat: Infinity }}
             style={{
-              left: enemy.x - 16,
-              top: enemy.lane * laneHeight + laneHeight / 2 - 16
+              left: enemy.x - 18,
+              top: enemy.lane * laneHeight + laneHeight / 2 - 18
             }}
           >
+            {/* Enemy shadow */}
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-2 bg-black/40 rounded-full blur-sm" />
+            {/* Enemy body */}
             <div
-              className="w-8 h-8 rounded-full flex items-center justify-center"
-              style={{ backgroundColor: config.color }}
+              className="w-9 h-9 rounded-full flex items-center justify-center border-2 shadow-lg relative"
+              style={{
+                background: `linear-gradient(135deg, ${config.color} 0%, ${config.color}80 100%)`,
+                borderColor: `${config.color}`,
+                boxShadow: `0 0 15px ${config.color}60`
+              }}
             >
-              <Icon className="w-4 h-4 text-white" />
+              <Icon className="w-4 h-4 text-white drop-shadow-md" />
+              {/* Danger pulse for boss */}
+              {enemy.type === 'boss' && (
+                <motion.div
+                  className="absolute inset-0 rounded-full border-2 border-[#F9A825]"
+                  animate={{ scale: [1, 1.3, 1], opacity: [0.8, 0, 0.8] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                />
+              )}
             </div>
-            {/* Health bar */}
-            <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gray-700 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-red-500 transition-all"
-                style={{ width: `${healthPercent}%` }}
+            {/* Health bar - Enhanced */}
+            <div className="absolute -bottom-3 left-0 right-0 h-1.5 bg-gray-800 rounded-full overflow-hidden border border-gray-700">
+              <motion.div
+                className="h-full rounded-full"
+                style={{
+                  width: `${healthPercent}%`,
+                  background: healthPercent > 50
+                    ? 'linear-gradient(90deg, #00997d, #00d9a7)'
+                    : healthPercent > 25
+                      ? 'linear-gradient(90deg, #F9A825, #FFD54F)'
+                      : 'linear-gradient(90deg, #C62828, #ff6b6b)'
+                }}
+                animate={{ opacity: [0.8, 1, 0.8] }}
+                transition={{ duration: 0.5, repeat: Infinity }}
               />
             </div>
           </motion.div>
         );
       })}
 
-      {/* Projectiles */}
+      {/* Projectiles - Enhanced with trails */}
       {projectiles.map(proj => (
         <motion.div
           key={proj.id}
-          className="absolute w-2 h-2 rounded-full"
+          className="absolute"
           style={{
-            left: proj.x - 4,
-            top: proj.y - 4,
-            backgroundColor: proj.color,
-            boxShadow: `0 0 8px ${proj.color}`
+            left: proj.x - 6,
+            top: proj.y - 6,
           }}
-        />
+        >
+          {/* Projectile trail */}
+          <div
+            className="absolute w-8 h-1 -left-6 top-1/2 -translate-y-1/2 rounded-full opacity-50"
+            style={{
+              background: `linear-gradient(90deg, transparent, ${proj.color})`,
+            }}
+          />
+          {/* Projectile core */}
+          <div
+            className="w-3 h-3 rounded-full"
+            style={{
+              backgroundColor: proj.color,
+              boxShadow: `0 0 12px ${proj.color}, 0 0 24px ${proj.color}50`
+            }}
+          />
+        </motion.div>
       ))}
 
-      {/* Placement hint */}
+      {/* Placement hint - Enhanced */}
       {selectedTower && (
-        <div className="absolute inset-0 bg-[#00997d]/5 flex items-center justify-center pointer-events-none">
-          <p className="text-[#00d9a7] text-sm font-medium bg-black/50 px-3 py-1 rounded">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="absolute inset-0 flex items-center justify-center pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle at center, #00997d10 0%, transparent 70%)'
+          }}
+        >
+          <motion.p
+            animate={{ y: [0, -5, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+            className="text-[#00d9a7] text-sm font-bold bg-black/70 backdrop-blur-sm px-4 py-2 rounded-full border border-[#00997d]/30 shadow-lg"
+          >
             Cliquez pour placer la tour
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
       )}
     </div>
   );

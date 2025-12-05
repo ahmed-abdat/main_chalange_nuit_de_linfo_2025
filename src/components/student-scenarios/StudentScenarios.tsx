@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { toast } from 'sonner';
-import { studentScenarios, getScenario, type ScenarioId, type ChoiceType } from '@/data/studentScenarios';
+import { studentScenarios, getStudentScenarioById, type ScenarioId, type ChoiceType } from '@/data/studentScenarios';
 import { useStudentScenarioStore, useProgress } from '@/store/studentScenarioStore';
 import { PointsDisplay } from './PointsDisplay';
 import { ScenarioCard } from './ScenarioCard';
@@ -41,8 +41,8 @@ export function StudentScenarios() {
   const nextScenarioId = useMemo(
     () => {
       for (let i = 1; i <= TOTAL_SCENARIOS; i++) {
-        const scenarioId = i as ScenarioId;
-        if (!completedScenarios[String(scenarioId)]) {
+        const scenarioId = `student-${i}` as ScenarioId;
+        if (!completedScenarios[scenarioId]) {
           return scenarioId;
         }
       }
@@ -52,7 +52,7 @@ export function StudentScenarios() {
   );
 
   const currentScenario = useMemo(
-    () => currentScenarioId ? getScenario(currentScenarioId) : null,
+    () => currentScenarioId ? getStudentScenarioById(currentScenarioId) : null,
     [currentScenarioId]
   );
 
@@ -110,11 +110,14 @@ export function StudentScenarios() {
   const isScenarioUnlocked = useMemo(
     () => (scenarioId: ScenarioId): boolean => {
       // First scenario is always unlocked
-      if (scenarioId === 1) return true;
+      if (scenarioId === 'student-1') return true;
 
       // Check if previous scenario is completed
-      const previousId = (scenarioId - 1) as ScenarioId;
-      return Boolean(completedScenarios[String(previousId)]);
+      const match = scenarioId.match(/student-(\d+)/);
+      if (!match) return false;
+      const num = parseInt(match[1], 10);
+      const previousId = `student-${num - 1}` as ScenarioId;
+      return Boolean(completedScenarios[previousId]);
     },
     [completedScenarios]
   );
@@ -268,7 +271,7 @@ export function StudentScenarios() {
                   {getScenarioChoice(currentScenario.id) === 'B' ? (
                     <EducationalInfo
                       info={currentScenario.educationalInfo}
-                      scenarioNumber={currentScenario.id}
+                      scenarioNumber={parseInt(currentScenario.id.replace(/\D/g, '')) || 1}
                     />
                   ) : (
                     <div className="bg-red-50 border border-red-100 rounded-2xl p-6 md:p-8">
@@ -282,7 +285,7 @@ export function StudentScenarios() {
                               Réalité du choix Big Tech
                             </h3>
                             <p className="text-red-800 leading-relaxed text-lg">
-                              {currentScenario.choiceA.realityCheck}
+                              {currentScenario.choiceA.realityCheck || currentScenario.choiceA.feedback}
                             </p>
                           </div>
 
@@ -303,14 +306,13 @@ export function StudentScenarios() {
               <Button
                 variant="ghost"
                 onClick={() => {
-                  const prevId = currentScenario.id > 1
-                    ? ((currentScenario.id - 1) as ScenarioId)
-                    : null;
-                  if (prevId) {
+                  const currentNum = parseInt(currentScenario.id.replace(/\D/g, '')) || 1;
+                  if (currentNum > 1) {
+                    const prevId = `student-${currentNum - 1}` as ScenarioId;
                     handleScenarioSelect(prevId);
                   }
                 }}
-                disabled={currentScenario.id === 1}
+                disabled={parseInt(currentScenario.id.replace(/\D/g, '')) <= 1}
                 className="flex items-center gap-2 hover:bg-gray-50"
               >
                 <ArrowLeft className="w-4 h-4" />

@@ -8,6 +8,9 @@
  * La Nuit de l'Info 2025
  */
 
+export type ChoiceType = 'A' | 'B';
+export type ScenarioId = string;
+
 export interface ScenarioPoints {
   money: number;
   protection: number;
@@ -22,6 +25,7 @@ export interface ScenarioChoice {
   color: string;
   points?: ScenarioPoints;
   feedback: string;
+  realityCheck?: string;
 }
 
 export interface EducationalInfo {
@@ -30,6 +34,11 @@ export interface EducationalInfo {
   benefits: string[];
   nirdPillar: 'inclusive' | 'responsible' | 'sustainable';
   fact: string;
+  tools?: Array<{
+    name: string;
+    description: string;
+    link?: string;
+  }>;
 }
 
 export interface StudentScenario {

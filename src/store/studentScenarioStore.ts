@@ -42,7 +42,7 @@ export const useStudentScenarioStore = create<StudentScenarioStore>()(
     (set, get) => ({
       completedScenarios: {},
       totalPoints: initialPoints,
-      currentScenarioId: 1, // Start with first scenario
+      currentScenarioId: 'student-1', // Start with first scenario
       viewMode: 'single',
 
       completeScenario: (scenarioId, choice, points) => {
@@ -85,7 +85,7 @@ export const useStudentScenarioStore = create<StudentScenarioStore>()(
         set({
           completedScenarios: {},
           totalPoints: initialPoints,
-          currentScenarioId: 1,
+          currentScenarioId: 'student-1',
         });
       },
 
@@ -111,8 +111,8 @@ export const useStudentScenarioStore = create<StudentScenarioStore>()(
 
         // Find first scenario that's not completed
         for (let i = 1; i <= TOTAL_SCENARIOS; i++) {
-          const scenarioId = i as ScenarioId;
-          if (!completedScenarios[String(scenarioId)]) {
+          const scenarioId = `student-${i}` as ScenarioId;
+          if (!completedScenarios[scenarioId]) {
             return scenarioId;
           }
         }
@@ -138,7 +138,7 @@ export const useCompletedScenarios = () =>
     // Convert Record to Map for component usage if needed
     const map = new Map<ScenarioId, ChoiceType>();
     Object.entries(state.completedScenarios).forEach(([key, value]) => {
-      map.set(Number(key) as ScenarioId, value);
+      map.set(key as ScenarioId, value);
     });
     return map;
   });

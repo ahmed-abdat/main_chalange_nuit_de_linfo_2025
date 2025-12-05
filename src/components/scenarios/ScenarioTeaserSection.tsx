@@ -1,14 +1,30 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import { motion, useInView } from 'motion/react';
-import { Compass, GraduationCap, Users, Trophy } from 'lucide-react';
+import { Compass, GraduationCap, Users, Trophy, Shield, Swords } from 'lucide-react';
 import BlurText from '@/components/BlurText';
 import Particles from '@/components/Particles';
 import ScenarioTeaserCard from './ScenarioTeaserCard';
 import { getStudentTeaserScenario, studentScenarios } from '@/data/studentScenarios';
 import { getParentTeaserScenario, parentScenarios } from '@/data/parentScenarios';
 import { useScenarioStore } from '@/store/scenarioStore';
+
+// Dynamic import for 3D scene (client-side only, no SSR)
+const VillageScene = dynamic(() => import('@/components/3d/VillageScene'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[300px] rounded-2xl bg-gradient-to-br from-[#1a472a] via-[#0f2818] to-[#1a1a1d] flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#00997d]/20 flex items-center justify-center animate-pulse">
+          <Shield className="w-8 h-8 text-[#00997d]" />
+        </div>
+        <p className="text-gray-400 text-sm">Chargement du Village 3D...</p>
+      </div>
+    </div>
+  ),
+});
 
 export default function ScenarioTeaserSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -131,6 +147,57 @@ export default function ScenarioTeaserSection() {
             </div>
           </motion.div>
         </div>
+
+        {/* 3D Village Scene */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={isInView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ delay: 0.5, duration: 0.8 }}
+          className="mb-10 sm:mb-12 relative"
+        >
+          {/* Scene container with glow effect */}
+          <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-[#00997d]/10">
+            {/* Animated border glow */}
+            <div className="absolute -inset-px rounded-2xl bg-gradient-to-r from-[#00997d] via-[#F9A825] to-[#C62828] opacity-30 blur-sm animate-pulse" />
+
+            {/* 3D Scene */}
+            <div className="relative bg-[#0a0a0f] rounded-2xl">
+              <VillageScene height="300px" />
+            </div>
+
+            {/* Overlay labels */}
+            <div className="absolute bottom-4 left-4 right-4 flex justify-between pointer-events-none">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ delay: 0.8, duration: 0.5 }}
+                className="flex items-center gap-2 px-3 py-1.5 bg-[#00997d]/80 backdrop-blur-sm rounded-full"
+              >
+                <Shield className="w-4 h-4 text-white" />
+                <span className="text-xs font-bold text-white">VILLAGE NIRD</span>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ delay: 0.9, duration: 0.5 }}
+                className="flex items-center gap-2 px-3 py-1.5 bg-[#C62828]/80 backdrop-blur-sm rounded-full"
+              >
+                <Swords className="w-4 h-4 text-white" />
+                <span className="text-xs font-bold text-white">EMPIRE BIG TECH</span>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Instruction text */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ delay: 1, duration: 0.5 }}
+            className="text-center text-xs text-gray-500 mt-3"
+          >
+            Faites glisser pour explorer la scene 3D
+          </motion.p>
+        </motion.div>
 
         {/* Teaser Cards Grid */}
         <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
