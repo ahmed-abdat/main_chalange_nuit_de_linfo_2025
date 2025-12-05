@@ -1,14 +1,13 @@
 'use client';
 
-import { useRef, Suspense } from 'react';
+import { useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { motion, useInView } from 'motion/react';
-import { Compass, GraduationCap, Users, Trophy, Shield, Swords } from 'lucide-react';
+import { Compass, GraduationCap, Trophy, Shield, Swords } from 'lucide-react';
 import BlurText from '@/components/BlurText';
 import Particles from '@/components/Particles';
 import ScenarioTeaserCard from './ScenarioTeaserCard';
 import { getStudentTeaserScenario, studentScenarios } from '@/data/studentScenarios';
-import { getParentTeaserScenario, parentScenarios } from '@/data/parentScenarios';
 import { useScenarioStore } from '@/store/scenarioStore';
 
 // Dynamic import for 3D scene (client-side only, no SSR)
@@ -33,16 +32,13 @@ export default function ScenarioTeaserSection() {
   // Get stores
   const {
     studentTeaserCompleted,
-    parentTeaserCompleted,
     completeStudentTeaser,
-    completeParentTeaser,
   } = useScenarioStore();
 
-  // Get teaser scenarios
+  // Get teaser scenario
   const studentTeaser = getStudentTeaserScenario();
-  const parentTeaser = getParentTeaserScenario();
 
-  if (!studentTeaser || !parentTeaser) return null;
+  if (!studentTeaser) return null;
 
   // Convert student scenario to card format
   const studentChoices = [
@@ -64,16 +60,6 @@ export default function ScenarioTeaserSection() {
       points: studentTeaser.choiceB.points,
     },
   ];
-
-  // Convert parent scenario to card format
-  const parentChoices = parentTeaser.decisions.slice(0, 2).map(d => ({
-    id: d.id,
-    title: d.label,
-    description: d.description,
-    icon: d.icon,
-    color: d.color,
-    feedback: d.feedback,
-  }));
 
   return (
     <section
@@ -140,11 +126,6 @@ export default function ScenarioTeaserSection() {
               <GraduationCap className="w-4 h-4 text-[#F9A825]" />
               <span>Etudiants</span>
             </div>
-            <div className="w-1 h-1 rounded-full bg-gray-600" />
-            <div className="flex items-center gap-2 text-sm text-gray-500">
-              <Users className="w-4 h-4 text-[#00997d]" />
-              <span>Parents</span>
-            </div>
           </motion.div>
         </div>
 
@@ -199,8 +180,8 @@ export default function ScenarioTeaserSection() {
           </motion.p>
         </motion.div>
 
-        {/* Teaser Cards Grid */}
-        <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
+        {/* Teaser Card */}
+        <div className="max-w-lg mx-auto">
           {/* Student Teaser */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -218,28 +199,10 @@ export default function ScenarioTeaserSection() {
               isCompleted={studentTeaserCompleted}
             />
           </motion.div>
-
-          {/* Parent Teaser */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.3, duration: 0.6 }}
-          >
-            <ScenarioTeaserCard
-              type="parent"
-              title={parentTeaser.title}
-              context={parentTeaser.context}
-              character={parentTeaser.character}
-              choices={parentChoices}
-              scenarioCount={parentScenarios.length}
-              onComplete={completeParentTeaser}
-              isCompleted={parentTeaserCompleted}
-            />
-          </motion.div>
         </div>
 
         {/* Completion indicator */}
-        {(studentTeaserCompleted || parentTeaserCompleted) && (
+        {studentTeaserCompleted && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -249,9 +212,7 @@ export default function ScenarioTeaserSection() {
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#00997d]/10 rounded-xl border border-[#00997d]/20">
               <Trophy className="w-4 h-4 text-[#F9A825]" />
               <span className="text-sm text-gray-400">
-                {studentTeaserCompleted && parentTeaserCompleted
-                  ? 'Bravo ! Les deux scenarios completes !'
-                  : 'Un scenario complete ! Continue pour debloquer le badge.'}
+                Bravo ! Scenario complete !
               </span>
             </div>
           </motion.div>

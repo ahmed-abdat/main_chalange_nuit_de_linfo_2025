@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, Source_Serif_4, JetBrains_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
+import GameToasts from "@/components/GameToasts";
 import "./globals.css";
 
 // Primary font - Modern, warm, great for French
@@ -67,6 +68,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         {children}
+        <GameToasts />
         <Toaster
           position="bottom-center"
           toastOptions={{

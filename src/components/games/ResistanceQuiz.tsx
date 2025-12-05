@@ -6,6 +6,7 @@ import { Check, X, ChevronRight, RotateCcw, Trophy, Sparkles } from 'lucide-reac
 import { cn } from '@/lib/utils';
 import { getRandomQuestions, type QuizQuestion } from '@/data/quizQuestions';
 import { useAchievementStore } from '@/store/achievementStore';
+import { useGameSounds } from '@/hooks/useGameSounds';
 import { SparklesText } from '@/components/ui/sparkles-text';
 import { BorderBeam } from '@/components/ui/border-beam';
 
@@ -24,6 +25,7 @@ export default function ResistanceQuiz({ questionCount = 5, onComplete }: Resist
   const [answers, setAnswers] = useState<boolean[]>([]);
 
   const unlockBadge = useAchievementStore((state) => state.unlockBadge);
+  const { play: playSound } = useGameSounds();
 
   // Initialize quiz
   useEffect(() => {
@@ -40,17 +42,22 @@ export default function ResistanceQuiz({ questionCount = 5, onComplete }: Resist
 
     const isCorrect = answerIndex === currentQuestion.correctIndex;
     if (isCorrect) {
+      playSound('success');
       setScore((s) => s + 1);
+    } else {
+      playSound('error');
     }
     setAnswers((prev) => [...prev, isCorrect]);
   };
 
   const handleNext = useCallback(() => {
+    playSound('click');
     if (currentIndex < questions.length - 1) {
       setCurrentIndex((i) => i + 1);
       setSelectedAnswer(null);
       setShowResult(false);
     } else {
+      playSound('victory');
       setIsComplete(true);
       const finalScore = score + (selectedAnswer === currentQuestion?.correctIndex ? 0 : 0);
 
@@ -61,9 +68,10 @@ export default function ResistanceQuiz({ questionCount = 5, onComplete }: Resist
 
       onComplete?.(finalScore, questionCount);
     }
-  }, [currentIndex, questions.length, score, selectedAnswer, currentQuestion, questionCount, unlockBadge, onComplete]);
+  }, [currentIndex, questions.length, score, selectedAnswer, currentQuestion, questionCount, unlockBadge, onComplete, playSound]);
 
   const resetQuiz = () => {
+    playSound('click');
     setQuestions(getRandomQuestions(questionCount));
     setCurrentIndex(0);
     setSelectedAnswer(null);

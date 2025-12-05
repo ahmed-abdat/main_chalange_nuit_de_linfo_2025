@@ -6,6 +6,9 @@ import { RotateCcw, Trophy, Clock, Layers, PartyPopper, Play, Zap } from 'lucide
 import { cn } from '@/lib/utils';
 import { CARD_PAIRS, generateCards, shuffleCards, getFactForPair, type MemoryCard } from '@/data/memoryCards';
 import { useAchievementStore } from '@/store/achievementStore';
+import { useGameStore, useGameSettings } from '@/store/gameStore';
+import { useGameSounds } from '@/hooks/useGameSounds';
+import { GameSettingsToggle, PlayerStats } from '@/components/GameSettings';
 import { LOGO_MAP, NIRDLogo } from './SoftwareLogos';
 import {
   EnhancedConfetti,
@@ -247,6 +250,12 @@ export default function MemoryGame() {
   const [isNewGame, setIsNewGame] = useState(false);
 
   const { particles, spawn: spawnParticles } = useParticles();
+  const settings = useGameSettings();
+  const { play: playSound } = useGameSounds({
+    soundEnabled: settings.soundEnabled,
+    hapticEnabled: settings.hapticEnabled,
+  });
+  const recordMiniGameResult = useGameStore(s => s.recordMiniGameResult);
   const gameRef = useRef<HTMLDivElement>(null);
 
   const unlockBadge = useAchievementStore(s => s.unlockBadge);
@@ -265,6 +274,7 @@ export default function MemoryGame() {
 
   // Start game
   const startGame = () => {
+    playSound('click');
     const allCards = generateCards();
     const shuffled = shuffleCards(allCards);
     const gameCards: GameCard[] = shuffled.map(card => ({
@@ -294,6 +304,9 @@ export default function MemoryGame() {
     const card = cards.find(c => c.id === cardId);
     if (!card || card.isMatched || card.isFlipped) return;
 
+    // Play flip sound
+    playSound('flip');
+
     // Flip the card
     setCards(prev => prev.map(c =>
       c.id === cardId ? { ...c, isFlipped: true } : c
@@ -315,6 +328,7 @@ export default function MemoryGame() {
         setCombo(c => c + 1);
 
         setTimeout(() => {
+          playSound('match');
           setCards(prev => prev.map(c =>
             c.pairId === firstCard.pairId ? { ...c, isMatched: true, isFlipped: false } : c
           ));
@@ -346,6 +360,7 @@ export default function MemoryGame() {
         setIsPerfect(false);
         setCombo(0);
         setTimeout(() => {
+          playSound('error');
           setCards(prev => prev.map(c =>
             newFlipped.includes(c.id) ? { ...c, isFlipped: false } : c
           ));
@@ -353,17 +368,23 @@ export default function MemoryGame() {
         }, 1000);
       }
     }
-  }, [cards, flippedCards, spawnParticles]);
+  }, [cards, flippedCards, spawnParticles, playSound]);
 
   // Check for victory
   useEffect(() => {
     if (phase === 'playing' && matchedPairs === totalPairs) {
+      playSound('victory');
       setPhase('victory');
       setShowConfetti(true);
       unlockBadge('alternatives_master');
+
+      // Record result: score = total moves (lower is better, so we invert)
+      const score = Math.max(100 - moves, 10); // Higher score for fewer moves
+      recordMiniGameResult('memory', score, true);
+
       setTimeout(() => setShowConfetti(false), 4000);
     }
-  }, [matchedPairs, totalPairs, phase, unlockBadge]);
+  }, [matchedPairs, totalPairs, phase, unlockBadge, playSound, moves, recordMiniGameResult]);
 
   // Format time
   const formatTime = (seconds: number) => {
@@ -499,9 +520,13 @@ export default function MemoryGame() {
                 </motion.div>
               )}
             </div>
-            <div className="flex items-center gap-1.5 bg-gray-700/50 px-3 py-1.5 rounded-full border border-gray-600">
-              <Clock className="w-4 h-4 text-white/60" />
-              <span className="text-white font-mono text-sm">{formatTime(time)}</span>
+            <div className="flex items-center gap-2">
+              <PlayerStats compact />
+              <div className="flex items-center gap-1.5 bg-gray-700/50 px-3 py-1.5 rounded-full border border-gray-600">
+                <Clock className="w-4 h-4 text-white/60" />
+                <span className="text-white font-mono text-sm">{formatTime(time)}</span>
+              </div>
+              <GameSettingsToggle />
             </div>
           </div>
 

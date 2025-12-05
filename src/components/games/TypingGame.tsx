@@ -9,6 +9,7 @@ import {
 import { cn } from '@/lib/utils';
 import { getProgressiveCommands, TYPING_CONFIG, type TypingCommand } from '@/data/typingCommands';
 import { useAchievementStore } from '@/store/achievementStore';
+import { useGameSounds } from '@/hooks/useGameSounds';
 import {
   EnhancedConfetti,
   SpeedLines,
@@ -176,6 +177,7 @@ function TypingGameInner() {
 
   const { particles, spawn: spawnParticles } = useParticles();
   const { shake } = useScreenShake();
+  const { play: playSound } = useGameSounds();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const unlockBadge = useAchievementStore(s => s.unlockBadge);
@@ -184,6 +186,7 @@ function TypingGameInner() {
 
   // Start game
   const startGame = useCallback(() => {
+    playSound('click');
     setPhase('countdown');
     setCountdown(3);
     setTimeLeft(TYPING_CONFIG.gameDuration);
@@ -193,20 +196,21 @@ function TypingGameInner() {
     setCompletedCommands([]);
     setStats({ correctChars: 0, totalChars: 0, correctCommands: 0, totalCommands: 0, wpm: 0 });
     setWindowsProgress(0);
-  }, []);
+  }, [playSound]);
 
   // Countdown
   useEffect(() => {
     if (phase !== 'countdown') return;
 
     if (countdown > 0) {
+      playSound('countdown');
       const timer = setTimeout(() => setCountdown(c => c - 1), 1000);
       return () => clearTimeout(timer);
     } else {
       setPhase('playing');
       inputRef.current?.focus();
     }
-  }, [phase, countdown]);
+  }, [phase, countdown, playSound]);
 
   // Game timer
   useEffect(() => {
@@ -258,12 +262,14 @@ function TypingGameInner() {
 
     if (value.length > userInput.length && actualChar !== expectedChar) {
       // Error! Shake and reset streak
+      playSound('error');
       setHasError(true);
       setStreak(0);
       shake(5, 100);
       setTimeout(() => setHasError(false), 200);
     } else if (value.length > userInput.length && actualChar === expectedChar) {
       // Correct keystroke
+      playSound('type');
       setStreak(s => s + 1);
 
       // Spawn particle every 10 keystrokes
@@ -285,6 +291,7 @@ function TypingGameInner() {
     // Check if command is complete
     if (value === currentCommand.command) {
       // Correct!
+      playSound('success');
       setStats(prev => ({
         ...prev,
         correctChars: prev.correctChars + currentCommand.command.length,
@@ -313,10 +320,11 @@ function TypingGameInner() {
         endGame();
       }
     }
-  }, [phase, currentCommand, currentIndex, commands.length, userInput, lastKeyTime, streak, shake, spawnParticles]);
+  }, [phase, currentCommand, currentIndex, commands.length, userInput, lastKeyTime, streak, shake, spawnParticles, playSound]);
 
   // End game
   const endGame = useCallback(() => {
+    playSound('victory');
     const elapsed = TYPING_CONFIG.gameDuration - timeLeft;
     const minutes = elapsed / 60;
     const words = stats.correctChars / 5; // Standard: 5 chars = 1 word
@@ -331,7 +339,7 @@ function TypingGameInner() {
     }
 
     setTimeout(() => setShowConfetti(false), 4000);
-  }, [timeLeft, stats.correctChars, unlockBadge]);
+  }, [timeLeft, stats.correctChars, unlockBadge, playSound]);
 
   // Keep input focused
   useEffect(() => {

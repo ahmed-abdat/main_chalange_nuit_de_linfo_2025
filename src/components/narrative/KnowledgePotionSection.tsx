@@ -94,7 +94,8 @@ function TransformationCard({
                     alt={isTransformed ? item.to.name : item.from.name}
                     width={32}
                     height={32}
-                    className="w-8 h-8 object-contain"
+                    className="object-contain"
+                    style={{ width: 'auto', height: 'auto', maxWidth: 32, maxHeight: 32 }}
                   />
                 ) : (
                   <span

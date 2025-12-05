@@ -24,21 +24,21 @@ export const characters: Record<CharacterId, CharacterInfo> = {
     name: 'Asterix',
     emoji: 'A',
     color: '#F9A825', // Gold - courage
-    role: 'Le Champion des Eleves'
+    role: 'Le Champion des Élèves'
   },
   obelix: {
     id: 'obelix',
     name: 'Obelix',
     emoji: 'O',
     color: '#2196F3', // Blue - strength
-    role: 'Le Veteran Linux'
+    role: 'Le Vétéran Linux'
   },
   idefix: {
     id: 'idefix',
     name: 'Idefix',
     emoji: 'I',
     color: '#4CAF50', // Green - eco
-    role: 'Le Gardien Ecologique'
+    role: 'Le Gardien Écologique'
   }
 };
 
@@ -55,9 +55,9 @@ export const sectionDialogues: SectionDialogue[] = [
     section: 'hero',
     speaker: 'panoramix',
     lines: [
-      "Bienvenue, voyageur. Tu arrives dans des temps troubles...",
+      "Bienvenue, voyageur. Vous arrivez dans des temps troubles...",
       "L'Empire Big Tech étend son ombre sur nos écoles.",
-      "Mais n'aie crainte ! Tu as trouvé le Village."
+      "Mais n'ayez crainte ! Vous avez trouvé le Village."
     ],
     delay: 2000
   },
@@ -79,8 +79,8 @@ export const sectionDialogues: SectionDialogue[] = [
     section: 'choice',
     speaker: 'asterix',
     lines: [
-      "Le moment est venu de choisir ton camp, ami(e).",
-      "Trois chemins s'offrent à toi...",
+      "Le moment est venu de choisir votre camp, ami(e).",
+      "Trois chemins s'offrent à vous...",
       "Mais seul un mène à la liberté numérique !"
     ],
     delay: 500
@@ -91,9 +91,9 @@ export const sectionDialogues: SectionDialogue[] = [
     section: 'choice-linux',
     speaker: 'obelix',
     lines: [
-      "Excellent choix ! Tu rejoins le Village !",
+      "Excellent choix ! Vous rejoignez le Village !",
       "Je suis tombé dans la marmite Linux quand j'étais petit...",
-      "Tiens, prends cette clé USB magique !"
+      "Tenez, prenez cette clé USB magique !"
     ],
     delay: 300
   },
@@ -103,9 +103,9 @@ export const sectionDialogues: SectionDialogue[] = [
     section: 'choice-windows',
     speaker: 'panoramix',
     lines: [
-      "Hmm... Réfléchis bien, voyageur.",
+      "Hmm... Réfléchissez bien, voyageur.",
       "L'Empire demande beaucoup et donne peu...",
-      "Tu peux toujours changer d'avis."
+      "Vous pouvez toujours changer d'avis."
     ],
     delay: 300
   },
@@ -128,8 +128,8 @@ export const sectionDialogues: SectionDialogue[] = [
     speaker: 'obelix',
     lines: [
       "C'est l'heure de l'épreuve !",
-      "Tu vois ce vieux PC ? L'Empire dit qu'il est 'obsolète'.",
-      "Nous disons qu'il est 'libérable'. Glisse la potion !"
+      "Vous voyez ce vieux PC ? L'Empire dit qu'il est 'obsolète'.",
+      "Nous disons qu'il est 'libérable'. Glissez la potion !"
     ],
     delay: 500
   },
@@ -139,9 +139,9 @@ export const sectionDialogues: SectionDialogue[] = [
     section: 'game-success',
     speaker: 'asterix',
     lines: [
-      "FORMIDABLE ! Tu as sauvé ce PC !",
+      "FORMIDABLE ! Vous avez sauvé ce PC !",
       "€800 économisés, 300kg de CO₂ évités !",
-      "Tu maîtrises maintenant l'art du reconditionnement."
+      "Vous maîtrisez maintenant l'art du reconditionnement."
     ],
     delay: 300
   },
@@ -151,9 +151,9 @@ export const sectionDialogues: SectionDialogue[] = [
     section: 'quiz',
     speaker: 'panoramix',
     lines: [
-      "Teste tes connaissances, jeune apprenti...",
+      "Testez vos connaissances, jeune apprenti...",
       "Chaque bonne réponse renforce le Village.",
-      "Es-tu prêt(e) à relever le défi ?"
+      "Êtes-vous prêt(e) à relever le défi ?"
     ],
     delay: 500
   },
@@ -164,8 +164,8 @@ export const sectionDialogues: SectionDialogue[] = [
     speaker: 'asterix',
     lines: [
       "Par Toutatis ! Un score parfait !",
-      "Tu es un véritable Maître du Quiz !",
-      "Le Village est fier de toi !"
+      "Vous êtes un véritable Maître du Quiz !",
+      "Le Village est fier de vous !"
     ],
     delay: 300
   },
@@ -175,7 +175,7 @@ export const sectionDialogues: SectionDialogue[] = [
     section: 'testimonials',
     speaker: 'panoramix',
     lines: [
-      "Tu n'es pas seul(e) dans cette quête...",
+      "Vous n'êtes pas seul(e) dans cette quête...",
       "Voici les écoles qui ont rejoint le Village.",
       "Leur succès prouve que la résistance fonctionne !"
     ],
@@ -188,7 +188,7 @@ export const sectionDialogues: SectionDialogue[] = [
     speaker: 'asterix',
     lines: [
       "Le moment est venu de passer à l'action !",
-      "Rejoins le Village NIRD et libère ton école.",
+      "Rejoignez le Village NIRD et libérez votre école.",
       "Ensemble, nous résisterons à l'Empire !"
     ],
     delay: 500
@@ -199,9 +199,9 @@ export const sectionDialogues: SectionDialogue[] = [
     section: 'idle',
     speaker: 'idefix',
     lines: [
-      "Continue ton exploration !",
-      "Chaque PC sauve = un arbre preserve !",
-      "Le Village compte sur toi !"
+      "Continuez votre exploration !",
+      "Chaque PC sauvé = un arbre préservé !",
+      "Le Village compte sur vous !"
     ],
     delay: 10000
   },
@@ -213,7 +213,7 @@ export const sectionDialogues: SectionDialogue[] = [
     lines: [
       "Pour chaque outil de l'Empire, il existe une alternative libre...",
       "Ma potion magique ? La connaissance des logiciels libres !",
-      "Teste ta mémoire et découvre les alternatives !"
+      "Testez votre mémoire et découvrez les alternatives !"
     ],
     delay: 500
   },
@@ -223,7 +223,7 @@ export const sectionDialogues: SectionDialogue[] = [
     section: 'memory',
     speaker: 'panoramix',
     lines: [
-      "Trouve les paires : propriétaire vs open source.",
+      "Trouvez les paires : propriétaire vs open source.",
       "Chaque correspondance renforce le Village !",
       "La connaissance est la première arme de la résistance !"
     ],
@@ -235,9 +235,9 @@ export const sectionDialogues: SectionDialogue[] = [
     section: 'memory-success',
     speaker: 'panoramix',
     lines: [
-      "Excellent ! Tu connais maintenant toutes les alternatives !",
+      "Excellent ! Vous connaissez maintenant toutes les alternatives !",
       "LibreOffice, Firefox, GIMP... Les outils du Village !",
-      "L'Empire n'a plus de secrets pour toi."
+      "L'Empire n'a plus de secrets pour vous."
     ],
     delay: 300
   },
@@ -259,7 +259,7 @@ export const sectionDialogues: SectionDialogue[] = [
     section: 'defense',
     speaker: 'obelix',
     lines: [
-      "Place tes défenses pour protéger le Village !",
+      "Placez vos défenses pour protéger le Village !",
       "Firewall, AdBlocker, Linux Update... nos armes secrètes !",
       "Ils ne passeront pas !"
     ],
@@ -272,8 +272,8 @@ export const sectionDialogues: SectionDialogue[] = [
     speaker: 'obelix',
     lines: [
       "FORMIDABLE ! L'Empire recule !",
-      "Tes défenses ont protégé le Village !",
-      "Tu es un véritable Défenseur !"
+      "Vos défenses ont protégé le Village !",
+      "Vous êtes un véritable Défenseur !"
     ],
     delay: 300
   },
@@ -283,9 +283,9 @@ export const sectionDialogues: SectionDialogue[] = [
     section: 'final-trial',
     speaker: 'asterix',
     lines: [
-      "Tu as prouvé tes connaissances. Maintenant, prouve ta maîtrise !",
+      "Vous avez prouvé vos connaissances. Maintenant, prouvez votre maîtrise !",
       "Le terminal est l'arme ultime du résistant.",
-      "Montre-moi la vitesse de tes doigts !"
+      "Montrez-moi la vitesse de vos doigts !"
     ],
     delay: 500
   },
@@ -295,9 +295,9 @@ export const sectionDialogues: SectionDialogue[] = [
     section: 'typing',
     speaker: 'asterix',
     lines: [
-      "Tape les commandes Linux le plus vite possible !",
+      "Tapez les commandes Linux le plus vite possible !",
       "Chaque commande maîtrisée = une victoire contre l'Empire.",
-      "Bats le chronomètre et deviens Ninja du Terminal !"
+      "Battez le chronomètre et devenez Ninja du Terminal !"
     ],
     delay: 500
   },
@@ -307,9 +307,9 @@ export const sectionDialogues: SectionDialogue[] = [
     section: 'typing-success',
     speaker: 'asterix',
     lines: [
-      "Quelle vitesse ! Tu maîtrises le terminal !",
-      "ls, cd, sudo... Tu parles couramment Linux !",
-      "L'Empire tremble devant tes compétences !"
+      "Quelle vitesse ! Vous maîtrisez le terminal !",
+      "ls, cd, sudo... Vous parlez couramment Linux !",
+      "L'Empire tremble devant vos compétences !"
     ],
     delay: 300
   }
@@ -328,12 +328,12 @@ export function getCharacter(characterId: CharacterId): CharacterInfo {
 // Reaction dialogues for achievements
 export const achievementReactions: Record<string, { speaker: CharacterId; line: string }> = {
   first_steps: { speaker: 'panoramix', line: "Premiers pas accomplis ! Bienvenue au Village." },
-  knowledge_seeker: { speaker: 'panoramix', line: "Tu as exploré les 3 piliers ! La sagesse grandit." },
+  knowledge_seeker: { speaker: 'panoramix', line: "Vous avez exploré les 3 piliers ! La sagesse grandit." },
   pc_savior: { speaker: 'obelix', line: "Un PC sauvé ! L'Empire recule !" },
-  quiz_master: { speaker: 'asterix', line: "Maître du Quiz ! Tes connaissances sont impressionnantes !" },
-  linux_champion: { speaker: 'obelix', line: "Champion Linux ! Tu es des nôtres maintenant !" },
-  alternatives_master: { speaker: 'panoramix', line: "Tu connais les alternatives ! Le Village est plus fort." },
-  village_defender: { speaker: 'obelix', line: "FORMIDABLE ! L'Empire recule grâce à toi !" },
-  terminal_ninja: { speaker: 'asterix', line: "Quelle vitesse ! Tu maîtrises le terminal !" },
-  village_hero: { speaker: 'asterix', line: "HÉROS DU VILLAGE ! Tu as tout accompli ! Par Toutatis !" }
+  quiz_master: { speaker: 'asterix', line: "Maître du Quiz ! Vos connaissances sont impressionnantes !" },
+  linux_champion: { speaker: 'obelix', line: "Champion Linux ! Vous êtes des nôtres maintenant !" },
+  alternatives_master: { speaker: 'panoramix', line: "Vous connaissez les alternatives ! Le Village est plus fort." },
+  village_defender: { speaker: 'obelix', line: "FORMIDABLE ! L'Empire recule grâce à vous !" },
+  terminal_ninja: { speaker: 'asterix', line: "Quelle vitesse ! Vous maîtrisez le terminal !" },
+  village_hero: { speaker: 'asterix', line: "HÉROS DU VILLAGE ! Vous avez tout accompli ! Par Toutatis !" }
 };

@@ -9,6 +9,7 @@ import {
 import { cn } from '@/lib/utils';
 import { ENEMIES, TOWERS, WAVES, GAME_CONFIG, type EnemyType, type TowerType } from '@/data/towerDefenseData';
 import { useAchievementStore } from '@/store/achievementStore';
+import { useGameSounds } from '@/hooks/useGameSounds';
 import {
   EnhancedConfetti,
   Explosion,
@@ -523,6 +524,7 @@ export default function TowerDefenseGame() {
   const [killCount, setKillCount] = useState(0);
 
   const { particles, spawn: spawnParticles } = useParticles();
+  const { play: playSound } = useGameSounds();
   const vfxIdRef = useRef(0);
 
   const gameLoopRef = useRef<number | null>(null);
@@ -560,6 +562,7 @@ export default function TowerDefenseGame() {
     const waveConfig = WAVES[waveNum - 1];
     if (!waveConfig) return;
 
+    playSound('click');
     setPhase('playing');
 
     let enemyIndex = 0;
@@ -622,10 +625,11 @@ export default function TowerDefenseGame() {
       lastFired: 0
     };
 
+    playSound('success');
     setTowers(prev => [...prev, newTower]);
     setCoins(prev => prev - config.cost);
     setSelectedTower(null);
-  }, [selectedTower, coins, towers]);
+  }, [selectedTower, coins, towers, playSound]);
 
   // Game loop
   useEffect(() => {
@@ -644,6 +648,7 @@ export default function TowerDefenseGame() {
         // Check for enemies reaching village
         const reached = updated.filter(e => e.x <= GAME_CONFIG.villageX);
         if (reached.length > 0) {
+          playSound('error');
           setLives(l => Math.max(0, l - reached.length));
           // Trigger damage flash
           setDamageFlash(true);
@@ -704,6 +709,7 @@ export default function TowerDefenseGame() {
                 const newHealth = enemy.health - proj.damage;
                 if (newHealth <= 0) {
                   // Enemy killed! Spawn explosion and floating text
+                  playSound('hit');
                   const reward = ENEMIES[enemy.type].reward;
                   const enemyConfig = ENEMIES[enemy.type];
                   setCoins(c => c + reward);
@@ -767,6 +773,7 @@ export default function TowerDefenseGame() {
 
     // Check defeat
     if (lives <= 0) {
+      playSound('gameOver');
       setPhase('defeat');
       if (enemySpawnRef.current) clearTimeout(enemySpawnRef.current);
       return;
@@ -784,18 +791,21 @@ export default function TowerDefenseGame() {
       setCoins(c => c + waveConfig.bonus);
 
       if (wave >= WAVES.length) {
+        playSound('victory');
         setPhase('victory');
         setShowConfetti(true);
         unlockBadge('village_defender');
         setTimeout(() => setShowConfetti(false), 4000);
       } else {
+        playSound('levelUp');
         setPhase('between_waves');
       }
     }
-  }, [phase, lives, enemies, wave, unlockBadge]);
+  }, [phase, lives, enemies, wave, unlockBadge, playSound]);
 
   // Reset game
   const resetGame = () => {
+    playSound('click');
     setPhase('menu');
     setLives(GAME_CONFIG.startingLives);
     setCoins(GAME_CONFIG.startingCoins);
@@ -812,6 +822,7 @@ export default function TowerDefenseGame() {
 
   // Start next wave
   const nextWave = () => {
+    playSound('click');
     setWave(w => w + 1);
     enemyIdRef.current = 0;
     startWave(wave + 1);

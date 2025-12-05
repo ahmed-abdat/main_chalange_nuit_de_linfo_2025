@@ -6,6 +6,7 @@ import { RotateCcw, Folder, Globe, FileText, Image as ImageIcon, Music, Settings
 import CountUp from '@/components/CountUp';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { useGameSounds } from '@/hooks/useGameSounds';
 
 type GameState = 'idle' | 'dragging' | 'hovering' | 'installing' | 'booting' | 'success' | 'failure';
 type ChoiceType = 'linux' | 'windows' | null;
@@ -442,6 +443,7 @@ export default function RefurbishGame() {
   const pcRef = useRef<HTMLDivElement>(null);
   const linuxRef = useRef<HTMLDivElement>(null);
   const windowsRef = useRef<HTMLDivElement>(null);
+  const { play: playSound } = useGameSounds();
 
   const checkOverlap = useCallback((itemRef: React.RefObject<HTMLDivElement | null>) => {
     if (!pcRef.current || !itemRef.current) return false;
@@ -481,6 +483,7 @@ export default function RefurbishGame() {
   const handleDrop = (itemType: 'linux' | 'windows') => {
     if (gameState === 'installing' || gameState === 'booting' || gameState === 'success' || gameState === 'failure') return;
 
+    playSound('click');
     setChoice(itemType);
     setGameState('installing');
     setIsOverPC(false);
@@ -496,7 +499,13 @@ export default function RefurbishGame() {
         setTimeout(() => {
           setGameState('booting');
           setTimeout(() => {
-            setGameState(itemType === 'linux' ? 'success' : 'failure');
+            if (itemType === 'linux') {
+              playSound('victory');
+              setGameState('success');
+            } else {
+              playSound('error');
+              setGameState('failure');
+            }
             setShowStats(true);
           }, 2000);
         }, 500);
@@ -506,6 +515,7 @@ export default function RefurbishGame() {
   };
 
   const resetGame = () => {
+    playSound('click');
     setGameState('idle');
     setInstallProgress(0);
     setShowStats(false);
@@ -515,6 +525,7 @@ export default function RefurbishGame() {
   };
 
   const switchToLinux = () => {
+    playSound('click');
     setShowStats(false);
     setChoice('linux');
     setInstallProgress(0);
@@ -529,6 +540,7 @@ export default function RefurbishGame() {
         setTimeout(() => {
           setGameState('booting');
           setTimeout(() => {
+            playSound('victory');
             setGameState('success');
             setShowStats(true);
           }, 2000);

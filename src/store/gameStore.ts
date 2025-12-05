@@ -2,6 +2,34 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 // =============================================================================
+// SETTINGS & MINI-GAME STATS
+// =============================================================================
+export interface GameSettings {
+  soundEnabled: boolean;
+  hapticEnabled: boolean;
+}
+
+export interface MiniGameStats {
+  gamesPlayed: number;
+  gamesWon: number;
+  bestScores: {
+    memory: number;    // Best time or moves
+    typing: number;    // Best WPM
+    quiz: number;      // Best score
+    tower: number;     // Waves survived
+    refurbish: number; // Times completed
+  };
+}
+
+export interface ToastNotification {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  color: string;
+}
+
+// =============================================================================
 // CHARACTER TYPES
 // =============================================================================
 export type CharacterId = 'asterix' | 'obelix' | 'panoramix' | 'idefix';
@@ -223,6 +251,11 @@ export interface GameState {
   activeDialogue: DialogueLine[] | null;
   dialogueIndex: number;
 
+  // === NEW: Settings & Mini-game Stats ===
+  settings: GameSettings;
+  miniGameStats: MiniGameStats;
+  toasts: ToastNotification[];
+
   // Actions
   startGame: () => void;
   selectCharacter: (id: CharacterId) => void;
@@ -239,6 +272,14 @@ export interface GameState {
   advanceDialogue: () => void;
 
   resetGame: () => void;
+
+  // === NEW: Settings & Mini-game Actions ===
+  toggleSound: () => void;
+  toggleHaptic: () => void;
+  recordMiniGameResult: (game: keyof MiniGameStats['bestScores'], score: number, won: boolean) => boolean;
+  showToast: (toast: Omit<ToastNotification, 'id'>) => void;
+  dismissToast: (id: string) => void;
+  getLevelTitle: () => string;
 }
 
 // =============================================================================
@@ -254,6 +295,36 @@ const initialQuests: Record<QuestId, Quest> = Object.fromEntries(
 const initialInventory: Record<ItemId, InventoryItem> = Object.fromEntries(
   Object.entries(ITEMS).map(([id, item]) => [id, { ...item, quantity: 0 }])
 ) as Record<ItemId, InventoryItem>;
+
+const initialSettings: GameSettings = {
+  soundEnabled: true,
+  hapticEnabled: true,
+};
+
+const initialMiniGameStats: MiniGameStats = {
+  gamesPlayed: 0,
+  gamesWon: 0,
+  bestScores: {
+    memory: 0,
+    typing: 0,
+    quiz: 0,
+    tower: 0,
+    refurbish: 0,
+  },
+};
+
+const LEVEL_TITLES = [
+  'Novice',
+  'Apprenti',
+  'Resistant',
+  'Defenseur',
+  'Gardien',
+  'Protecteur',
+  'Champion',
+  'Maitre',
+  'Legende',
+  'Heros du Village',
+];
 
 export const useGameStore = create<GameState>()(
   persist(
@@ -273,6 +344,11 @@ export const useGameStore = create<GameState>()(
       inventory: initialInventory,
       activeDialogue: null,
       dialogueIndex: 0,
+
+      // NEW: Settings & Mini-game stats
+      settings: initialSettings,
+      miniGameStats: initialMiniGameStats,
+      toasts: [],
 
       // Actions
       startGame: () => set({ gameStarted: true, currentPhase: 'character_select' }),
@@ -396,9 +472,100 @@ export const useGameStore = create<GameState>()(
           activeDialogue: null,
           dialogueIndex: 0,
         }),
+
+      // === NEW: Settings & Mini-game Actions ===
+      toggleSound: () =>
+        set((state) => ({
+          settings: { ...state.settings, soundEnabled: !state.settings.soundEnabled },
+        })),
+
+      toggleHaptic: () =>
+        set((state) => ({
+          settings: { ...state.settings, hapticEnabled: !state.settings.hapticEnabled },
+        })),
+
+      recordMiniGameResult: (game, score, won) => {
+        const { miniGameStats, xp } = get();
+        const isNewRecord = score > miniGameStats.bestScores[game];
+
+        // Calculate XP reward
+        let xpReward = 25; // Base for playing
+        if (won) xpReward += 50;
+        if (isNewRecord) xpReward += 25;
+
+        const newXp = xp + xpReward;
+
+        set((state) => ({
+          xp: newXp,
+          level: Math.floor(newXp / 500) + 1,
+          miniGameStats: {
+            gamesPlayed: state.miniGameStats.gamesPlayed + 1,
+            gamesWon: state.miniGameStats.gamesWon + (won ? 1 : 0),
+            bestScores: isNewRecord
+              ? { ...state.miniGameStats.bestScores, [game]: score }
+              : state.miniGameStats.bestScores,
+          },
+        }));
+
+        // Show toast for new record
+        if (isNewRecord) {
+          get().showToast({
+            title: 'Nouveau Record!',
+            description: `${game}: ${score}`,
+            icon: '🏆',
+            color: '#F9A825',
+          });
+        }
+
+        return isNewRecord;
+      },
+
+      showToast: (toast) => {
+        const id = `toast-${Date.now()}`;
+        set((state) => ({
+          toasts: [...state.toasts, { ...toast, id }],
+        }));
+
+        // Auto-dismiss after 4 seconds
+        setTimeout(() => {
+          get().dismissToast(id);
+        }, 4000);
+      },
+
+      dismissToast: (id) => {
+        set((state) => ({
+          toasts: state.toasts.filter((t) => t.id !== id),
+        }));
+      },
+
+      getLevelTitle: () => {
+        const { level } = get();
+        return LEVEL_TITLES[Math.min(level - 1, LEVEL_TITLES.length - 1)] || 'Heros du Village';
+      },
     }),
     {
       name: 'village-nird-game',
+      partialize: (state) => ({
+        gameStarted: state.gameStarted,
+        currentPhase: state.currentPhase,
+        selectedCharacter: state.selectedCharacter,
+        userChoice: state.userChoice,
+        xp: state.xp,
+        level: state.level,
+        currentSection: state.currentSection,
+        budgetSaved: state.budgetSaved,
+        pcsSaved: state.pcsSaved,
+        co2Saved: state.co2Saved,
+        quests: state.quests,
+        inventory: state.inventory,
+        settings: state.settings,
+        miniGameStats: state.miniGameStats,
+      }),
     }
   )
 );
+
+// Selector hooks for performance
+export const useGameSettings = () => useGameStore((state) => state.settings);
+export const useMiniGameStats = () => useGameStore((state) => state.miniGameStats);
+export const useGameToasts = () => useGameStore((state) => state.toasts);
