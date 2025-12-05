@@ -18,6 +18,7 @@ export interface ScenarioChoice {
   id: ChoiceType;
   title: string;
   description: string;
+  icon: string; // Lucide icon name
   points?: ScenarioPoints; // Only for choice B (NIRD)
 }
 
@@ -50,11 +51,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: 'الدفع والشراء (إدمان القمار)',
       description: 'Dépenser de l\'argent pour des loot boxes, risquer l\'addiction au jeu.',
+      icon: 'Gamepad2',
     },
     choiceB: {
       id: 'B',
       title: 'دعوته للعب Minetest (بديل Minecraft الحر)',
       description: 'Inviter à jouer à Minetest, alternative libre à Minecraft.',
+      icon: 'Box',
       points: { money: 50, protection: 30, environment: 0 },
     },
     educationalInfo: {
@@ -85,11 +88,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: 'استخدام ChatGPT ونسخ النتيجة (غش، استهلاك طاقة)',
       description: 'Utiliser ChatGPT et copier le résultat (tricherie, consommation d\'énergie).',
+      icon: 'Bot',
     },
     choiceB: {
       id: 'B',
       title: 'البحث في Vikidia/Wikipedia والتحقق من المصادر',
       description: 'Rechercher sur Vikidia/Wikipedia et vérifier les sources.',
+      icon: 'Search',
       points: { money: 0, protection: 40, environment: 10 },
     },
     educationalInfo: {
@@ -125,11 +130,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: 'استخدام Chrome (يجمع بياناتك)',
       description: 'Utiliser Chrome (collecte vos données).',
+      icon: 'Chrome',
     },
     choiceB: {
       id: 'B',
       title: 'استخدام Firefox مع uBlock Origin',
       description: 'Utiliser Firefox avec uBlock Origin.',
+      icon: 'ShieldCheck',
       points: { money: 0, protection: 50, environment: 10 },
     },
     educationalInfo: {
@@ -165,11 +172,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: 'Spotify (إعلانات، تتبع)',
       description: 'Spotify (publicités, suivi).',
+      icon: 'Music2',
     },
     choiceB: {
       id: 'B',
       title: 'استخدام Jamendo (موسيقى حرة) أو ملفات MP3 محلية',
       description: 'Utiliser Jamendo (musique libre) ou fichiers MP3 locaux.',
+      icon: 'Headphones',
       points: { money: 0, protection: 20, environment: 0 },
     },
     educationalInfo: {
@@ -200,11 +209,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: 'Photoshop مقرصن (خطر، غير قانوني)',
       description: 'Photoshop piraté (risque, illégal).',
+      icon: 'Skull',
     },
     choiceB: {
       id: 'B',
       title: 'استخدام GIMP أو Krita',
       description: 'Utiliser GIMP ou Krita.',
+      icon: 'Palette',
       points: { money: 0, protection: 40, environment: 0 },
     },
     educationalInfo: {
@@ -240,11 +251,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: 'Discord (يبيع البيانات، مغلق)',
       description: 'Discord (vend vos données, fermé).',
+      icon: 'MessageSquareWarning',
     },
     choiceB: {
       id: 'B',
       title: 'استخدام Signal أو دردشة Apps.education',
       description: 'Utiliser Signal ou la messagerie Apps.education.',
+      icon: 'MessageCircleHeart',
       points: { money: 0, protection: 60, environment: 0 },
     },
     educationalInfo: {
@@ -280,11 +293,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: 'طلب هاتف جديد من الأهل',
       description: 'Demander un nouveau téléphone aux parents.',
+      icon: 'Smartphone',
     },
     choiceB: {
       id: 'B',
       title: 'محاولة إصلاحه في "نادي الإصلاح" بالمدرسة',
       description: 'Essayer de le réparer au "club de réparation" de l\'école.',
+      icon: 'Wrench',
       points: { money: 200, protection: 0, environment: 80 },
     },
     educationalInfo: {
@@ -308,11 +323,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: 'WeTransfer (مؤقت، طرف ثالث)',
       description: 'WeTransfer (temporaire, tiers).',
+      icon: 'CloudUpload',
     },
     choiceB: {
       id: 'B',
       title: 'استخدام Lufi (مشاركة ملفات مشفرة ومجهولة)',
       description: 'Utiliser Lufi (partage de fichiers chiffré et anonyme).',
+      icon: 'FileLock2',
       points: { money: 0, protection: 30, environment: 0 },
     },
     educationalInfo: {
@@ -343,11 +360,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: 'Google Maps (تتبع الموقع)',
       description: 'Google Maps (suivi de localisation).',
+      icon: 'MapPinOff',
     },
     choiceB: {
       id: 'B',
       title: 'استخدام OpenStreetMap (OSM)',
       description: 'Utiliser OpenStreetMap (OSM).',
+      icon: 'Map',
       points: { money: 0, protection: 50, environment: 0 },
     },
     educationalInfo: {
@@ -383,11 +402,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: 'تطبيق هاتف يضع علامة مائية',
       description: 'Application mobile qui ajoute un filigrane.',
+      icon: 'Film',
     },
     choiceB: {
       id: 'B',
       title: 'استخدام Kdenlive أو Shotcut',
       description: 'Utiliser Kdenlive ou Shotcut.',
+      icon: 'Clapperboard',
       points: { money: 0, protection: 30, environment: 10 },
     },
     educationalInfo: {
@@ -423,11 +444,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: 'استخدام "123456" لكل شيء',
       description: 'Utiliser "123456" pour tout.',
+      icon: 'Unlock',
     },
     choiceB: {
       id: 'B',
       title: 'استخدام مدير كلمات مرور Bitwarden أو KeePass',
       description: 'Utiliser un gestionnaire de mots de passe Bitwarden ou KeePass.',
+      icon: 'KeyRound',
       points: { money: 0, protection: 80, environment: 0 },
     },
     educationalInfo: {
@@ -463,11 +486,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: 'Google Translate',
       description: 'Google Translate.',
+      icon: 'Languages',
     },
     choiceB: {
       id: 'B',
       title: 'استخدام LibreTranslate أو أدوات La Digitale',
       description: 'Utiliser LibreTranslate ou les outils de La Digitale.',
+      icon: 'Globe',
       points: { money: 0, protection: 20, environment: 0 },
     },
     educationalInfo: {
@@ -503,11 +528,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: 'رميه في القمامة',
       description: 'Le jeter à la poubelle.',
+      icon: 'Trash2',
     },
     choiceB: {
       id: 'B',
       title: 'تجربة Live USB لنظام Linux خفيف',
       description: 'Essayer une clé USB Live d\'un système Linux léger.',
+      icon: 'Usb',
       points: { money: 500, protection: 0, environment: 70 },
     },
     educationalInfo: {
@@ -543,11 +570,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: 'التثبيت فوراً (فقدان الخصوصية)',
       description: 'L\'installer immédiatement (perte de vie privée).',
+      icon: 'Eye',
     },
     choiceB: {
       id: 'B',
       title: 'تجاهل الترند والتركيز على المحتوى الهادف',
       description: 'Ignorer la tendance et se concentrer sur du contenu significatif.',
+      icon: 'EyeOff',
       points: { money: 0, protection: 60, environment: 0 },
     },
     educationalInfo: {
@@ -571,11 +600,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: 'إعطاء الإيميل الشخصي (سبام)',
       description: 'Donner son email personnel (spam).',
+      icon: 'MailWarning',
     },
     choiceB: {
       id: 'B',
       title: 'استخدام بريد مؤقت أو Alias',
       description: 'Utiliser un email temporaire ou un alias.',
+      icon: 'MailCheck',
       points: { money: 0, protection: 40, environment: 0 },
     },
     educationalInfo: {
@@ -611,11 +642,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: '"ليس لدي وقت"',
       description: '"Je n\'ai pas le temps".',
+      icon: 'Clock',
     },
     choiceB: {
       id: 'B',
       title: 'الانضمام لـ "نادي البرمجيات الحرة" المدرسي',
       description: 'Rejoindre le "club de logiciels libres" de l\'école.',
+      icon: 'Users',
       points: { money: 0, protection: 50, environment: 0 },
     },
     educationalInfo: {
@@ -639,11 +672,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: 'إجبار المعلم على فتحها (مشكلة توافق)',
       description: 'Forcer le professeur à l\'ouvrir (problème de compatibilité).',
+      icon: 'FileX',
     },
     choiceB: {
       id: 'B',
       title: 'التصدير بصيغة PDF أو ODT (معيار مفتوح)',
       description: 'Exporter en PDF ou ODT (format ouvert).',
+      icon: 'FileCheck',
       points: { money: 0, protection: 20, environment: 0 },
     },
     educationalInfo: {
@@ -674,11 +709,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: 'سرقة صور من Google Images (حقوق ملكية)',
       description: 'Voler des images de Google Images (droits d\'auteur).',
+      icon: 'Copyright',
     },
     choiceB: {
       id: 'B',
       title: 'استخدام صور Creative Commons (CC)',
       description: 'Utiliser des images Creative Commons (CC).',
+      icon: 'Image',
       points: { money: 0, protection: 30, environment: 0 },
     },
     educationalInfo: {
@@ -714,11 +751,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: 'Midjourney (اشتراك، استهلاك طاقة هائل)',
       description: 'Midjourney (abonnement, consommation d\'énergie énorme).',
+      icon: 'Zap',
     },
     choiceB: {
       id: 'B',
       title: 'الرسم اليدوي أو استخدام أدوات محلية خفيفة',
       description: 'Dessin à la main ou utilisation d\'outils locaux légers.',
+      icon: 'PenTool',
       points: { money: 0, protection: 0, environment: 40 },
     },
     educationalInfo: {
@@ -749,11 +788,13 @@ export const studentScenarios: StudentScenario[] = [
       id: 'A',
       title: 'الاحتفاظ به لنفسك',
       description: 'Le garder pour soi.',
+      icon: 'Lock',
     },
     choiceB: {
       id: 'B',
       title: 'نشره على La Forge ليستخدمه الآخرون',
       description: 'Le publier sur La Forge pour que d\'autres l\'utilisent.',
+      icon: 'GitBranch',
       points: { money: 0, protection: 0, environment: 0 },
     },
     educationalInfo: {

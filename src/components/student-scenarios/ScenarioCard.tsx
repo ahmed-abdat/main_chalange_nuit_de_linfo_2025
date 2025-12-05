@@ -1,11 +1,35 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { type StudentScenario, type ChoiceType } from '@/data/studentScenarios';
 import { cn } from '@/lib/utils';
 import { useStudentScenarioStore } from '@/store/studentScenarioStore';
-import { Check, X, AlertTriangle, RotateCcw } from 'lucide-react';
+import { 
+  Check, X, AlertTriangle, RotateCcw, 
+  DollarSign, Lock, ServerCrash, Sprout, Unlock, ShieldCheck,
+  Smartphone, Laptop, Wifi, HelpCircle, Info,
+  Gamepad2, Box, Bot, Search, Chrome, Music2, Headphones,
+  Skull, Palette, MessageSquareWarning, MessageCircleHeart,
+  Wrench, CloudUpload, FileLock2, MapPinOff, Map, Film,
+  Clapperboard, KeyRound, Languages, Globe, Trash2, Usb,
+  Eye, EyeOff, MailWarning, MailCheck, Clock, Users,
+  FileX, FileCheck, Copyright, Image, Zap, PenTool, GitBranch
+} from 'lucide-react';
+
+// Map string icon names to Lucide components
+const IconMap: Record<string, any> = {
+  Gamepad2, Box, Bot, Search, Chrome, ShieldCheck, Music2, Headphones,
+  Skull, Palette, MessageSquareWarning, MessageCircleHeart, Smartphone, Wrench,
+  CloudUpload, FileLock2, MapPinOff, Map, Film, Clapperboard, Unlock, KeyRound,
+  Languages, Globe, Trash2, Usb, Eye, EyeOff, MailWarning, MailCheck, Clock, Users,
+  FileX, FileCheck, Copyright, Image, Zap, PenTool, Lock, GitBranch
+};
+
+const DynamicIcon = ({ name, className }: { name: string, className?: string }) => {
+  const IconComponent = IconMap[name] || HelpCircle;
+  return <IconComponent className={className} />;
+};
 
 interface ScenarioCardProps {
   scenario: StudentScenario;
@@ -16,6 +40,27 @@ interface ScenarioCardProps {
 type GameState = 'idle' | 'dragging' | 'hovering' | 'processing' | 'completed';
 type DraggingItem = 'A' | 'B' | null;
 
+// Simple Particle Component for Confetti Effect
+const Particle = ({ delay }: { delay: number }) => (
+  <motion.div
+    initial={{ opacity: 1, scale: 0, x: 0, y: 0 }}
+    animate={{ 
+      opacity: 0, 
+      scale: [0, 1, 0],
+      x: (Math.random() - 0.5) * 200,
+      y: (Math.random() - 0.5) * 200,
+      rotate: Math.random() * 360
+    }}
+    transition={{ duration: 1, delay, ease: "easeOut" }}
+    className="absolute w-3 h-3 rounded-full"
+    style={{
+      backgroundColor: ['#FFD700', '#FF69B4', '#00CED1', '#32CD32'][Math.floor(Math.random() * 4)],
+      top: '50%',
+      left: '50%'
+    }}
+  />
+);
+
 export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: ScenarioCardProps) {
   const { isScenarioCompleted, getScenarioChoice } = useStudentScenarioStore();
   const isCompleted = isScenarioCompleted(scenario.id);
@@ -25,7 +70,8 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
   const [gameState, setGameState] = useState<GameState>(isCompleted ? 'completed' : 'idle');
   const [draggingItem, setDraggingItem] = useState<DraggingItem>(null);
   const [hoveredChoice, setHoveredChoice] = useState<DraggingItem>(null);
-
+  const [showConfetti, setShowConfetti] = useState(false);
+  
   const dropZoneRef = useRef<HTMLDivElement>(null);
   const choiceARef = useRef<HTMLDivElement>(null);
   const choiceBRef = useRef<HTMLDivElement>(null);
@@ -50,7 +96,7 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
       setGameState('dragging');
       const ref = itemType === 'A' ? choiceARef : choiceBRef;
       const isOver = checkOverlap(ref);
-
+      
       if (isOver) {
         setGameState('hovering');
         setHoveredChoice(itemType);
@@ -80,36 +126,51 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
     setTimeout(() => {
       onChoiceSelect(choiceId);
       setGameState('completed');
+      if (choiceId === 'B') {
+        setShowConfetti(true);
+      }
     }, 1500);
   };
 
   // Determine visual state based on completion or current interaction
-  const currentVisualState = isCompleted
+  const currentVisualState = isCompleted 
     ? (selectedChoice === 'B' ? 'success' : 'warning')
     : (gameState === 'processing' ? 'processing' : 'idle');
 
   return (
-    <div className="w-full max-w-5xl mx-auto">
+    <div className="w-full max-w-5xl mx-auto relative">
+      {/* Confetti Effect */}
+      {showConfetti && (
+        <div className="absolute inset-0 pointer-events-none z-50 flex items-center justify-center">
+          {[...Array(20)].map((_, i) => (
+            <Particle key={i} delay={i * 0.05} />
+          ))}
+        </div>
+      )}
+
       {/* Context Header */}
-      <motion.div
+      <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="mb-8 text-center"
       >
-        <span className="inline-block px-3 py-1 bg-[#00997d]/10 text-[#00997d] text-xs font-medium rounded-full mb-4">
+        <span className="inline-flex items-center gap-2 px-3 py-1 bg-[#00997d]/10 text-[#00997d] text-xs font-medium rounded-full mb-4">
+          <Laptop className="w-3 h-3" />
           Scénario {scenario.id}/20
         </span>
-        <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 leading-relaxed max-w-3xl mx-auto" dir="rtl">
+        <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 leading-relaxed max-w-3xl mx-auto flex items-center justify-center gap-3" dir="rtl">
           {scenario.context}
         </h3>
       </motion.div>
 
       <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16">
-
+        
         {/* DROP ZONE (The Situation/Device) */}
         <div className="order-2 lg:order-2">
           <motion.div
             ref={dropZoneRef}
+            animate={currentVisualState === 'warning' ? { x: [0, -5, 5, -5, 5, 0] } : {}}
+            transition={{ duration: 0.4 }}
             className={cn(
               'relative w-72 h-72 md:w-80 md:h-80 rounded-2xl border-4 transition-all duration-500 flex flex-col items-center justify-center p-6 text-center shadow-lg overflow-hidden',
               gameState === 'idle' && 'border-gray-200 bg-white',
@@ -132,7 +193,7 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
                   className="flex flex-col items-center"
                 >
                   <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                    <span className="text-4xl">🤔</span>
+                    <HelpCircle className="w-10 h-10 text-gray-400" />
                   </div>
                   <p className="text-gray-500 font-medium">Faites votre choix</p>
                   <p className="text-xs text-gray-400 mt-2">Glissez une option ici</p>
@@ -148,16 +209,32 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
                   exit={{ opacity: 0, scale: 0.8 }}
                   className="flex flex-col items-center"
                 >
-                  <span className="text-5xl mb-4">
-                    {hoveredChoice === 'B' ? '🐧' : '💸'}
-                  </span>
+                  <div className={cn(
+                    "w-20 h-20 rounded-full flex items-center justify-center mb-4",
+                    hoveredChoice === 'B' ? "bg-[#00997d]/10" : "bg-[#C62828]/10"
+                  )}>
+                     <DynamicIcon 
+                       name={hoveredChoice === 'B' ? scenario.choiceB.icon : scenario.choiceA.icon} 
+                       className={cn("w-10 h-10", hoveredChoice === 'B' ? "text-[#00997d]" : "text-[#C62828]")}
+                     />
+                  </div>
                   <p className={cn(
                     "font-bold text-lg",
                     hoveredChoice === 'B' ? "text-[#00997d]" : "text-[#C62828]"
                   )}>
                     {hoveredChoice === 'B' ? "Solution NIRD" : "Solution Big Tech"}
                   </p>
-                  <p className="text-sm opacity-70">Relâchez pour confirmer</p>
+                  
+                  {/* Points Preview on Hover */}
+                  {hoveredChoice === 'B' && scenario.choiceB.points && (
+                     <div className="flex gap-2 mt-2">
+                        {scenario.choiceB.points.money > 0 && <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded">+💰</span>}
+                        {scenario.choiceB.points.protection > 0 && <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">+🛡️</span>}
+                        {scenario.choiceB.points.environment > 0 && <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded">+🌱</span>}
+                     </div>
+                  )}
+                  
+                  <p className="text-sm opacity-70 mt-2">Relâchez pour confirmer</p>
                 </motion.div>
               )}
 
@@ -206,7 +283,7 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
               )}
             </AnimatePresence>
           </motion.div>
-
+          
           {/* Mobile Instruction */}
           <p className="lg:hidden text-center text-xs text-gray-400 mt-4">
             Appuyez longuement pour glisser
@@ -234,14 +311,17 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
             )}
           >
             <div className="flex items-start justify-between mb-2">
-              <span className="text-3xl">💸</span>
-              <span className="px-2 py-1 bg-[#C62828]/10 text-[#C62828] text-xs font-bold rounded uppercase">
+              <div className="p-2 bg-[#C62828]/10 rounded-lg">
+                <DynamicIcon name={scenario.choiceA.icon} className="w-6 h-6 text-[#C62828]" />
+              </div>
+              <span className="px-2 py-1 bg-[#C62828]/10 text-[#C62828] text-xs font-bold rounded uppercase flex items-center gap-1">
+                <Lock className="w-3 h-3" />
                 Big Tech
               </span>
             </div>
             <h4 className="font-bold text-gray-900 mb-1">{scenario.choiceA.title}</h4>
             <p className="text-sm text-gray-600">{scenario.choiceA.description}</p>
-
+            
             {!isCompleted && (
               <div className="absolute -right-2 -top-2 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center border border-gray-200 shadow-sm">
                 <span className="text-xs text-gray-400">A</span>
@@ -268,8 +348,11 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
             )}
           >
             <div className="flex items-start justify-between mb-2">
-              <span className="text-3xl">🐧</span>
-              <span className="px-2 py-1 bg-[#00997d]/10 text-[#00997d] text-xs font-bold rounded uppercase">
+              <div className="p-2 bg-[#00997d]/10 rounded-lg">
+                <DynamicIcon name={scenario.choiceB.icon} className="w-6 h-6 text-[#00997d]" />
+              </div>
+              <span className="px-2 py-1 bg-[#00997d]/10 text-[#00997d] text-xs font-bold rounded uppercase flex items-center gap-1">
+                <Unlock className="w-3 h-3" />
                 NIRD
               </span>
             </div>
@@ -280,18 +363,18 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
             {scenario.choiceB.points && !isCompleted && (
               <div className="mt-3 flex gap-2">
                 {scenario.choiceB.points.money > 0 && (
-                  <span className="text-[10px] px-1.5 py-0.5 bg-yellow-100 text-yellow-700 rounded font-medium">
-                    +💰
+                  <span className="text-[10px] px-1.5 py-0.5 bg-yellow-100 text-yellow-700 rounded font-medium flex items-center gap-1">
+                    <DollarSign className="w-3 h-3" /> Money
                   </span>
                 )}
                 {scenario.choiceB.points.protection > 0 && (
-                  <span className="text-[10px] px-1.5 py-0.5 bg-green-100 text-green-700 rounded font-medium">
-                    +🛡️
+                  <span className="text-[10px] px-1.5 py-0.5 bg-green-100 text-green-700 rounded font-medium flex items-center gap-1">
+                    <ShieldCheck className="w-3 h-3" /> Secu
                   </span>
                 )}
                 {scenario.choiceB.points.environment > 0 && (
-                  <span className="text-[10px] px-1.5 py-0.5 bg-emerald-100 text-emerald-700 rounded font-medium">
-                    +🌱
+                  <span className="text-[10px] px-1.5 py-0.5 bg-emerald-100 text-emerald-700 rounded font-medium flex items-center gap-1">
+                    <Sprout className="w-3 h-3" /> Eco
                   </span>
                 )}
               </div>
@@ -309,4 +392,3 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
     </div>
   );
 }
-
