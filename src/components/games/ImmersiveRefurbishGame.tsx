@@ -292,7 +292,6 @@ function WindowsIcon({ className }: { className?: string }) {
       height={48}
       draggable={false}
       className={cn("object-contain pointer-events-none select-none", className)}
-      style={{ width: 'auto', height: 'auto' }}
     />
   );
 }
@@ -303,33 +302,27 @@ function WindowsIcon({ className }: { className?: string }) {
 
 function Windows10EOLScreen() {
   return (
-    <div className="w-full h-full bg-[#0078D4] flex flex-col items-center justify-center p-6 text-white font-['Segoe_UI',sans-serif]">
-      <motion.div
-        animate={{ scale: [1, 1.05, 1] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        className="text-7xl md:text-8xl mb-4"
-      >
-        :(
-      </motion.div>
-      <p className="text-lg md:text-xl font-light mb-2">Votre PC a rencontré un problème</p>
-      <p className="text-white/60 text-sm mb-4">Code d'arrêt: FIN_DE_SUPPORT_WINDOWS_10</p>
-      <div className="flex items-center gap-3 mt-4">
-        <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center">
-          <WindowsIcon className="w-10 h-10 brightness-0 invert opacity-60" />
-        </div>
-        <div className="text-left">
-          <p className="text-sm font-medium">Windows 10</p>
-          <p className="text-xs text-white/50">Fin de support: 14 Oct 2025</p>
+    <div className="w-full h-full bg-[#0078D4] flex items-center justify-center text-white font-['Segoe_UI',sans-serif]">
+      <div className="flex flex-col items-center justify-center text-center px-4 py-6">
+        <motion.div
+          animate={{ scale: [1, 1.05, 1] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="text-5xl sm:text-6xl md:text-7xl mb-3"
+        >
+          :(
+        </motion.div>
+        <p className="text-sm sm:text-base md:text-lg font-light mb-1.5">Votre PC a rencontré un problème</p>
+        <p className="text-white/60 text-[10px] sm:text-xs mb-3">Code d'arrêt: FIN_DE_SUPPORT_WINDOWS_10</p>
+        <div className="flex items-center gap-2 mt-2">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/10 rounded-lg flex items-center justify-center">
+            <WindowsIcon className="w-6 h-6 sm:w-8 sm:h-8 brightness-0 invert opacity-60" />
+          </div>
+          <div className="text-left">
+            <p className="text-xs sm:text-sm font-medium">Windows 10</p>
+            <p className="text-[9px] sm:text-xs text-white/50">Fin de support: 14 Oct 2025</p>
+          </div>
         </div>
       </div>
-      <motion.div
-        animate={{ opacity: [0.5, 1, 0.5] }}
-        transition={{ duration: 1.5, repeat: Infinity }}
-        className="mt-6 px-4 py-2 bg-red-500/30 border border-red-400/50 rounded-lg text-red-200 text-sm flex items-center gap-2"
-      >
-        <ShieldX className="w-5 h-5 text-red-400" />
-        <span>Système non sécurisé - Mises à jour arrêtées</span>
-      </motion.div>
     </div>
   );
 }
@@ -975,7 +968,7 @@ export default function ImmersiveRefurbishGame() {
               transition={{ x: { duration: 1.5, repeat: Infinity } }}
               className="mt-4 text-center text-xs text-[#00997d] font-medium h-5"
             >
-              ← Glissez vers le PC
+              Glissez vers le PC →
             </motion.p>
           </motion.div>
         </div>
@@ -1134,7 +1127,7 @@ export default function ImmersiveRefurbishGame() {
               transition={{ x: { duration: 1.5, repeat: Infinity } }}
               className="mt-4 text-center text-xs text-gray-400 font-medium h-5"
             >
-              Glissez vers le PC →
+              ← Glissez vers le PC
             </motion.p>
           </motion.div>
         </div>

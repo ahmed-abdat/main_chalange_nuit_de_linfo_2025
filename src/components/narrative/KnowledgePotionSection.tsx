@@ -15,7 +15,7 @@ const ALTERNATIVES = [
   {
     id: 1,
     from: { name: 'Windows', logo: '/images/Windows_11_logo.svg', color: '#0078D4' },
-    to: { name: 'Linux', logo: '/lunix.svg', color: '#00997d' },
+    to: { name: 'Linux', logo: '/images/linux.svg', color: '#00997d' },
     benefit: 'Gratuit & Léger',
   },
   {
@@ -129,7 +129,7 @@ function TransformationCard({
             </div>
 
             {/* Name transformation */}
-            <div className="relative h-12 mb-3 overflow-hidden">
+            <div className="relative h-[4.5rem] mb-3 overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={isTransformed ? 'to' : 'from'}
@@ -141,7 +141,7 @@ function TransformationCard({
                 >
                   <h3
                     className={cn(
-                      'text-2xl font-bold',
+                      'text-xl font-bold leading-tight',
                       isTransformed ? 'line-through opacity-40' : ''
                     )}
                     style={{ color: isTransformed ? item.from.color : item.from.color }}
@@ -152,7 +152,7 @@ function TransformationCard({
                     <motion.h3
                       initial={{ x: -10, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
-                      className="text-2xl font-bold"
+                      className="text-xl font-bold leading-tight mt-1"
                       style={{ color: item.to.color }}
                     >
                       {item.to.name}
