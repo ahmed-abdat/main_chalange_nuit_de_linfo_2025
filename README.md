@@ -18,7 +18,7 @@
 
 <br />
 
-<img src="public/og-image.png" alt="Village NIRD Preview" width="600" />
+<img src="public/screenshots/hero.png" alt="Village NIRD Preview" width="700" />
 
 </div>
 
