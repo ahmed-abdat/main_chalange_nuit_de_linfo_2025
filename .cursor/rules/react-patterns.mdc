@@ -1,0 +1,290 @@
+---
+description: React and Next.js component patterns for Village NIRD
+globs: ["src/components/**/*.tsx", "src/app/**/*.tsx", "src/hooks/**/*.ts"]
+alwaysApply: false
+---
+
+# React & Next.js Patterns
+
+## Server vs Client Components
+
+### Server Components (Default)
+```tsx
+// No directive needed - this is the default
+export default function ServerComponent() {
+  // Can use async/await directly
+  // Can access backend resources
+  // Cannot use hooks or browser APIs
+  return <div>Server rendered</div>;
+}
+```
+
+### Client Components
+```tsx
+'use client';
+
+import { useState, useEffect } from 'react';
+
+export function ClientComponent() {
+  const [state, setState] = useState(false);
+  // Can use hooks, browser APIs, event handlers
+  return <button onClick={() => setState(!state)}>Toggle</button>;
+}
+```
+
+### When to Use Client Components
+- Using React hooks (useState, useEffect, useRef, etc.)
+- Event handlers (onClick, onChange, etc.)
+- Browser APIs (window, document, localStorage)
+- Animation libraries (Framer Motion, GSAP)
+- Third-party client libraries
+
+## Component Structure
+
+### File Organization
+```
+src/components/
+├── sections/           # Full-page sections
+│   ├── HeroSection.tsx
+│   └── CrisisSection.tsx
+├── ui/                 # shadcn/ui primitives
+│   ├── button.tsx
+│   └── card.tsx
+├── Village/            # Domain-specific
+│   ├── VillageMap.tsx
+│   └── Character.tsx
+└── [feature]/          # Feature-specific
+```
+
+### Component Template
+```tsx
+'use client'; // Only if needed
+
+import { cn } from '@/lib/utils';
+
+interface ComponentProps {
+  children?: React.ReactNode;
+  className?: string;
+}
+
+export function Component({ children, className }: ComponentProps) {
+  return (
+    <div className={cn('base-classes', className)}>
+      {children}
+    </div>
+  );
+}
+```
+
+## Framer Motion Patterns
+
+### Basic Animation
+```tsx
+'use client';
+
+import { motion } from 'framer-motion';
+
+export function AnimatedComponent() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      Content
+    </motion.div>
+  );
+}
+```
+
+### Scroll-triggered Animation
+```tsx
+'use client';
+
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
+
+export function ScrollReveal({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 50 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6 }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+```
+
+### Stagger Children
+```tsx
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+};
+
+<motion.div variants={containerVariants} initial="hidden" animate="visible">
+  {items.map((item) => (
+    <motion.div key={item.id} variants={itemVariants}>
+      {item.content}
+    </motion.div>
+  ))}
+</motion.div>
+```
+
+## Zustand State Management
+
+### Store Pattern
+```typescript
+// src/store/choiceStore.ts
+import { create } from 'zustand';
+
+interface ChoiceState {
+  userChoice: 'upgrade' | 'linux' | 'nothing' | null;
+  setChoice: (choice: ChoiceState['userChoice']) => void;
+  reset: () => void;
+}
+
+export const useChoiceStore = create<ChoiceState>((set) => ({
+  userChoice: null,
+  setChoice: (choice) => set({ userChoice: choice }),
+  reset: () => set({ userChoice: null }),
+}));
+```
+
+### Usage in Components
+```tsx
+'use client';
+
+import { useChoiceStore } from '@/store/choiceStore';
+
+export function ChoiceComponent() {
+  const { userChoice, setChoice } = useChoiceStore();
+
+  return (
+    <button onClick={() => setChoice('linux')}>
+      Choose Linux
+    </button>
+  );
+}
+```
+
+## Image Handling
+
+### Always Use next/image
+```tsx
+import Image from 'next/image';
+
+// With explicit dimensions
+<Image
+  src="/images/village.png"
+  alt="The resistant village"
+  width={800}
+  height={600}
+  priority // For above-fold images
+/>
+
+// Fill container
+<div className="relative h-64 w-full">
+  <Image
+    src="/images/hero.jpg"
+    alt="Hero background"
+    fill
+    className="object-cover"
+  />
+</div>
+```
+
+## Custom Hooks
+
+### useScrollProgress
+```typescript
+'use client';
+
+import { useScroll, useTransform } from 'framer-motion';
+
+export function useScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
+
+  return { scrollYProgress, opacity, scale };
+}
+```
+
+### useMediaQuery
+```typescript
+'use client';
+
+import { useState, useEffect } from 'react';
+
+export function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    setMatches(media.matches);
+
+    const listener = (e: MediaQueryListEvent) => setMatches(e.matches);
+    media.addEventListener('change', listener);
+    return () => media.removeEventListener('change', listener);
+  }, [query]);
+
+  return matches;
+}
+```
+
+## Error Boundaries
+
+```tsx
+'use client';
+
+import { Component, ReactNode } from 'react';
+
+interface Props {
+  children: ReactNode;
+  fallback?: ReactNode;
+}
+
+interface State {
+  hasError: boolean;
+}
+
+export class ErrorBoundary extends Component<Props, State> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback || <div>Something went wrong</div>;
+    }
+    return this.props.children;
+  }
+}
+```
+
+## Performance Tips
+
+- Use `React.memo()` for expensive pure components
+- Use `useMemo()` and `useCallback()` sparingly, only when needed
+- Lazy load below-fold components with `dynamic()`
+- Prefer CSS animations over JS when possible
+- Use `loading="lazy"` for images below the fold

@@ -1,0 +1,137 @@
+---
+description: NIRD color palette, typography, and visual design system
+globs: ["**/*.css", "src/components/**/*.tsx", "src/app/**/*.tsx"]
+alwaysApply: false
+---
+
+# NIRD Design System
+
+Inspired by Juliette Taka's "Emerald" theme for Debian 12.
+
+## Color Palette
+
+### Primary Colors (Village/NIRD - The Heroes)
+
+| Color | Hex | CSS Variable | Usage |
+|-------|-----|--------------|-------|
+| Emerald Green | `#00997d` | `--color-emerald` | Primary buttons, success states |
+| Forest Green | `#2E7D32` | `--color-forest` | Secondary actions |
+| Gold | `#F9A825` | `--color-gold` | Magic Potion accents, highlights |
+| Parchment | `#FFF8E1` | `--color-parchment` | Light backgrounds |
+| Soft White | `#f4f4f9` | `--color-soft-white` | Text backgrounds |
+
+### Empire Colors (Big Tech - The Villains)
+
+| Color | Hex | CSS Variable | Usage |
+|-------|-----|--------------|-------|
+| Roman Red | `#C62828` | `--color-roman-red` | Danger, enemy elements |
+| Resistance Orange | `#ff8c00` | `--color-orange` | CTAs, alerts |
+| Dark Blue | `#1A237E` | `--color-empire-blue` | Corporate, serious |
+| Steel Gray | `#455A64` | `--color-steel` | Industrial elements |
+
+### Technology Colors
+
+| Color | Hex | CSS Variable | Usage |
+|-------|-----|--------------|-------|
+| Slate Blue | `#4a697d` | `--color-slate` | Backgrounds, footer |
+| Deep Mineral | `#1a1a1d` | `--color-mineral` | Dark mode |
+
+## Visual Metaphor Rules
+
+### Village Elements (Use NIRD Colors)
+- Buttons for positive actions → Emerald Green
+- Success messages → Forest Green
+- Special features/highlights → Gold
+- Backgrounds → Parchment/Soft White
+
+### Empire Elements (Use Empire Colors)
+- Warning about Big Tech → Roman Red
+- Statistics about problems → Steel Gray
+- Corporate imagery → Dark Blue
+
+## Character Mapping
+
+Use these associations in UI elements:
+
+| Character | Digital Equivalent | Visual Style |
+|-----------|-------------------|--------------|
+| Asterix | Student Champion | Green, active, small but powerful |
+| Obelix | Linux Veteran | Blue, strong, reliable |
+| Panoramix | Open Source Community | Gold, wise, magical |
+| Vitalstatistix | School Admin | Green, leadership |
+| Tux (Dogmatix) | Linux Mascot | Black/White, faithful |
+
+## Typography
+
+### Font Hierarchy
+- **Headings**: Bold, impactful (consider display fonts)
+- **Body**: Clean, readable sans-serif
+- **Accents**: Slightly playful for Asterix theme elements
+
+### Text Colors
+```css
+/* Light mode */
+--text-primary: #1a1a1d;
+--text-secondary: #455A64;
+--text-accent: #00997d;
+
+/* Dark mode */
+--text-primary: #f4f4f9;
+--text-secondary: #9ca3af;
+--text-accent: #00997d;
+```
+
+## Component Styling Patterns
+
+### Buttons
+```tsx
+// Primary (Village action)
+<Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
+  Join the Resistance
+</Button>
+
+// Danger (Empire warning)
+<Button variant="destructive" className="bg-red-700">
+  Big Tech Trap
+</Button>
+
+// Magic Potion (special CTA)
+<Button className="bg-amber-500 hover:bg-amber-600 text-black">
+  Get the Potion
+</Button>
+```
+
+### Cards
+```tsx
+// Village card (positive)
+<Card className="border-emerald-200 bg-parchment">
+  <CardContent>...</CardContent>
+</Card>
+
+// Empire card (warning)
+<Card className="border-red-200 bg-red-50">
+  <CardContent>...</CardContent>
+</Card>
+```
+
+## Spacing & Layout
+
+- Use consistent spacing: 4, 8, 12, 16, 24, 32, 48, 64, 96px
+- Mobile-first responsive design
+- Section padding: `py-16 md:py-24 lg:py-32`
+- Container max-width: `max-w-7xl mx-auto px-4`
+
+## Animation Guidelines
+
+- Entrance animations: `duration-500` to `duration-700`
+- Micro-interactions: `duration-200` to `duration-300`
+- Scroll reveals: Stagger children by 100-150ms
+- Easing: Use `ease-out` for entrances, `ease-in-out` for transitions
+
+## Accessibility
+
+- Maintain WCAG 2.1 AA contrast ratios
+- Emerald on white: 4.5:1 ✓
+- Gold on dark: Use darker shade for text
+- Always provide focus states
+- Support reduced-motion preferences
