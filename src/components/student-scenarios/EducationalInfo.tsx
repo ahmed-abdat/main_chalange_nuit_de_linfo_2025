@@ -109,7 +109,6 @@ export function EducationalInfo({ info, scenarioNumber }: EducationalInfoProps) 
                   </div>
                 </div>
 
-
               </div>
             </motion.div>
           )}

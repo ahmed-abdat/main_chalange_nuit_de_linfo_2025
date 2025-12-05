@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { type StudentScenario, type ChoiceType } from '@/data/studentScenarios';
 import { cn } from '@/lib/utils';
 import { useStudentScenarioStore } from '@/store/studentScenarioStore';
-import { 
-  Check, X, AlertTriangle, RotateCcw, 
+import {
+  Check, X, AlertTriangle, RotateCcw,
   DollarSign, Lock, ServerCrash, Sprout, Unlock, ShieldCheck,
   Smartphone, Laptop, Wifi, HelpCircle, Info,
   Gamepad2, Box, Bot, Search, Chrome, Music2, Headphones,
@@ -44,8 +44,8 @@ type DraggingItem = 'A' | 'B' | null;
 const Particle = ({ delay }: { delay: number }) => (
   <motion.div
     initial={{ opacity: 1, scale: 0, x: 0, y: 0 }}
-    animate={{ 
-      opacity: 0, 
+    animate={{
+      opacity: 0,
       scale: [0, 1, 0],
       x: (Math.random() - 0.5) * 200,
       y: (Math.random() - 0.5) * 200,
@@ -71,7 +71,7 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
   const [draggingItem, setDraggingItem] = useState<DraggingItem>(null);
   const [hoveredChoice, setHoveredChoice] = useState<DraggingItem>(null);
   const [showConfetti, setShowConfetti] = useState(false);
-  
+
   const dropZoneRef = useRef<HTMLDivElement>(null);
   const choiceARef = useRef<HTMLDivElement>(null);
   const choiceBRef = useRef<HTMLDivElement>(null);
@@ -96,7 +96,7 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
       setGameState('dragging');
       const ref = itemType === 'A' ? choiceARef : choiceBRef;
       const isOver = checkOverlap(ref);
-      
+
       if (isOver) {
         setGameState('hovering');
         setHoveredChoice(itemType);
@@ -133,7 +133,7 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
   };
 
   // Determine visual state based on completion or current interaction
-  const currentVisualState = isCompleted 
+  const currentVisualState = isCompleted
     ? (selectedChoice === 'B' ? 'success' : 'warning')
     : (gameState === 'processing' ? 'processing' : 'idle');
 
@@ -149,7 +149,7 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
       )}
 
       {/* Context Header */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="mb-8 text-center"
@@ -164,7 +164,7 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
       </motion.div>
 
       <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16">
-        
+
         {/* DROP ZONE (The Situation/Device) */}
         <div className="order-2 lg:order-2">
           <motion.div
@@ -213,10 +213,10 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
                     "w-20 h-20 rounded-full flex items-center justify-center mb-4",
                     hoveredChoice === 'B' ? "bg-[#00997d]/10" : "bg-[#C62828]/10"
                   )}>
-                     <DynamicIcon 
-                       name={hoveredChoice === 'B' ? scenario.choiceB.icon : scenario.choiceA.icon} 
-                       className={cn("w-10 h-10", hoveredChoice === 'B' ? "text-[#00997d]" : "text-[#C62828]")}
-                     />
+                    <DynamicIcon
+                      name={hoveredChoice === 'B' ? scenario.choiceB.icon : scenario.choiceA.icon}
+                      className={cn("w-10 h-10", hoveredChoice === 'B' ? "text-[#00997d]" : "text-[#C62828]")}
+                    />
                   </div>
                   <p className={cn(
                     "font-bold text-lg",
@@ -224,16 +224,16 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
                   )}>
                     {hoveredChoice === 'B' ? "Solution NIRD" : "Solution Big Tech"}
                   </p>
-                  
+
                   {/* Points Preview on Hover */}
                   {hoveredChoice === 'B' && scenario.choiceB.points && (
-                     <div className="flex gap-2 mt-2">
-                        {scenario.choiceB.points.money > 0 && <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded">+💰</span>}
-                        {scenario.choiceB.points.protection > 0 && <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">+🛡️</span>}
-                        {scenario.choiceB.points.environment > 0 && <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded">+🌱</span>}
-                     </div>
+                    <div className="flex gap-2 mt-2">
+                      {scenario.choiceB.points.money > 0 && <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded">+💰</span>}
+                      {scenario.choiceB.points.protection > 0 && <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">+🛡️</span>}
+                      {scenario.choiceB.points.environment > 0 && <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded">+🌱</span>}
+                    </div>
                   )}
-                  
+
                   <p className="text-sm opacity-70 mt-2">Relâchez pour confirmer</p>
                 </motion.div>
               )}
@@ -283,7 +283,7 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
               )}
             </AnimatePresence>
           </motion.div>
-          
+
           {/* Mobile Instruction */}
           <p className="lg:hidden text-center text-xs text-gray-400 mt-4">
             Appuyez longuement pour glisser
@@ -321,7 +321,7 @@ export function ScenarioCard({ scenario, onChoiceSelect, disabled = false }: Sce
             </div>
             <h4 className="font-bold text-gray-900 mb-1">{scenario.choiceA.title}</h4>
             <p className="text-sm text-gray-600">{scenario.choiceA.description}</p>
-            
+
             {!isCompleted && (
               <div className="absolute -right-2 -top-2 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center border border-gray-200 shadow-sm">
                 <span className="text-xs text-gray-400">A</span>
