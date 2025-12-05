@@ -204,7 +204,7 @@ function TransformationCard({
                 'text-center py-2 px-3 rounded-lg border transition-colors duration-300',
                 isTransformed
                   ? 'bg-[#00997d]/10 border-[#00997d]/30 text-[#00d9a7]'
-                  : 'bg-white/5 border-white/10 text-gray-500'
+                  : 'bg-white/5 border-white/10 text-gray-400'
               )}
             >
               <span className="text-sm font-medium">{item.benefit}</span>
@@ -213,7 +213,7 @@ function TransformationCard({
             {/* Click hint */}
             <motion.p
               animate={{ opacity: isHovered ? 1 : 0 }}
-              className="text-xs text-center text-gray-500 mt-3"
+              className="text-xs text-center text-gray-400 mt-3"
             >
               Cliquez pour transformer
             </motion.p>
@@ -317,7 +317,7 @@ export default function KnowledgePotionSection() {
             <Gamepad2 className="w-5 h-5 text-[#F9A825]" />
             <p className="text-white/80 text-sm">
               <span className="text-[#00d9a7] font-medium">Prochain défi :</span>{' '}
-              Teste ta mémoire et découvre toutes les alternatives !
+              Sauve un PC de l'obsolescence !
             </p>
           </div>
         </motion.div>

@@ -70,7 +70,7 @@ function TerminalDisplay({
               <span className="text-white">{cmd.command}</span>
               <CheckCircle className="w-3 h-3 text-green-500" />
             </div>
-            <div className="text-gray-500 text-xs ml-4"># {cmd.description}</div>
+            <div className="text-gray-400 text-xs ml-4"># {cmd.description}</div>
           </div>
         ))}
 
@@ -81,7 +81,7 @@ function TerminalDisplay({
             <div className="flex-1">
               {command.split('').map((char, i) => {
                 const userChar = userInput[i];
-                let className = 'text-gray-500'; // Not typed yet
+                let className = 'text-gray-400'; // Not typed yet
 
                 if (userChar !== undefined) {
                   if (userChar === char) {

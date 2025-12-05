@@ -150,7 +150,7 @@ export default function FinalTrialSection() {
                           {item.cmd}
                         </motion.span>
                       </div>
-                      <span className="text-gray-500 text-xs ml-4"># {item.desc}</span>
+                      <span className="text-gray-400 text-xs ml-4"># {item.desc}</span>
                     </motion.div>
                   ))}
 

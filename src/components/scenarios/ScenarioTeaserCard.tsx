@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Laptop, Terminal, Cloud, Shield, CreditCard, FileText,
-  GraduationCap, Users, ArrowRight, Check, Sparkles
+  GraduationCap, Users, ArrowRight, Check, Sparkles,
+  Eye, EyeOff, Wrench, Gamepad2, Zap, Trash2, Scale, RefreshCw, Cpu, Recycle
 } from 'lucide-react';
 import Link from 'next/link';
 import { CometCard } from '@/components/ui/CometCard';
@@ -22,11 +23,16 @@ const ICONS: Record<string, LucideIcon> = {
   'shield': Shield,
   'credit-card': CreditCard,
   'file-text': FileText,
-  'scale': Shield, // fallback
-  'recycle': Sparkles,
-  'trash-2': Laptop,
-  'refresh-cw': Cloud,
-  'cpu': Terminal,
+  'scale': Scale,
+  'recycle': Recycle,
+  'trash-2': Trash2,
+  'refresh-cw': RefreshCw,
+  'cpu': Cpu,
+  'eye': Eye,
+  'eye-off': EyeOff,
+  'wrench': Wrench,
+  'gamepad': Gamepad2,
+  'zap': Zap,
 };
 
 // Character colors

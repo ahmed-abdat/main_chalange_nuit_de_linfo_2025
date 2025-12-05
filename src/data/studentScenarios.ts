@@ -1,6 +1,11 @@
 /**
- * Student Scenarios - Curated for Village NIRD
- * 3 best scenarios for the hybrid teaser + full experience
+ * Student Scenarios - Village NIRD
+ *
+ * Credits:
+ * - Original scenarios by: Hashimi (hashimi branch)
+ * - Adapted for dark theme by: Main team
+ *
+ * La Nuit de l'Info 2025
  */
 
 export interface ScenarioPoints {
@@ -39,7 +44,7 @@ export interface StudentScenario {
 }
 
 export const studentScenarios: StudentScenario[] = [
-  // TEASER SCENARIO (shown on main page)
+  // SCENARIO 1 - Windows 10 Crisis (TEASER)
   {
     id: 'student-1',
     title: 'Nouveau PC ou Linux ?',
@@ -76,55 +81,19 @@ export const studentScenarios: StudentScenario[] = [
     }
   },
 
-  // FULL SCENARIO 2
+  // SCENARIO 2 - Office vs LibreOffice
   {
     id: 'student-2',
-    title: 'Le Cloud vs Local',
-    context: "L'ecole veut stocker tous vos travaux sur Google Drive. C'est pratique, mais tes donnees partent aux USA...",
+    title: 'Logiciels Payants ou Libres ?',
+    context: "L'abonnement Office coute trop cher ! L'ecole n'a plus d'argent pour le voyage de fin d'annee.",
     character: 'panoramix',
     choiceA: {
       id: 'A',
-      title: 'Google Drive',
-      description: 'Utiliser Google Drive. C\'est gratuit et tout le monde connait.',
-      icon: 'cloud',
-      color: '#C62828',
-      feedback: "Tes donnees sont maintenant soumises au Cloud Act americain. Google peut les lire et les utiliser pour la pub."
-    },
-    choiceB: {
-      id: 'B',
-      title: 'Nextcloud',
-      description: 'Utiliser Nextcloud, heberge en France. Tes donnees restent a toi !',
-      icon: 'shield',
-      color: '#00997d',
-      points: { money: 50, protection: 100, environment: 60 },
-      feedback: "Bravo ! Tes donnees restent en France, protegees par le RGPD. Personne ne peut les utiliser sans ton accord."
-    },
-    educationalInfo: {
-      title: "Souverainete Numerique",
-      explanation: "Quand tes donnees sont sur des serveurs etrangers, elles sont soumises aux lois de ce pays, pas aux tiennes.",
-      benefits: [
-        "Protection RGPD garantie",
-        "Donnees en France",
-        "Pas de tracking publicitaire"
-      ],
-      nirdPillar: 'responsible',
-      fact: "Le Cloud Act permet au gouvernement US d'acceder aux donnees stockees par les entreprises americaines, meme en Europe."
-    }
-  },
-
-  // FULL SCENARIO 3
-  {
-    id: 'student-3',
-    title: "L'Application Proprietaire",
-    context: "L'abonnement Microsoft Office coute trop cher ! L'ecole n'a plus d'argent pour le voyage de fin d'annee.",
-    character: 'obelix',
-    choiceA: {
-      id: 'A',
       title: 'Payer Microsoft',
-      description: 'Payer l\'abonnement et annuler le voyage scolaire.',
+      description: "Payer l'abonnement et annuler le voyage scolaire.",
       icon: 'credit-card',
       color: '#C62828',
-      feedback: "L'argent de l'ecole part en Californie. En plus, quand tu arretes de payer, tu perds l'acces a tes documents !"
+      feedback: "L'argent de l'ecole part en Californie. En plus, sans payer, tu perds l'acces a tes documents !"
     },
     choiceB: {
       id: 'B',
@@ -132,7 +101,7 @@ export const studentScenarios: StudentScenario[] = [
       description: 'Utiliser LibreOffice. Gratuit, ca fait pareil, et on part en voyage !',
       icon: 'file-text',
       color: '#00997d',
-      points: { money: 80, protection: 60, environment: 40 },
+      points: { money: 80, protection: 20, environment: 0 },
       feedback: "Genial ! LibreOffice fait tout pareil que Office, en gratuit. L'argent economise finance le voyage !"
     },
     educationalInfo: {
@@ -145,6 +114,114 @@ export const studentScenarios: StudentScenario[] = [
       ],
       nirdPillar: 'inclusive',
       fact: "La Gendarmerie Nationale utilise des logiciels libres et economise des millions d'euros."
+    }
+  },
+
+  // SCENARIO 3 - Slow PCs
+  {
+    id: 'student-3',
+    title: 'PC Lents au CDI',
+    context: "Les PC du CDI sont trop lents ! On met 10 minutes a les allumer.",
+    character: 'obelix',
+    choiceA: {
+      id: 'A',
+      title: 'A la poubelle !',
+      description: 'Ils sont vieux, ils ne servent a rien. On les jette.',
+      icon: 'trash-2',
+      color: '#C62828',
+      feedback: "Stop ! Ces ordinateurs sont juste encrasses. Les jeter cree des dechets polluants qui finissent en Afrique."
+    },
+    choiceB: {
+      id: 'B',
+      title: 'Operation Boost',
+      description: 'On change le disque dur pour 30EUR. Ils repartent comme neufs !',
+      icon: 'wrench',
+      color: '#00997d',
+      points: { money: 60, protection: 0, environment: 90 },
+      feedback: "Bravo ! Reparer coute 30EUR au lieu de 800EUR, et evite les dechets electroniques !"
+    },
+    educationalInfo: {
+      title: "Reparer c'est Gagner",
+      explanation: "Souvent, un seul composant ralentit l'ordinateur. Le changer est facile, pas cher et ecolo.",
+      benefits: [
+        "Apprends comment marche un ordi",
+        "Evite les dechets electroniques",
+        "Fais de grosses economies"
+      ],
+      nirdPillar: 'sustainable',
+      fact: "80% de la pollution d'un ordinateur vient de sa fabrication, pas de son utilisation."
+    }
+  },
+
+  // SCENARIO 4 - Privacy
+  {
+    id: 'student-4',
+    title: 'Vie Privee en Ligne',
+    context: "Google sait tout de toi ! Tes recherches sont enregistrees pour te cibler avec des pubs.",
+    character: 'idefix',
+    choiceA: {
+      id: 'A',
+      title: 'Tant pis',
+      description: "Je n'ai rien a cacher, laissez-moi voir mes pubs.",
+      icon: 'eye',
+      color: '#C62828',
+      feedback: "Tu n'as rien a cacher ? Imagine quelqu'un qui note tout ce que tu fais pour le vendre. C'est ce que fait Google."
+    },
+    choiceB: {
+      id: 'B',
+      title: 'Mode Secret',
+      description: 'Utiliser Qwant ou DuckDuckGo. Ils ne t\'espionnent pas.',
+      icon: 'eye-off',
+      color: '#00997d',
+      points: { money: 0, protection: 90, environment: 0 },
+      feedback: "Ta vie privee est protegee ! Ces moteurs ne vendent pas tes donnees aux publicitaires."
+    },
+    educationalInfo: {
+      title: "Ta vie privee n'est pas a vendre",
+      explanation: "Quand c'est gratuit, c'est toi le produit ! Les moteurs ethiques ne vendent pas tes donnees.",
+      benefits: [
+        "Personne ne sait ce que tu cherches",
+        "Pas de bulles de filtres",
+        "Protege ton identite numerique"
+      ],
+      nirdPillar: 'responsible',
+      fact: "Les geants du web creent un 'profil' de toi pour predire ce que tu vas acheter ou penser."
+    }
+  },
+
+  // SCENARIO 5 - Gaming
+  {
+    id: 'student-5',
+    title: 'Jeux Video Responsables',
+    context: "Fortnite lague trop ! Ton PC n'est pas assez puissant pour les gros jeux modernes.",
+    character: 'asterix',
+    choiceA: {
+      id: 'A',
+      title: 'PC Gamer a 2000EUR',
+      description: 'Demander un PC qui consomme autant qu\'un four electrique.',
+      icon: 'zap',
+      color: '#C62828',
+      feedback: "2000EUR pour jouer ? C'est le prix d'une voiture ! Ces PC consomment enormement d'electricite."
+    },
+    choiceB: {
+      id: 'B',
+      title: 'Jeux Retro & Libres',
+      description: 'Jouer a Minetest ou des jeux retro. Fun et leger !',
+      icon: 'gamepad',
+      color: '#00997d',
+      points: { money: 80, protection: 0, environment: 50 },
+      feedback: "Les jeux libres sont crees par des passionnes, pour le fun, pas pour l'argent. Et ca tourne partout !"
+    },
+    educationalInfo: {
+      title: "Le Jeu Libre et Creatif",
+      explanation: "On n'a pas besoin de graphismes 4K pour s'amuser. Les jeux libres sont souvent meilleurs !",
+      benefits: [
+        "Tourne sur n'importe quel ordi",
+        "Tu peux modifier le jeu (mods)",
+        "Developpe ta creativite"
+      ],
+      nirdPillar: 'inclusive',
+      fact: "Minecraft original a ete inspire par des jeux libres developpes par la communaute."
     }
   }
 ];
@@ -159,5 +236,5 @@ export function getStudentTeaserScenario(): StudentScenario | undefined {
 }
 
 export function getFullStudentScenarios(): StudentScenario[] {
-  return studentScenarios.filter(s => !s.isTeaser);
+  return studentScenarios;
 }

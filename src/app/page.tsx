@@ -59,10 +59,10 @@ import { ImmersiveRefurbishGame, ResistanceQuiz, TowerDefenseGame, MemoryGame, T
 // Narrative Bridge Sections
 import KnowledgePotionSection from '@/components/narrative/KnowledgePotionSection';
 import ThreatsSection from '@/components/narrative/ThreatsSection';
-import FinalTrialSection from '@/components/narrative/FinalTrialSection';
+// FinalTrialSection removed - redundant with TypingGameSection
 
-// Scenario Sections
-import { ScenarioTeaserSection } from '@/components/scenarios';
+// Defis Sections (Scenarios renamed)
+import { DefisSection } from '@/components/scenarios';
 
 // Gamification
 import AchievementToast from '@/components/game/AchievementToast';
@@ -563,7 +563,7 @@ function ChoiceSection() {
 
                     {/* Cost with NumberTicker */}
                     <div className="pt-4 border-t border-white/10">
-                      <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-2 font-medium">
+                      <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-2 font-medium">
                         Coût sur 5 ans
                       </p>
                       <div className="flex items-baseline gap-1">
@@ -726,7 +726,7 @@ function GameSection() {
           transition={{ delay: 0.6, duration: 0.6 }}
           className="text-center mt-12"
         >
-          <p className="text-gray-500 text-sm mb-4">
+          <p className="text-gray-400 text-sm mb-4">
             Vous voulez vraiment sauver votre PC ?
           </p>
           <motion.a
@@ -1491,9 +1491,9 @@ function CTASection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   const stats = [
-    { value: '132', label: 'PCs reconditionnés' },
-    { value: '11', label: 'Écoles équipées' },
-    { value: '€0', label: 'Coût logiciel' },
+    { value: '132+', label: 'PCs sauvés de la poubelle' },
+    { value: '11', label: 'Écoles du réseau NIRD' },
+    { value: '€0', label: 'Coût du logiciel Linux' },
   ];
 
   return (
@@ -1599,31 +1599,37 @@ function CTASection() {
           transition={{ delay: 1.4, duration: 0.6 }}
           className="flex flex-col sm:flex-row gap-6 justify-center items-center"
         >
-          {/* Primary CTA - Shatter emerald */}
-          <ShatterButton
-            shatterColor="#00997d"
-            shardCount={25}
-            onClick={() => window.open('https://nird.forge.apps.education.fr/', '_blank')}
-            className="text-lg"
-          >
-            <span className="flex items-center gap-2">
-              Rejoindre le Village
-              <ArrowRight className="w-5 h-5" />
-            </span>
-          </ShatterButton>
+          {/* Primary CTA - Download Linux NIRD */}
+          <div className="flex flex-col items-center">
+            <ShatterButton
+              shatterColor="#00997d"
+              shardCount={25}
+              onClick={() => window.open('https://nird.forge.apps.education.fr/linux/', '_blank')}
+              className="text-lg"
+            >
+              <span className="flex items-center gap-2">
+                <Download className="w-5 h-5" />
+                Télécharger Linux NIRD
+              </span>
+            </ShatterButton>
+            <p className="text-sm text-gray-400 mt-2">Gratuit - Fonctionne sur vos anciens PC</p>
+          </div>
 
-          {/* Secondary CTA - Shatter gold */}
-          <ShatterButton
-            shatterColor="#F9A825"
-            shardCount={20}
-            onClick={() => window.open('https://nird.forge.apps.education.fr/linux/', '_blank')}
-            className="text-lg"
-          >
-            <span className="flex items-center gap-2">
-              <Download className="w-5 h-5" />
-              Briser les chaines
-            </span>
-          </ShatterButton>
+          {/* Secondary CTA - Discover the movement */}
+          <div className="flex flex-col items-center">
+            <ShatterButton
+              shatterColor="#F9A825"
+              shardCount={20}
+              onClick={() => window.open('https://nird.forge.apps.education.fr/', '_blank')}
+              className="text-lg"
+            >
+              <span className="flex items-center gap-2">
+                <Users className="w-5 h-5" />
+                Découvrir le Mouvement
+              </span>
+            </ShatterButton>
+            <p className="text-sm text-gray-400 mt-2">Ressources, guides et communauté</p>
+          </div>
         </motion.div>
 
         {/* Bottom quote */}
@@ -1631,7 +1637,7 @@ function CTASection() {
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ delay: 1.6, duration: 0.8 }}
-          className="mt-14 text-center text-sm text-gray-500 italic"
+          className="mt-14 text-center text-sm text-gray-400 italic"
         >
           &ldquo;Un village d&apos;irréductibles enseignants et élèves résiste encore à l&apos;envahisseur.&rdquo;
         </motion.p>
@@ -1652,7 +1658,6 @@ function Footer() {
             {[
               { label: 'Site NIRD', href: 'https://nird.forge.apps.education.fr/' },
               { label: 'Linux NIRD', href: 'https://nird.forge.apps.education.fr/linux/' },
-              { label: 'RPG', href: '/rpg', internal: true },
               { label: 'Variants', href: '/variants', internal: true },
               { label: 'Tonton Roger 🤖', href: 'https://chatbot-kappa-mocha.vercel.app/' },
             ].map((link) => (
@@ -1677,11 +1682,11 @@ function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-white/10 text-center">
-          <p className="text-sm text-gray-500 flex items-center justify-center gap-2">
+          <p className="text-sm text-gray-400 flex items-center justify-center gap-2">
             <Landmark className="w-4 h-4" />
             &ldquo;Un village d&apos;irréductibles enseignants et élèves résiste encore à l&apos;envahisseur.&rdquo;
           </p>
-          <p className="text-sm text-gray-600 mt-3">
+          <p className="text-sm text-gray-400 mt-3">
             Projet sous licence libre • Numérique Inclusif, Responsable, Durable
           </p>
         </div>
@@ -1697,11 +1702,12 @@ function useScrollSectionTracker() {
   const [currentSection, setCurrentSection] = useState('hero');
 
   useEffect(() => {
+    // Reordered for better narrative flow: Problem → Urgency → Decision → Practice → Education → Games → Credibility → Action
     const sections = [
-      'hero', 'stats', 'choice', 'game',
-      'knowledge-potion', 'memory', 'pillars',
-      'media-coverage', 'threats', 'defense',
-      'quiz', 'scenario-teasers', 'final-trial', 'typing', 'cta'
+      'hero', 'stats', 'threats', 'choice',
+      'scenario-teasers', 'pillars', 'knowledge-potion',
+      'game', 'memory', 'defense', 'quiz', 'typing',
+      'media-coverage', 'cta'
     ];
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
@@ -1755,52 +1761,52 @@ export default function Home() {
         {/* Achievement Toast - Shows badge unlocks */}
         <AchievementToast />
 
-        {/* 1. HOOK - Dramatic hero (Dark) */}
+        {/* 1. HOOK - Welcome to the village */}
         <div data-section="hero">
           <HeroSection />
         </div>
 
-        {/* 2. PROBLEM - The crisis is real (Light) */}
+        {/* 2. CRISIS - The problem is real */}
         <div data-section="stats">
           <StatsSection />
         </div>
 
-        {/* 3. DECISION - Interactive choice (Light) */}
-        <div data-section="choice">
-          <ChoiceSection />
-        </div>
-
-        {/* 4. EXPERIENCE - Interactive game (Dark) - Moved up for better flow */}
-        <div data-section="game">
-          <GameSection />
-        </div>
-
-        {/* 5. KNOWLEDGE POTION - Bridge to Memory Game */}
-        <div data-section="knowledge-potion">
-          <KnowledgePotionSection />
-        </div>
-
-        {/* 6. MEMORY GAME - Learn alternatives */}
-        <div data-section="memory">
-          <MemoryGameSection />
-        </div>
-
-        {/* 7. EDUCATION - The 3 NIRD pillars (Light) */}
-        <div data-section="pillars">
-          <PillarsSection />
-        </div>
-
-        {/* 8. MEDIA COVERAGE - Real media coverage for credibility */}
-        <div data-section="media-coverage">
-          <MediaCoverageSection />
-        </div>
-
-        {/* 9. THREATS - Bridge to Tower Defense */}
+        {/* 3. THREATS - Amplify urgency BEFORE solutions */}
         <div data-section="threats">
           <ThreatsSection />
         </div>
 
-        {/* 10. TOWER DEFENSE - Defend the Village */}
+        {/* 4. DECISION - What would your school do? */}
+        <div data-section="choice">
+          <ChoiceSection />
+        </div>
+
+        {/* 5. SCENARIOS - Real-world grounding (moved up) */}
+        <div data-section="scenario-teasers">
+          <DefisSection />
+        </div>
+
+        {/* 6. PILLARS - The NIRD framework */}
+        <div data-section="pillars">
+          <PillarsSection />
+        </div>
+
+        {/* 7. ALTERNATIVES - Discover software alternatives */}
+        <div data-section="knowledge-potion">
+          <KnowledgePotionSection />
+        </div>
+
+        {/* 8. REFURBISH GAME - Save a PC from obsolescence */}
+        <div data-section="game">
+          <GameSection />
+        </div>
+
+        {/* 9. MEMORY GAME - Match open source alternatives */}
+        <div data-section="memory">
+          <MemoryGameSection />
+        </div>
+
+        {/* 10. TOWER DEFENSE - Defend the village */}
         <div data-section="defense">
           <TowerDefenseSection />
         </div>
@@ -1810,22 +1816,17 @@ export default function Home() {
           <QuizSection />
         </div>
 
-        {/* 12. SCENARIO TEASERS - Practice your knowledge */}
-        <div data-section="scenario-teasers">
-          <ScenarioTeaserSection />
-        </div>
-
-        {/* 13. FINAL TRIAL - Bridge to Typing */}
-        <div data-section="final-trial">
-          <FinalTrialSection />
-        </div>
-
-        {/* 13. TYPING CHALLENGE - Terminal skills */}
+        {/* 12. TYPING - Master the terminal */}
         <div data-section="typing">
           <TypingGameSection />
         </div>
 
-        {/* 14. CONVERSION - Final CTA */}
+        {/* 13. MEDIA - Credibility through press coverage */}
+        <div data-section="media-coverage">
+          <MediaCoverageSection />
+        </div>
+
+        {/* 14. CTA - Join the village */}
         <div data-section="cta">
           <CTASection />
         </div>

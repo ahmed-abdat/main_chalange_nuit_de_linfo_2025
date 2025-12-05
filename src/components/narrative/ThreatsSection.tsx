@@ -157,7 +157,7 @@ export default function ThreatsSection() {
             <Shield className="w-6 h-6 text-[#00d9a7]" />
             <p className="text-white/80">
               <span className="text-[#00d9a7] font-medium">Prochain defi :</span>{' '}
-              Defends le Village contre les invasions de Big Tech !
+              Il est temps de choisir ton camp !
             </p>
             <Zap className="w-5 h-5 text-[#F9A825]" />
           </div>

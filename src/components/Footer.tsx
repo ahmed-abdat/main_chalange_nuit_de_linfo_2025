@@ -69,10 +69,10 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-400">
             &copy; 2025 RetroSnake. Créé pour la Nuit de l&apos;Info.
           </p>
-          <p className="text-sm text-gray-500 flex items-center gap-1">
+          <p className="text-sm text-gray-400 flex items-center gap-1">
             Fait avec <Heart size={14} className="text-red-500" /> par l&apos;équipe Mauritanie
           </p>
         </div>
