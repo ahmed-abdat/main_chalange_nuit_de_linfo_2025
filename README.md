@@ -8,6 +8,9 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8)](https://tailwindcss.com/)
 
+**🌐 Site en ligne** : [main-chalange-nuit-de-linfo-2025.vercel.app](https://main-chalange-nuit-de-linfo-2025.vercel.app)  
+**📦 Repository** : [github.com/ahmed-abdat/main_chalange_nuit_de_linfo_2025](https://github.com/ahmed-abdat/main_chalange_nuit_de_linfo_2025)
+
 ## 📖 Description du Projet
 
 **Village NIRD** est une application web interactive et immersive créée pour **La Nuit de l'Info 2025** qui sensibilise aux enjeux critiques de la souveraineté numérique dans les écoles françaises. Le projet utilise la métaphore emblématique d'**Astérix contre l'Empire Romain** pour raconter l'histoire d'un village d'enseignants et d'élèves qui résistent à la domination des Big Tech.
@@ -161,8 +164,8 @@ Plusieurs variantes visuelles pour différents publics :
 
 1. **Cloner le dépôt**
 ```bash
-git clone https://github.com/votre-org/village-nird.git
-cd village-nird
+git clone https://github.com/ahmed-abdat/main_chalange_nuit_de_linfo_2025.git
+cd main_chalange_nuit_de_linfo_2025
 ```
 
 2. **Installer les dépendances**
@@ -192,8 +195,8 @@ http://localhost:3000
 
 1. **Cloner le dépôt**
 ```bash
-git clone https://github.com/votre-org/village-nird.git
-cd village-nird
+git clone https://github.com/ahmed-abdat/main_chalange_nuit_de_linfo_2025.git
+cd main_chalange_nuit_de_linfo_2025
 ```
 
 2. **Installer les dépendances**
@@ -540,6 +543,9 @@ Ce projet est sous licence **MIT**. Voir le fichier [LICENSE](LICENSE) pour plus
 - **docs/LANDING_PAGE_PLAN.md** : Plan de la page d'accueil
 
 ## 👥 Équipe
+
+**🏛️ Institution** : كلية العلوم والتقنيات - جامعة النواكشوط العصرية، موريتانيا  
+**Faculté des Sciences et Techniques - Université de Nouakchott Al Aasriya, Mauritanie**
 
 Créé avec ❤️ pour **La Nuit de l'Info 2025**
 
