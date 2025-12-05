@@ -1,0 +1,211 @@
+---
+description: Challenge winning strategy and judge expectations for La Nuit de l'Info 2025
+alwaysApply: true
+---
+
+# Winning Strategy - La Nuit de l'Info 2025
+
+## Critical Reminder
+
+> **Judges have ~3 MINUTES per project. Make every second count!**
+
+## Winning Formula
+
+### DO (What Makes Winners)
+
+| Priority | Action | Why It Wins |
+|----------|--------|-------------|
+| 1 | **Immediate visual impact** | First impression in 5 seconds |
+| 2 | **ONE perfect WOW feature** | Memorable > Complete |
+| 3 | **Tell a story** | Emotion > Information |
+| 4 | **Show, don't tell** | Demo > Documentation |
+| 5 | **Use the Asterix metaphor** | On-theme = On-message |
+| 6 | **Working demo** | Broken = Disqualified |
+
+### DON'T (Common Failures)
+
+| Mistake | Why It Fails |
+|---------|--------------|
+| Boring "corporate" site | Forgettable in 30 seconds |
+| 10 mediocre features | Jack of all trades, master of none |
+| List facts | Judges won't read them |
+| Walls of text | TL;DR = skipped |
+| Ignore the given theme | Off-topic = lower score |
+| "It will work soon" | Broken promises = zero points |
+
+## The 6 Key Messages
+
+Your site MUST communicate these clearly:
+
+1. **The crisis is real and urgent**
+   - October 2025 deadline
+   - 240 million PCs to discard worldwide
+   - 68% of French gov PCs on Windows 10
+
+2. **A solution EXISTS**
+   - Linux + open source = free + often better
+   - Works on old hardware
+   - Real alternative, not just theory
+
+3. **Schools are already doing this**
+   - NIRD has proven results
+   - 132 computers reconditioned
+   - 11 schools benefited
+
+4. **It's more than money**
+   - Freedom from vendor lock-in
+   - Data sovereignty
+   - Environmental sustainability
+
+5. **Anyone can start**
+   - PrimTux works with 2GB RAM, 30GB SSD
+   - €30 SSD transforms old PC
+   - Step-by-step guides exist
+
+6. **Join a community**
+   - You're not alone
+   - The "village" welcomes newcomers
+   - Support network available
+
+## WOW Feature Ideas (Pick ONE!)
+
+### Option A: Interactive Choice Simulator
+User chooses school's path, sees real-time cost/benefit comparison:
+- "Upgrade to Windows 11" → €300-800/PC, recurring costs
+- "Switch to Linux" → €0, extended hardware life
+- "Do Nothing" → Security risks, eventual crisis
+
+### Option B: "Refurbish & Liberate" Mini-Game
+1. Old PC appears on screen
+2. User "diagnoses" issues
+3. Drag Linux USB to PC
+4. Watch it boot into Linux
+5. Counter shows "PCs saved from landfill"
+
+### Option C: Live Carbon Calculator
+- Compare CO2 footprint: new PC vs refurbished
+- Show "trees saved" equivalent
+- Gamified: "Your school saved X kg CO2"
+
+### Option D: Village Map Interactive
+- Explore the Gaulish village
+- Each hut = one NIRD pillar
+- Click to learn, animations reveal content
+- Collect "knowledge potions"
+
+## Judge Psychology
+
+### What Judges Notice First
+1. Visual design quality
+2. Smooth animations
+3. Clear value proposition
+4. Working functionality
+5. Creative interpretation of theme
+
+### What Judges Remember
+- Unique interactions they haven't seen
+- Emotional moments
+- Surprising statistics
+- Clear call-to-action
+
+### What Makes Judges Smile
+- Clever use of Asterix metaphor
+- Easter eggs
+- Attention to detail
+- Technical sophistication that "just works"
+
+## Technical Excellence Signals
+
+### Must Have
+- [ ] Mobile responsive
+- [ ] Fast initial load (<3s)
+- [ ] No console errors
+- [ ] All links work
+- [ ] Smooth 60fps animations
+
+### Nice to Have
+- [ ] Dark mode support
+- [ ] Accessibility (keyboard nav, screen readers)
+- [ ] PWA capabilities
+- [ ] Offline fallback
+
+### WOW Factor
+- [ ] 3D elements (Three.js)
+- [ ] Advanced scroll animations
+- [ ] Sound design (subtle)
+- [ ] Easter eggs
+- [ ] Unique cursor/interactions
+
+## Presentation Tips
+
+### The 3-Minute Pitch
+1. **0:00-0:30** - Hook with the problem (crisis)
+2. **0:30-1:30** - Demo the main feature (WOW)
+3. **1:30-2:30** - Show the story flow (scrollytelling)
+4. **2:30-3:00** - Call-to-action & summary
+
+### If Asked Questions
+- "Why this approach?" → Asterix metaphor makes complex issue accessible
+- "What's the tech stack?" → Next.js 16, React 19, Framer Motion
+- "Is it realistic?" → Yes, NIRD has real success stories
+
+## Quality Checklist Before Submission
+
+### Critical
+- [ ] Site loads without errors
+- [ ] All navigation works
+- [ ] Mobile version tested
+- [ ] Main feature is polished
+
+### Important
+- [ ] No placeholder content
+- [ ] Images optimized
+- [ ] Consistent styling
+- [ ] Clear messaging
+
+### Polish
+- [ ] Favicon set
+- [ ] Meta tags for social sharing
+- [ ] Loading states for async content
+- [ ] 404 page (if routes exist)
+
+## Time Management
+
+### If You Have 2 Hours Left
+Focus ONLY on:
+1. Fix any bugs
+2. Polish the hero section
+3. Ensure mobile works
+4. Remove incomplete features
+
+### If You Have 4 Hours Left
+Add:
+1. Second section polish
+2. Basic animations
+3. Responsive testing
+4. Content review
+
+### If You Have 8+ Hours Left
+Full scope:
+1. All sections implemented
+2. WOW feature complete
+3. Micro-interactions
+4. Edge cases handled
+5. Performance optimization
+
+## Emergency Fallbacks
+
+### If 3D Doesn't Work
+- Use SVG illustrations
+- Framer Motion still impressive
+- Focus on scrollytelling
+
+### If Animation Breaks
+- Keep it simple
+- Fade-in is better than broken
+- Static > Buggy
+
+### If Time Runs Out
+- Ship what works
+- Hide incomplete sections
+- Polish > Quantity

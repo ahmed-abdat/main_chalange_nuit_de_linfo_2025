@@ -1,0 +1,141 @@
+---
+description: Green IT optimization rules for O2 Switch challenge
+globs: ["src/**/*.tsx", "src/app/**/*.tsx", "**/*.css"]
+alwaysApply: false
+---
+
+# Green IT Rules (O2 Switch Challenge)
+
+## Performance Targets
+
+| Metric | Target |
+|--------|--------|
+| EcoIndex Score | Grade A or B |
+| Page Weight | < 1MB initial load |
+| Lighthouse Performance | > 95 |
+| DOM Elements | < 1000 |
+| HTTP Requests | < 25 |
+
+## Image Optimization
+
+### Use Modern Formats
+```tsx
+import Image from 'next/image';
+
+// Next.js auto-optimizes to WebP/AVIF
+<Image
+  src="/village.png"
+  alt="Village"
+  width={800}
+  height={600}
+  loading="lazy" // Below fold
+/>
+```
+
+### Size Guidelines
+- Hero images: max 200KB
+- Thumbnails: max 30KB
+- Icons: Use SVG when possible
+- Compress all images before adding
+
+## 3D/Canvas Optimization
+
+### Demand-Based Rendering
+```tsx
+import { Canvas } from '@react-three/fiber';
+
+// Only re-renders on interaction, saves GPU
+<Canvas frameloop="demand">
+  {/* 3D content */}
+</Canvas>
+```
+
+### Conditional 3D Loading
+```tsx
+// Disable 3D on low-power devices
+const prefersReducedMotion = window.matchMedia(
+  '(prefers-reduced-motion: reduce)'
+).matches;
+
+{!prefersReducedMotion && <ThreeScene />}
+```
+
+## Code Splitting
+
+### Lazy Load Heavy Components
+```tsx
+import dynamic from 'next/dynamic';
+
+// Load only when needed
+const HeavyComponent = dynamic(
+  () => import('@/components/HeavyComponent'),
+  { ssr: false }
+);
+```
+
+## CSS Efficiency
+
+### Avoid Unused Styles
+- Tailwind CSS purges unused classes automatically
+- Remove unused component imports
+- Use CSS variables for repeated values
+
+### Efficient Animations
+```css
+/* Prefer transform/opacity (GPU accelerated) */
+.good {
+  transform: translateX(100px);
+  opacity: 0.5;
+}
+
+/* Avoid layout-triggering properties */
+.avoid {
+  left: 100px; /* Triggers layout */
+  width: 200px; /* Triggers layout */
+}
+```
+
+## Font Optimization
+
+### Use System Fonts When Possible
+```css
+font-family: system-ui, -apple-system, sans-serif;
+```
+
+### If Custom Fonts
+- Use WOFF2 format
+- Subset to needed characters
+- Use `font-display: swap`
+
+## Data Sovereignty
+
+### No External Tracking
+- No Google Analytics
+- No Facebook Pixel
+- No third-party cookies
+- Self-host all assets
+
+### Privacy-First Approach
+```tsx
+// Example: Local analytics only
+localStorage.setItem('pageViews', count);
+```
+
+## Quick Wins Checklist
+
+- [ ] Compress all images (tinypng.com)
+- [ ] Use lazy loading for below-fold images
+- [ ] Remove console.logs in production
+- [ ] Enable gzip/brotli compression (Vercel does this)
+- [ ] Minimize third-party scripts
+- [ ] Use CSS instead of JS animations when possible
+- [ ] Set proper cache headers
+
+## Carbon Footprint Awareness
+
+Key message to convey:
+- Linux extends hardware life 5+ years
+- One refurbished PC = ~200kg CO2 saved
+- Digital sobriety = environmental responsibility
+
+This aligns with NIRD's "Durable" pillar.
