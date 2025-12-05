@@ -10,6 +10,9 @@ interface TrueFocusProps {
   glowColor?: string;
   animationDuration?: number;
   pauseBetweenAnimations?: number;
+  cycleOnce?: boolean;
+  onCycleComplete?: () => void;
+  onWordChange?: (index: number) => void;
 }
 
 interface FocusRect {
@@ -27,27 +30,47 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
   borderColor = 'green',
   glowColor = 'rgba(0, 255, 0, 0.6)',
   animationDuration = 0.5,
-  pauseBetweenAnimations = 1
+  pauseBetweenAnimations = 1,
+  cycleOnce = false,
+  onCycleComplete,
+  onWordChange
 }) => {
   const words = sentence.split(separator);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [lastActiveIndex, setLastActiveIndex] = useState<number | null>(null);
+  const [cycleCompleted, setCycleCompleted] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const wordRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const [focusRect, setFocusRect] = useState<FocusRect>({ x: 0, y: 0, width: 0, height: 0 });
 
+  // Notify parent when word changes
   useEffect(() => {
-    if (!manualMode) {
+    onWordChange?.(currentIndex);
+  }, [currentIndex, onWordChange]);
+
+  useEffect(() => {
+    if (!manualMode && !(cycleOnce && cycleCompleted)) {
       const interval = setInterval(
         () => {
-          setCurrentIndex(prev => (prev + 1) % words.length);
+          setCurrentIndex(prev => {
+            const nextIndex = (prev + 1) % words.length;
+
+            // If cycleOnce is enabled and we've completed a full cycle
+            if (cycleOnce && nextIndex === 0) {
+              setCycleCompleted(true);
+              onCycleComplete?.();
+              return prev; // Stay on last word
+            }
+
+            return nextIndex;
+          });
         },
         (animationDuration + pauseBetweenAnimations) * 1000
       );
 
       return () => clearInterval(interval);
     }
-  }, [manualMode, animationDuration, pauseBetweenAnimations, words.length]);
+  }, [manualMode, animationDuration, pauseBetweenAnimations, words.length, cycleOnce, cycleCompleted, onCycleComplete]);
 
   useEffect(() => {
     if (currentIndex === null || currentIndex === -1) return;
