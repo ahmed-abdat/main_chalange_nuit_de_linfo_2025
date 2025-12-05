@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Laptop, Terminal, Cloud, Shield, CreditCard, FileText,
-  GraduationCap, Users, ArrowRight, Check, Sparkles,
+  GraduationCap, Users, ArrowRight, Check, AlertCircle,
   Eye, EyeOff, Wrench, Gamepad2, Zap, Trash2, Scale, RefreshCw, Cpu, Recycle
 } from 'lucide-react';
 import Link from 'next/link';
@@ -206,7 +206,7 @@ export default function ScenarioTeaserCard({
                   {selectedChoiceData?.color === '#00997d' ? (
                     <Check className="w-5 h-5 text-[#00997d] shrink-0 mt-0.5" />
                   ) : (
-                    <Sparkles className="w-5 h-5 text-[#F9A825] shrink-0 mt-0.5" />
+                    <AlertCircle className="w-5 h-5 text-[#F9A825] shrink-0 mt-0.5" />
                   )}
                   <p className="text-sm text-gray-300">{selectedChoiceData?.feedback}</p>
                 </div>

@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { motion, useInView } from 'motion/react';
-import { Compass, GraduationCap, Users, Sparkles } from 'lucide-react';
+import { Compass, GraduationCap, Users, Trophy } from 'lucide-react';
 import BlurText from '@/components/BlurText';
 import Particles from '@/components/Particles';
 import ScenarioTeaserCard from './ScenarioTeaserCard';
@@ -180,7 +180,7 @@ export default function ScenarioTeaserSection() {
             className="mt-8 text-center"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#00997d]/10 rounded-xl border border-[#00997d]/20">
-              <Sparkles className="w-4 h-4 text-[#F9A825]" />
+              <Trophy className="w-4 h-4 text-[#F9A825]" />
               <span className="text-sm text-gray-400">
                 {studentTeaserCompleted && parentTeaserCompleted
                   ? 'Bravo ! Les deux scenarios completes !'

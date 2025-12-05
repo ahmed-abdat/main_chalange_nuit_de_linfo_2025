@@ -948,7 +948,7 @@ export default function DefisSection() {
                   Choisissez votre profil pour une experience personnalisee
                 </motion.p>
               </div>
-              <div className="grid sm:grid-cols-3 gap-5 max-w-4xl mx-auto">
+              <div className="grid sm:grid-cols-3 gap-5 max-w-4xl mx-auto items-stretch">
                 {PERSONAS.map((persona, idx) => {
                   const Icon = persona.icon;
                   return (
@@ -957,72 +957,65 @@ export default function DefisSection() {
                       initial={{ opacity: 0, y: 30, scale: 0.9 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       transition={{ delay: 0.15 * idx, duration: 0.5, type: 'spring' }}
+                      className="h-full"
                     >
-                      <MagicCard
-                        gradientSize={250}
-                        gradientColor={`${persona.color}30`}
-                        gradientOpacity={0.6}
-                        gradientFrom={persona.color}
-                        gradientTo="#F9A825"
-                        className="rounded-2xl h-full"
+                      <motion.button
+                        onClick={() => handlePersonaSelect(persona.id)}
+                        whileHover={{ scale: 1.03, y: -4 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="relative p-6 rounded-2xl bg-[#242428] border border-white/10 text-left transition-all group w-full h-full hover:border-white/20 overflow-hidden flex flex-col"
                       >
-                        <button
-                          onClick={() => handlePersonaSelect(persona.id)}
-                          className="relative p-6 rounded-2xl bg-[#242428]/90 backdrop-blur-sm border border-white/10 text-left transition-all group w-full h-full hover:border-white/20"
+                        {/* Animated gradient border on hover */}
+                        <motion.div
+                          className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                          style={{
+                            background: `linear-gradient(135deg, ${persona.color}20 0%, transparent 50%, ${persona.color}10 100%)`,
+                          }}
+                        />
+
+                        {/* Border glow effect */}
+                        <motion.div
+                          className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                          style={{
+                            boxShadow: `inset 0 0 30px ${persona.color}15, 0 0 20px ${persona.color}10`,
+                          }}
+                        />
+
+                        {/* Icon */}
+                        <div
+                          className="relative w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-105"
+                          style={{ backgroundColor: `${persona.color}20` }}
                         >
-                          {/* Glow effect on hover */}
-                          <motion.div
-                            className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                            style={{
-                              background: `radial-gradient(circle at 50% 50%, ${persona.color}15 0%, transparent 70%)`,
-                            }}
-                          />
+                          <Icon className="w-7 h-7" style={{ color: persona.color }} />
+                        </div>
 
-                          {/* Icon with animated border */}
-                          <motion.div
-                            whileHover={{ scale: 1.1, rotate: 5 }}
-                            className="relative w-14 h-14 rounded-xl flex items-center justify-center mb-5"
-                            style={{ backgroundColor: `${persona.color}20` }}
+                        {/* Title */}
+                        <h3 className="relative font-bold text-white text-xl mb-2 group-hover:text-[#F9A825] transition-colors">
+                          {persona.title}
+                        </h3>
+
+                        {/* Description - fixed height for consistency */}
+                        <p className="relative text-sm text-gray-400 leading-relaxed min-h-[3rem] flex-grow">
+                          {persona.description}
+                        </p>
+
+                        {/* CTA - always at bottom */}
+                        <div className="relative flex items-center justify-between mt-4 pt-4 border-t border-white/5">
+                          <span
+                            className="text-xs font-bold px-3 py-1.5 rounded-full"
+                            style={{ backgroundColor: `${persona.color}20`, color: persona.color }}
                           >
-                            <Icon className="w-7 h-7" style={{ color: persona.color }} />
-                            <motion.div
-                              className="absolute inset-0 rounded-xl"
-                              style={{ border: `2px solid ${persona.color}` }}
-                              initial={{ opacity: 0, scale: 1.2 }}
-                              whileHover={{ opacity: 1, scale: 1 }}
-                              transition={{ duration: 0.3 }}
-                            />
+                            {persona.scenarios} défis
+                          </span>
+                          <motion.div
+                            className="flex items-center gap-1 text-sm font-medium group-hover:translate-x-1 transition-transform"
+                            style={{ color: persona.color }}
+                          >
+                            Commencer
+                            <ArrowRight className="w-4 h-4" />
                           </motion.div>
-
-                          {/* Title */}
-                          <h3 className="relative font-bold text-white text-xl mb-2 group-hover:text-[#F9A825] transition-colors">
-                            {persona.title}
-                          </h3>
-
-                          {/* Description */}
-                          <p className="relative text-sm text-gray-400 mb-4 leading-relaxed">
-                            {persona.description}
-                          </p>
-
-                          {/* CTA */}
-                          <div className="relative flex items-center justify-between">
-                            <span
-                              className="text-xs font-bold px-3 py-1.5 rounded-full"
-                              style={{ backgroundColor: `${persona.color}20`, color: persona.color }}
-                            >
-                              {persona.scenarios} defis
-                            </span>
-                            <motion.div
-                              className="flex items-center gap-1 text-sm font-medium"
-                              style={{ color: persona.color }}
-                              whileHover={{ x: 4 }}
-                            >
-                              Commencer
-                              <ArrowRight className="w-4 h-4" />
-                            </motion.div>
-                          </div>
-                        </button>
-                      </MagicCard>
+                        </div>
+                      </motion.button>
                     </motion.div>
                   );
                 })}
