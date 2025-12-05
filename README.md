@@ -437,6 +437,74 @@ Le calculateur permet de :
 - **Café Pédagogique** : Article sur le Lycée Carnot et les 132 PCs reconditionnés
 - **ZDNet** : Blog sur la démarche NIRD et PrimTux
 
+## 📋 Informations de Compétition - La Nuit de l'Info 2025
+
+### ✅ Exigences de Déploiement
+
+**Impératif : rendre votre développement sur une machine accessible publiquement en indiquant clairement l'URL à consulter.**
+
+✅ **URL du site en production** : [main-chalange-nuit-de-linfo-2025.vercel.app](https://main-chalange-nuit-de-linfo-2025.vercel.app)
+
+**Déposer les sources sur le site de la nuit, ou préciser le lien vers lequel elles peuvent être téléchargées.**
+
+✅ **Repository GitHub** : [github.com/ahmed-abdat/main_chalange_nuit_de_linfo_2025](https://github.com/ahmed-abdat/main_chalange_nuit_de_linfo_2025)
+
+**Insérer un document contenant les informations et features réalisées : URL, description...**
+
+### 📄 Document d'Information du Projet
+
+#### URL d'Accès
+- **Site web** : https://main-chalange-nuit-de-linfo-2025.vercel.app
+- **Code source** : https://github.com/ahmed-abdat/main_chalange_nuit_de_linfo_2025
+
+#### Description du Projet
+Village NIRD est une application web interactive créée pour La Nuit de l'Info 2025 qui sensibilise aux enjeux de la souveraineté numérique dans les écoles françaises. Le projet utilise la métaphore d'Astérix contre l'Empire Romain pour expliquer comment les écoles peuvent résister à la dépendance aux Big Tech en adoptant Linux et les logiciels libres.
+
+#### Features Réalisées
+
+1. **Page d'Accueil - Scrollytelling Narratif**
+   - Section Hero avec métaphore Astérix
+   - Section Crise avec statistiques animées (240M PCs menacés, 68% admin française)
+   - Section Choix interactive avec calculateur d'économies
+   - Section Piliers NIRD (Inclusif, Responsable, Durable)
+   - Mini-jeu "Sauvez un PC" (drag & drop)
+   - Section CTA vers communauté NIRD
+
+2. **Scénarios Étudiants** (`/student-scenarios`)
+   - 6 scénarios éducatifs interactifs
+   - Système de points (argent, protection, environnement)
+   - Informations éducatives détaillées
+   - Liens vers outils et ressources
+
+3. **Aventure RPG** (`/rpg`)
+   - Jeu de rôle narratif
+   - Sélection de personnage
+   - Système de quêtes et progression
+
+4. **Variantes de Thème** (`/variants`)
+   - Thème Arcade (rétro gaming)
+   - Thème Cosmic (spatial)
+   - Thème Potion (magie)
+
+5. **Fonctionnalités Techniques**
+   - Responsive design (mobile, tablette, desktop)
+   - Animations Framer Motion
+   - Gestion d'état avec Zustand
+   - TypeScript strict
+   - Optimisations performance (Lighthouse > 95)
+
+#### Technologies Utilisées
+- Next.js 16.0.7 (App Router)
+- React 19.2.1
+- TypeScript 5
+- Tailwind CSS 4
+- Framer Motion 12
+- Zustand 5
+
+#### Institution
+- **Faculté des Sciences et Techniques - Université de Nouakchott Al Aasriya, Mauritanie**
+- كلية العلوم والتقنيات - جامعة النواكشوط العصرية، موريتانيا
+
 ## 🎮 Expériences Interactives
 
 ### Mini-jeu "Sauvez un PC"
