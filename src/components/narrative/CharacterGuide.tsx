@@ -109,10 +109,10 @@ export default function CharacterGuide({ currentSection, onDialogueComplete }: C
               animate={{ scale: 1 }}
               exit={{ scale: 0 }}
               onClick={handleExpand}
-              className="fixed bottom-4 left-4 z-50 w-12 h-12 rounded-full flex items-center justify-center shadow-lg cursor-pointer hover:scale-110 transition-transform"
+              className="fixed bottom-2 left-2 sm:bottom-4 sm:left-4 z-50 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shadow-lg cursor-pointer hover:scale-110 transition-transform"
               style={{ backgroundColor: character.color }}
             >
-              <span className="text-white font-bold text-lg">{character.emoji}</span>
+              <span className="text-white font-bold text-base sm:text-lg">{character.emoji}</span>
             </motion.button>
           ) : (
             /* Full dialogue box */
@@ -121,7 +121,7 @@ export default function CharacterGuide({ currentSection, onDialogueComplete }: C
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 50, scale: 0.9 }}
               transition={{ type: 'spring', damping: 20 }}
-              className="fixed bottom-4 left-4 z-50 max-w-sm"
+              className="fixed bottom-2 left-2 right-2 sm:bottom-4 sm:left-4 sm:right-auto z-50 max-w-[calc(100vw-1rem)] sm:max-w-sm"
             >
               <div
                 className="bg-gray-900/95 backdrop-blur-md rounded-2xl border-2 shadow-2xl overflow-hidden"

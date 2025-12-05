@@ -1132,8 +1132,8 @@ export default function DefisSection() {
           transition={{ delay: 0.3, duration: 0.6 }}
           className="relative"
         >
-          {/* Navigation arrows */}
-          <div className="absolute inset-y-0 left-0 flex items-center -translate-x-4 sm:-translate-x-12 z-10">
+          {/* Navigation arrows - hidden on mobile, shown on larger screens */}
+          <div className="hidden sm:flex absolute inset-y-0 left-0 items-center -translate-x-4 md:-translate-x-12 z-10">
             <motion.button
               onClick={goToPrevious}
               disabled={currentIndex === 0}
@@ -1149,7 +1149,7 @@ export default function DefisSection() {
               <ChevronLeft className="w-5 h-5" />
             </motion.button>
           </div>
-          <div className="absolute inset-y-0 right-0 flex items-center translate-x-4 sm:translate-x-12 z-10">
+          <div className="hidden sm:flex absolute inset-y-0 right-0 items-center translate-x-4 md:translate-x-12 z-10">
             <motion.button
               onClick={goToNext}
               disabled={currentIndex === totalScenarios - 1}

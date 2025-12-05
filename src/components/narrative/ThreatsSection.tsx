@@ -43,7 +43,7 @@ export default function ThreatsSection() {
   return (
     <section
       data-section="threats"
-      className="relative py-24 px-6 overflow-hidden"
+      className="relative py-16 sm:py-20 md:py-24 px-4 sm:px-6 overflow-hidden"
       style={{
         background: 'linear-gradient(to bottom, #1a1a1d 0%, #1a0a0a 50%, #1a1a1d 100%)'
       }}

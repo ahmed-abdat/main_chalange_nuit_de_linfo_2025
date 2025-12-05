@@ -1273,7 +1273,7 @@ function MediaCard({ item, index, isInView }: { item: MediaCardData; index: numb
         <motion.div
           animate={{ scale: isHovered ? 1.02 : 1 }}
           transition={{ duration: 0.3 }}
-          className="relative h-[380px] w-full rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl overflow-hidden"
+          className="relative h-auto min-h-[320px] sm:min-h-[350px] md:h-[380px] w-full rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl overflow-hidden"
         >
           {/* Gradient overlay on hover */}
           <motion.div
