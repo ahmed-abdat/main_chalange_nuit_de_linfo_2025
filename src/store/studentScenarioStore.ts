@@ -59,15 +59,12 @@ export const useStudentScenarioStore = create<StudentScenarioStore>()(
             [scenarioKey]: choice,
           };
 
-          // Calculate new total points (only add if choice is B)
-          let newTotalPoints = { ...state.totalPoints };
-          if (choice === 'B') {
-            newTotalPoints = {
-              money: state.totalPoints.money + points.money,
-              protection: state.totalPoints.protection + points.protection,
-              environment: state.totalPoints.environment + points.environment,
-            };
-          }
+          // Calculate new total points (add points regardless of choice, allowing negatives)
+          const newTotalPoints = {
+            money: state.totalPoints.money + (points.money || 0),
+            protection: state.totalPoints.protection + (points.protection || 0),
+            environment: state.totalPoints.environment + (points.environment || 0),
+          };
 
           return {
             completedScenarios: newCompleted,

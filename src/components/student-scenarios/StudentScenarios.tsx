@@ -8,6 +8,7 @@ import { useStudentScenarioStore, useProgress } from '@/store/studentScenarioSto
 import { PointsDisplay } from './PointsDisplay';
 import { ScenarioCard } from './ScenarioCard';
 import { EducationalInfo } from './EducationalInfo';
+import { ScenarioSummary } from './ScenarioSummary';
 import { cn } from '@/lib/utils';
 import CountUp from '@/components/CountUp';
 import { Button } from '@/components/ui/button';
@@ -20,6 +21,8 @@ export function StudentScenarios() {
   const completedScenarios = useStudentScenarioStore((state) => state.completedScenarios);
   const setCurrentScenario = useStudentScenarioStore((state) => state.setCurrentScenario);
   const completeScenario = useStudentScenarioStore((state) => state.completeScenario);
+  const totalPoints = useStudentScenarioStore((state) => state.totalPoints);
+  const resetProgress = useStudentScenarioStore((state) => state.resetProgress);
 
   const { completed, total, percentage } = useProgress();
   const [showAllScenarios, setShowAllScenarios] = useState(false);
@@ -56,9 +59,18 @@ export function StudentScenarios() {
   const handleChoiceSelect = (choice: ChoiceType) => {
     if (!currentScenario) return;
 
-    const points = choice === 'B' && currentScenario.choiceB.points
-      ? currentScenario.choiceB.points
-      : { money: 0, protection: 0, environment: 0 };
+    let points = { money: 0, protection: 0, environment: 0 };
+
+    if (choice === 'B' && currentScenario.choiceB.points) {
+      points = currentScenario.choiceB.points;
+    } else if (choice === 'A') {
+      // PENALTY for Big Tech choice!
+      points = {
+        money: -50,
+        protection: -30,
+        environment: -20
+      };
+    }
 
     // Complete the scenario
     completeScenario(currentScenario.id, choice, points);
@@ -75,9 +87,9 @@ export function StudentScenarios() {
         duration: 4000,
       });
     } else {
-      toast.warning('Choix Big Tech', {
-        description: 'Ce choix ne rapporte pas de points NIRD. Pensez aux alternatives !',
-        duration: 3000,
+      toast.error('Choix Big Tech', {
+        description: 'Aïe ! Vous perdez des points. La facilité a un coût caché...',
+        duration: 4000,
       });
     }
   };
@@ -331,65 +343,17 @@ export function StudentScenarios() {
           </div>
         )}
         {/* Summary Section */}
-        <ScenarioSummary completedCount={completed} totalCount={total} />
+        <ScenarioSummary
+          completedCount={completed}
+          totalCount={total}
+          totalPoints={totalPoints}
+          onReset={() => {
+            resetProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        />
       </div>
     </div>
   );
 }
 
-
-function ScenarioSummary({ completedCount, totalCount }: { completedCount: number; totalCount: number }) {
-  if (completedCount === 0) return null;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="mt-12 p-6 bg-gradient-to-br from-[#00997d]/5 to-[#007d66]/5 rounded-2xl border border-[#00997d]/20"
-    >
-      <div className="flex items-start gap-4">
-        <div className="p-3 bg-[#00997d]/10 rounded-xl">
-          <Bot className="w-8 h-8 text-[#00997d]" />
-        </div>
-        <div>
-          <h3 className="text-lg font-bold text-gray-900 mb-2">
-            Résumé de votre Résistance
-          </h3>
-          <p className="text-gray-600 mb-4 leading-relaxed">
-            Vous avez complété {completedCount} scénarios sur {totalCount}. Chaque choix NIRD que vous faites aide à construire un village numérique plus libre, éthique et durable.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
-              <div className="flex items-center gap-2 mb-2 text-[#00997d]">
-                <ShieldCheck className="w-5 h-5" />
-                <span className="font-bold">Indépendance</span>
-              </div>
-              <p className="text-xs text-gray-500">
-                Vous apprenez à ne plus dépendre des géants de la tech pour vos outils quotidiens.
-              </p>
-            </div>
-            <div className="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
-              <div className="flex items-center gap-2 mb-2 text-[#00997d]">
-                <Sprout className="w-5 h-5" />
-                <span className="font-bold">Durabilité</span>
-              </div>
-              <p className="text-xs text-gray-500">
-                Vos choix prolongent la vie du matériel et réduisent les déchets électroniques.
-              </p>
-            </div>
-            <div className="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
-              <div className="flex items-center gap-2 mb-2 text-[#00997d]">
-                <Users className="w-5 h-5" />
-                <span className="font-bold">Communauté</span>
-              </div>
-              <p className="text-xs text-gray-500">
-                Vous rejoignez un mouvement mondial de partage et d'entraide (Open Source).
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
