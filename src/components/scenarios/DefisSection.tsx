@@ -3,8 +3,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useInView } from 'motion/react';
 import {
-  Compass, GraduationCap, Users, Sparkles, ChevronLeft, ChevronRight,
-  Check, X, Lightbulb, ArrowRight, Trophy, Star, Zap, Settings,
+  Compass, GraduationCap, Users, ChevronLeft, ChevronRight,
+  Check, X, Lightbulb, ArrowRight, Trophy, Zap, Settings,
   Laptop, Terminal, Cloud, Shield, CreditCard, FileText,
   Scale, Recycle, Trash2, RefreshCw, Cpu, Eye, EyeOff, Wrench, Gamepad2
 } from 'lucide-react';
@@ -13,6 +13,7 @@ import BlurText from '@/components/BlurText';
 import Particles from '@/components/Particles';
 import { MagicCard } from '@/components/ui/magic-card';
 import { BorderBeam } from '@/components/ui/border-beam';
+import { SparklesText } from '@/components/ui/sparkles-text';
 import { cn } from '@/lib/utils';
 import { studentScenarios, type StudentScenario } from '@/data/studentScenarios';
 import { parentScenarios, type ParentScenario } from '@/data/parentScenarios';
@@ -926,63 +927,115 @@ export default function DefisSection() {
               key="persona-selector"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4 }}
+              exit={{ opacity: 0, scale: 0.95, y: -20 }}
+              transition={{ duration: 0.5 }}
               className="mb-8"
             >
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                className="text-center text-gray-400 mb-6"
-              >
-                Qui etes-vous ?
-              </motion.p>
-              <div className="grid sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+              <div className="text-center mb-8">
+                <SparklesText
+                  className="text-2xl sm:text-3xl font-black mb-2"
+                  colors={{ first: '#F9A825', second: '#00997d' }}
+                  sparklesCount={8}
+                >
+                  Qui etes-vous ?
+                </SparklesText>
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="text-sm text-gray-500"
+                >
+                  Choisissez votre profil pour une experience personnalisee
+                </motion.p>
+              </div>
+              <div className="grid sm:grid-cols-3 gap-5 max-w-4xl mx-auto">
                 {PERSONAS.map((persona, idx) => {
                   const Icon = persona.icon;
                   return (
-                    <motion.button
+                    <motion.div
                       key={persona.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.1 * idx, duration: 0.4 }}
-                      onClick={() => handlePersonaSelect(persona.id)}
-                      whileHover={{ scale: 1.03, y: -4 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="p-5 rounded-2xl bg-[#242428]/80 backdrop-blur-sm border border-white/10 hover:border-white/20 text-left transition-all group"
+                      initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ delay: 0.15 * idx, duration: 0.5, type: 'spring' }}
                     >
-                      <div
-                        className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-                        style={{ backgroundColor: `${persona.color}20` }}
+                      <MagicCard
+                        gradientSize={250}
+                        gradientColor={`${persona.color}30`}
+                        gradientOpacity={0.6}
+                        gradientFrom={persona.color}
+                        gradientTo="#F9A825"
+                        className="rounded-2xl h-full"
                       >
-                        <Icon className="w-6 h-6" style={{ color: persona.color }} />
-                      </div>
-                      <h3 className="font-bold text-white text-lg mb-1 group-hover:text-[#F9A825] transition-colors">
-                        {persona.title}
-                      </h3>
-                      <p className="text-xs text-gray-500 mb-3">{persona.description}</p>
-                      <div className="flex items-center gap-2">
-                        <span
-                          className="text-xs font-semibold px-2 py-1 rounded-full"
-                          style={{ backgroundColor: `${persona.color}20`, color: persona.color }}
+                        <button
+                          onClick={() => handlePersonaSelect(persona.id)}
+                          className="relative p-6 rounded-2xl bg-[#242428]/90 backdrop-blur-sm border border-white/10 text-left transition-all group w-full h-full hover:border-white/20"
                         >
-                          {persona.scenarios} defis
-                        </span>
-                        <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-[#F9A825] group-hover:translate-x-1 transition-all" />
-                      </div>
-                    </motion.button>
+                          {/* Glow effect on hover */}
+                          <motion.div
+                            className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                            style={{
+                              background: `radial-gradient(circle at 50% 50%, ${persona.color}15 0%, transparent 70%)`,
+                            }}
+                          />
+
+                          {/* Icon with animated border */}
+                          <motion.div
+                            whileHover={{ scale: 1.1, rotate: 5 }}
+                            className="relative w-14 h-14 rounded-xl flex items-center justify-center mb-5"
+                            style={{ backgroundColor: `${persona.color}20` }}
+                          >
+                            <Icon className="w-7 h-7" style={{ color: persona.color }} />
+                            <motion.div
+                              className="absolute inset-0 rounded-xl"
+                              style={{ border: `2px solid ${persona.color}` }}
+                              initial={{ opacity: 0, scale: 1.2 }}
+                              whileHover={{ opacity: 1, scale: 1 }}
+                              transition={{ duration: 0.3 }}
+                            />
+                          </motion.div>
+
+                          {/* Title */}
+                          <h3 className="relative font-bold text-white text-xl mb-2 group-hover:text-[#F9A825] transition-colors">
+                            {persona.title}
+                          </h3>
+
+                          {/* Description */}
+                          <p className="relative text-sm text-gray-400 mb-4 leading-relaxed">
+                            {persona.description}
+                          </p>
+
+                          {/* CTA */}
+                          <div className="relative flex items-center justify-between">
+                            <span
+                              className="text-xs font-bold px-3 py-1.5 rounded-full"
+                              style={{ backgroundColor: `${persona.color}20`, color: persona.color }}
+                            >
+                              {persona.scenarios} defis
+                            </span>
+                            <motion.div
+                              className="flex items-center gap-1 text-sm font-medium"
+                              style={{ color: persona.color }}
+                              whileHover={{ x: 4 }}
+                            >
+                              Commencer
+                              <ArrowRight className="w-4 h-4" />
+                            </motion.div>
+                          </div>
+                        </button>
+                      </MagicCard>
+                    </motion.div>
                   );
                 })}
               </div>
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
+                transition={{ delay: 0.6 }}
                 onClick={() => setShowPersonaSelector(false)}
-                className="mt-6 mx-auto block text-xs text-gray-500 hover:text-gray-300 transition-colors"
+                className="mt-8 mx-auto flex items-center gap-2 text-sm text-gray-500 hover:text-[#F9A825] transition-colors group"
               >
-                Ou explorez tous les defis
+                <Compass className="w-4 h-4 group-hover:rotate-45 transition-transform" />
+                Explorer tous les defis
               </motion.button>
             </motion.div>
           ) : (
@@ -1208,8 +1261,8 @@ export default function DefisSection() {
             transition={{ delay: 0.8, duration: 0.6 }}
             className="mt-8 text-center"
           >
-            <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#00997d]/20 via-[#895af6]/20 to-[#F9A825]/20 rounded-xl border border-white/10">
-              <Sparkles className="w-5 h-5 text-[#F9A825]" />
+            <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-[#00997d]/20 via-[#895af6]/20 to-[#F9A825]/20 rounded-xl border border-white/10">
+              <Trophy className="w-5 h-5 text-[#F9A825]" />
               <span className="text-white font-semibold text-sm sm:text-base">
                 {studentCompleted >= studentScenarios.length && parentCompleted >= parentScenarios.length && adminCompleted >= adminScenarios.length
                   ? 'Tous les defis completes ! Tu es un(e) vrai(e) resistant(e) !'
@@ -1219,7 +1272,6 @@ export default function DefisSection() {
                       ? 'Parents termines ! Essaie Etudiants ou Admin !'
                       : 'Admin termines ! Essaie Etudiants ou Parents !'}
               </span>
-              <Star className="w-5 h-5 text-[#F9A825]" />
             </div>
           </motion.div>
         )}
