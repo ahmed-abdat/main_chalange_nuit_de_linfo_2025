@@ -101,14 +101,14 @@ export default function ParentSenario() {
                             Situation {currentStep + 1} sur {situations.length}
                         </span>
                         <span className="text-sm text-gray-500">
-                            {Math.round(((currentStep + 1) / situations.length) * 100)}%
+                            {Math.round((currentStep / situations.length) * 100)}%
                         </span>
                     </div>
                     <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                         <motion.div
                             className="h-full bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full"
                             initial={{ width: 0 }}
-                            animate={{ width: `${((currentStep + 1) / situations.length) * 100}%` }}
+                            animate={{ width: `${(currentStep / situations.length) * 100}%` }}
                             transition={{ duration: 0.5, ease: 'easeOut' }}
                         />
                     </div>
